@@ -35,10 +35,10 @@ alias SharedCompletionProperties = {
    */
   max_tokens?: MaxTokens | null = 16;
 
-  // todo: needs to be oneOf
+  // todo: consider inlining when https://github.com/microsoft/typespec/issues/2356 is resolved
   // https://github.com/microsoft/typespec/issues/2355
   /** Up to 4 sequences where the API will stop generating further tokens. */
-  stop?: string | StopSequences | null = null;
+  stop?: Stop = null;
 
   // needs default
   // https://github.com/microsoft/typespec/issues/1646
@@ -86,6 +86,13 @@ alias SharedCompletionProperties = {
    */
   stream?: boolean | null = true;
 };
+
+@oneOf
+union Stop {
+  string,
+  StopSequences,
+  null,
+}
 
 // this is using yaml refs instead of a def in the openapi, not sure if that's required?
 
@@ -300,13 +307,8 @@ model CreateCompletionRequest {
    * Note that <|endoftext|> is the document separator that the model sees during training, so if a
    * prompt is not specified the model will generate as if from the beginning of a new document.
    */
-  // TODO: needs oneOf.
-  prompt:
-    | string
-    | string[]
-    | TokenArray
-    | TokenArrayArray
-    | null = "<|endoftext|>";
+  // TODO: consider inlining when https://github.com/microsoft/typespec/issues/2356 fixed
+  prompt: Prompt = "<|endoftext|>";
 
   /** The suffix that comes after a completion of inserted text. */
   suffix?: string | null = null;
@@ -339,6 +341,14 @@ model CreateCompletionRequest {
   best_of?: safeint | null = 1;
 }
 
+@oneOf
+union Prompt {
+  string,
+  string[],
+  TokenArray,
+  TokenArrayArray,
+  null,
+}
 /**
  * Represents a completion response from the API. Note: both the streamed and non-streamed response
  * objects share the same shape (unlike the chat endpoint).

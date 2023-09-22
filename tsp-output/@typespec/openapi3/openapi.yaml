@@ -1148,10 +1148,8 @@ components:
             for counting tokens.
           default: 16
         stop:
-          anyOf:
-            - type: string
-            - $ref: '#/components/schemas/StopSequences'
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Stop'
           description: Up to 4 sequences where the API will stop generating further tokens.
           default: null
         presence_penalty:
@@ -1285,14 +1283,8 @@ components:
             descriptions of them.
           x-oaiTypeLabel: string
         prompt:
-          anyOf:
-            - type: string
-            - type: array
-              items:
-                type: string
-            - $ref: '#/components/schemas/TokenArray'
-            - $ref: '#/components/schemas/TokenArrayArray'
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Prompt'
           description: |-
             The prompt(s) to generate completions for, encoded as a string, array of strings, array of
             tokens, or array of token arrays.
@@ -1347,10 +1339,8 @@ components:
             for counting tokens.
           default: 16
         stop:
-          anyOf:
-            - type: string
-            - $ref: '#/components/schemas/StopSequences'
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Stop'
           description: Up to 4 sequences where the API will stop generating further tokens.
           default: null
         presence_penalty:
@@ -2921,6 +2911,20 @@ components:
       format: double
       minimum: -2
       maximum: 2
+    Prompt:
+      oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+        - $ref: '#/components/schemas/TokenArray'
+        - $ref: '#/components/schemas/TokenArrayArray'
+      nullable: true
+    Stop:
+      oneOf:
+        - type: string
+        - $ref: '#/components/schemas/StopSequences'
+      nullable: true
     StopSequences:
       type: array
       items:

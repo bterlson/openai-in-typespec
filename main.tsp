@@ -2,9 +2,14 @@ import "@typespec/http";
 import "@typespec/openapi3";
 import "@typespec/openapi";
 
-import "./constants.tsp";
-import "./models";
-import "./operations.tsp";
+import "./audio";
+import "./completions";
+import "./edits";
+import "./embeddings";
+import "./files";
+import "./fine-tuning";
+import "./images";
+import "./moderation";
 
 using TypeSpec.Http;
 

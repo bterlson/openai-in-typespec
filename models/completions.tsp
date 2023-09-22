@@ -35,11 +35,10 @@ alias SharedCompletionProperties = {
    */
   max_tokens?: MaxTokens | null = 16;
 
-  // todo: needs a null default
   // todo: needs to be oneOf
   // https://github.com/microsoft/typespec/issues/2355
   /** Up to 4 sequences where the API will stop generating further tokens. */
-  stop?: string | StopSequences | null;
+  stop?: string | StopSequences | null = null;
 
   // needs default
   // https://github.com/microsoft/typespec/issues/1646
@@ -309,13 +308,11 @@ model CreateCompletionRequest {
     | TokenArrayArray
     | null = "<|endoftext|>";
 
-  // TODO: needs default of null
   /** The suffix that comes after a completion of inserted text. */
-  suffix?: string | null;
+  suffix?: string | null = null;
 
   ...SharedCompletionProperties;
 
-  // TODO: needs default of null
   /**
    * Include the log probabilities on the `logprobs` most likely tokens, as well the chosen tokens.
    * For example, if `logprobs` is 5, the API will return a list of the 5 most likely tokens. The
@@ -324,7 +321,7 @@ model CreateCompletionRequest {
    *
    * The maximum value for `logprobs` is 5.
    */
-  logprobs?: safeint | null; // = null;
+  logprobs?: safeint | null = null;
 
   /** Echo back the prompt in addition to the completion */
   echo?: boolean | null = false;
@@ -339,7 +336,7 @@ model CreateCompletionRequest {
    * **Note:** Because this parameter generates many completions, it can quickly consume your token
    * quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
    */
-  best_of?: safeint | null; // = 1;
+  best_of?: safeint | null = 1;
 }
 
 /**

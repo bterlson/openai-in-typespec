@@ -1,0 +1,26 @@
+import "@typespec/http";
+import "@typespec/openapi3";
+import "@typespec/openapi";
+
+import "./constants.tsp";
+import "./models";
+import "./operations.tsp";
+
+using TypeSpec.Http;
+
+/** The OpenAI REST API. Please see https://platform.openai.com/docs/api-reference for more details. */
+@service({
+  title: "OpenAI API",
+  termsOfService: "https://openai.com/policies/terms-of-use",
+  contact: {
+    name: "OpenAI Support",
+    url: "https://help.openai.com",
+  },
+  license: {
+    name: "MIT",
+    url: "https://github.com/openai/openai-openapi/blob/master/LICENSE",
+  },
+  version: "2.0.0",
+})
+@useAuth(BearerAuth)
+namespace OpenAI;

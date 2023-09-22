@@ -1,0 +1,12 @@
+{
+  "name": "openai-tsp",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "@typespec/compiler": "^0.49.0-dev.5",
+    "@typespec/openapi": "^0.49.0-dev.2",
+    "@typespec/openapi3": "^0.49.0-dev.5",
+    "@typespec/rest": "^0.49.0-dev.1"
+  },
+  "private": true
+}

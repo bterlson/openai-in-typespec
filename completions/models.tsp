@@ -1,6 +1,30 @@
 namespace OpenAI;
 using TypeSpec.OpenAPI;
 
+alias CHAT_COMPLETION_MODELS =
+  | "gpt4"
+  | "gpt-4-0314"
+  | "gpt-4-0613"
+  | "gpt-4-32k"
+  | "gpt-4-32k-0314"
+  | "gpt-4-32k-0613"
+  | "gpt-3.5-turbo"
+  | "gpt-3.5-turbo-16k"
+  | "gpt-3.5-turbo-0301"
+  | "gpt-3.5-turbo-0613"
+  | "gpt-3.5-turbo-16k-0613";
+
+alias COMPLETION_MODELS =
+  | "babbage-002"
+  | "davinci-002"
+  | "text-davinci-003"
+  | "text-davinci-002"
+  | "text-davinci-001"
+  | "code-davinci-002"
+  | "text-curie-001"
+  | "text-babbage-001"
+  | "text-ada-001";
+
 alias SharedCompletionProperties = {
   /**
    * What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output
@@ -87,10 +111,6 @@ alias SharedCompletionProperties = {
    */
   stream?: boolean | null = true;
 };
-
-// this is using yaml refs instead of a def in the openapi, not sure if that's required?
-
-scalar User extends string;
 
 @minValue(-2)
 @maxValue(2)
@@ -395,9 +415,3 @@ model CreateCompletionResponse {
 @minValue(0)
 @maxValue(5)
 scalar LogProbs extends safeint;
-
-@minItems(1)
-model TokenArray is safeint[];
-
-@minItems(1)
-model TokenArrayArray is TokenArray[];

@@ -5,10 +5,10 @@ using TypeSpec.OpenAPI;
 
 alias SharedImageProperties = {
   /** The number of images to generate. Must be between 1 and 10. */
-  n?: ImagesN | null; // = 1;
+  n?: ImagesN | null = 1;
 
   /** The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`. */
-  size?: IMAGE_SIZES | null; // = "1024x1024"
+  size?: IMAGE_SIZES | null = "1024x1024";
 
   /** The format in which the generated images are returned. Must be one of `url` or `b64_json`. */
   response_format?: "url" | "b64_json" | null = "url";

@@ -1148,11 +1148,10 @@ components:
             for counting tokens.
           default: 16
         stop:
-          anyOf:
-            - type: string
-            - $ref: '#/components/schemas/StopSequences'
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Stop'
           description: Up to 4 sequences where the API will stop generating further tokens.
+          default: null
         presence_penalty:
           oneOf:
             - $ref: '#/components/schemas/Penalty'
@@ -1263,7 +1262,6 @@ components:
       required:
         - model
         - prompt
-        - best_of
       properties:
         model:
           anyOf:
@@ -1285,14 +1283,8 @@ components:
             descriptions of them.
           x-oaiTypeLabel: string
         prompt:
-          anyOf:
-            - type: string
-            - type: array
-              items:
-                type: string
-            - $ref: '#/components/schemas/TokenArray'
-            - $ref: '#/components/schemas/TokenArrayArray'
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Prompt'
           description: |-
             The prompt(s) to generate completions for, encoded as a string, array of strings, array of
             tokens, or array of token arrays.
@@ -1304,6 +1296,7 @@ components:
           type: string
           nullable: true
           description: The suffix that comes after a completion of inserted text.
+          default: null
         temperature:
           oneOf:
             - $ref: '#/components/schemas/Temperature'
@@ -1346,11 +1339,10 @@ components:
             for counting tokens.
           default: 16
         stop:
-          anyOf:
-            - type: string
-            - $ref: '#/components/schemas/StopSequences'
-          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/Stop'
           description: Up to 4 sequences where the API will stop generating further tokens.
+          default: null
         presence_penalty:
           oneOf:
             - $ref: '#/components/schemas/Penalty'
@@ -1410,6 +1402,7 @@ components:
             elements in the response.
 
             The maximum value for `logprobs` is 5.
+          default: null
         echo:
           type: boolean
           nullable: true
@@ -1428,6 +1421,7 @@ components:
 
             **Note:** Because this parameter generates many completions, it can quickly consume your token
             quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
+          default: 1
     CreateCompletionResponse:
       type: object
       description: |-
@@ -1547,6 +1541,7 @@ components:
             - $ref: '#/components/schemas/EditN'
           nullable: true
           description: How many edits to generate for the input and instruction.
+          default: 1
         temperature:
           oneOf:
             - $ref: '#/components/schemas/Temperature'
@@ -1556,6 +1551,7 @@ components:
             more random, while lower values like 0.2 will make it more focused and deterministic.
 
             We generally recommend altering this or `top_p` but not both.
+          default: 1
         top_p:
           oneOf:
             - $ref: '#/components/schemas/TopP'
@@ -1566,6 +1562,7 @@ components:
             the top 10% probability mass are considered.
 
             We generally recommend altering this or `temperature` but not both.
+          default: 1
     CreateEditResponse:
       type: object
       required:
@@ -1700,7 +1697,6 @@ components:
       type: object
       required:
         - training_file
-        - suffix
       properties:
         training_file:
           type: string
@@ -1754,6 +1750,7 @@ components:
           description: |-
             The number of epochs to train the model for. An epoch refers to one full cycle through the
             training dataset.
+          default: 4
         batch_size:
           type: integer
           format: int64
@@ -1765,6 +1762,7 @@ components:
             By default, the batch size will be dynamically configured to be ~0.2% of the number of examples
             in the training set, capped at 256 - in general, we've found that larger batch sizes tend to
             work better for larger datasets.
+          default: null
         learning_rate_multiplier:
           type: number
           format: double
@@ -1777,6 +1775,7 @@ components:
             `batch_size` (larger learning rates tend to perform better with larger batch sizes). We
             recommend experimenting with values in the range 0.02 to 0.2 to see what produces the best
             results.
+          default: null
         prompt_loss_rate:
           type: number
           format: double
@@ -1788,6 +1787,7 @@ components:
 
             If prompts are extremely long (relative to completions), it may make sense to reduce this
             weight so as to avoid over-prioritizing learning the prompt.
+          default: 0.01
         compute_classification_metrics:
           type: boolean
           nullable: true
@@ -1799,6 +1799,7 @@ components:
             In order to compute classification metrics, you must provide a `validation_file`. Additionally,
             you must specify `classification_n_classes` for multiclass classification or
             `classification_positive_class` for binary classification.
+          default: false
         classification_n_classes:
           type: integer
           format: int64
@@ -1807,6 +1808,7 @@ components:
             The number of classes in a classification task.
 
             This parameter is required for multiclass classification.
+          default: null
         classification_positive_class:
           type: string
           nullable: true
@@ -1815,6 +1817,7 @@ components:
 
             This parameter is needed to generate precision, recall, and F1 metrics when doing binary
             classification.
+          default: null
         classification_betas:
           type: array
           items:
@@ -1828,6 +1831,7 @@ components:
             With a beta of 1 (i.e. the F-1 score), precision and recall are given the same weight. A larger
             beta score puts more weight on recall and less on precision. A smaller beta score puts more
             weight on precision and less on recall.
+          default: null
         suffix:
           oneOf:
             - $ref: '#/components/schemas/SuffixString'
@@ -1837,6 +1841,7 @@ components:
 
             For example, a `suffix` of "custom-model-name" would produce a model name like
             `ada:ft-your-org:custom-model-name-2022-02-15-04-21-04`.
+          default: null
     CreateFineTuningJobRequest:
       type: object
       required:
@@ -1903,6 +1908,7 @@ components:
 
             For example, a `suffix` of "custom-model-name" would produce a model name like
             `ft:gpt-3.5-turbo:openai:custom-model-name:7p4lURel`.
+          default: null
     CreateImageEditRequest:
       type: object
       required:
@@ -1930,6 +1936,7 @@ components:
             - $ref: '#/components/schemas/ImagesN'
           nullable: true
           description: The number of images to generate. Must be between 1 and 10.
+          default: 1
         size:
           type: string
           enum:
@@ -1938,6 +1945,7 @@ components:
             - 1024x1024
           nullable: true
           description: The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
+          default: 1024x1024
         response_format:
           type: string
           enum:
@@ -1961,6 +1969,7 @@ components:
             - $ref: '#/components/schemas/ImagesN'
           nullable: true
           description: The number of images to generate. Must be between 1 and 10.
+          default: 1
         size:
           type: string
           enum:
@@ -1969,6 +1978,7 @@ components:
             - 1024x1024
           nullable: true
           description: The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
+          default: 1024x1024
         response_format:
           type: string
           enum:
@@ -1995,6 +2005,7 @@ components:
             - $ref: '#/components/schemas/ImagesN'
           nullable: true
           description: The number of images to generate. Must be between 1 and 10.
+          default: 1
         size:
           type: string
           enum:
@@ -2003,6 +2014,7 @@ components:
             - 1024x1024
           nullable: true
           description: The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
+          default: 1024x1024
         response_format:
           type: string
           enum:
@@ -2237,6 +2249,7 @@ components:
             automatically increase the temperature until certain thresholds are hit.
           minimum: 0
           maximum: 1
+          default: 0
         language:
           type: string
           description: |-
@@ -2298,6 +2311,7 @@ components:
             automatically increase the temperature until certain thresholds are hit.
           minimum: 0
           maximum: 1
+          default: 0
     CreateTranslationResponse:
       type: object
       required:
@@ -2897,6 +2911,20 @@ components:
       format: double
       minimum: -2
       maximum: 2
+    Prompt:
+      oneOf:
+        - type: string
+        - type: array
+          items:
+            type: string
+        - $ref: '#/components/schemas/TokenArray'
+        - $ref: '#/components/schemas/TokenArrayArray'
+      nullable: true
+    Stop:
+      oneOf:
+        - type: string
+        - $ref: '#/components/schemas/StopSequences'
+      nullable: true
     StopSequences:
       type: array
       items:

@@ -59,11 +59,10 @@ alias SharedCompletionProperties = {
    */
   max_tokens?: MaxTokens | null = 16;
 
-  // todo: needs a null default
-  // todo: needs to be oneOf
+  // todo: consider inlining when https://github.com/microsoft/typespec/issues/2356 is resolved
   // https://github.com/microsoft/typespec/issues/2355
   /** Up to 4 sequences where the API will stop generating further tokens. */
-  stop?: string | StopSequences | null;
+  stop?: Stop = null;
 
   // needs default
   // https://github.com/microsoft/typespec/issues/1646
@@ -111,6 +110,13 @@ alias SharedCompletionProperties = {
    */
   stream?: boolean | null = true;
 };
+
+@oneOf
+union Stop {
+  string,
+  StopSequences,
+  null,
+}
 
 @minValue(-2)
 @maxValue(2)
@@ -321,21 +327,14 @@ model CreateCompletionRequest {
    * Note that <|endoftext|> is the document separator that the model sees during training, so if a
    * prompt is not specified the model will generate as if from the beginning of a new document.
    */
-  // TODO: needs oneOf.
-  prompt:
-    | string
-    | string[]
-    | TokenArray
-    | TokenArrayArray
-    | null = "<|endoftext|>";
+  // TODO: consider inlining when https://github.com/microsoft/typespec/issues/2356 fixed
+  prompt: Prompt = "<|endoftext|>";
 
-  // TODO: needs default of null
   /** The suffix that comes after a completion of inserted text. */
-  suffix?: string | null;
+  suffix?: string | null = null;
 
   ...SharedCompletionProperties;
 
-  // TODO: needs default of null
   /**
    * Include the log probabilities on the `logprobs` most likely tokens, as well the chosen tokens.
    * For example, if `logprobs` is 5, the API will return a list of the 5 most likely tokens. The
@@ -344,7 +343,7 @@ model CreateCompletionRequest {
    *
    * The maximum value for `logprobs` is 5.
    */
-  logprobs?: safeint | null; // = null;
+  logprobs?: safeint | null = null;
 
   /** Echo back the prompt in addition to the completion */
   echo?: boolean | null = false;
@@ -359,9 +358,17 @@ model CreateCompletionRequest {
    * **Note:** Because this parameter generates many completions, it can quickly consume your token
    * quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
    */
-  best_of?: safeint | null; // = 1;
+  best_of?: safeint | null = 1;
 }
 
+@oneOf
+union Prompt {
+  string,
+  string[],
+  TokenArray,
+  TokenArrayArray,
+  null,
+}
 /**
  * Represents a completion response from the API. Note: both the streamed and non-streamed response
  * objects share the same shape (unlike the chat endpoint).

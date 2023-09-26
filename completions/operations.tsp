@@ -18,7 +18,7 @@ namespace Chat {
     @post
     @operationId("createChatCompletion")
     create(
-      @body body: CreateChatCompletionRequest,
+      ... CreateChatCompletionRequest
     ): CreateChatCompletionResponse | ErrorResponse;
   }
 }
@@ -28,6 +28,6 @@ interface Completions {
   @post
   @operationId("createCompletion")
   create(
-    @body body: CreateCompletionRequest,
+    ... CreateCompletionRequest
   ): CreateCompletionResponse | ErrorResponse;
 }

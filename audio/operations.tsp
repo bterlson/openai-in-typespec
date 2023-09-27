@@ -15,7 +15,7 @@ namespace Audio {
     @operationId("createTranscription")
     @tag("OpenAI")
     @summary("Transcribes audio into the input language.")
-    create(
+    createTranscription(
       @header contentType: "multipart/form-data",
       @body audio: CreateTranscriptionRequest,
     ): CreateTranscriptionResponse | ErrorResponse;
@@ -27,7 +27,7 @@ namespace Audio {
     @operationId("createTranslation")
     @tag("OpenAI")
     @summary("Transcribes audio into the input language.")
-    create(
+    createTranslation(
       @header contentType: "multipart/form-data",
       @body audio: CreateTranslationRequest,
     ): CreateTranslationResponse | ErrorResponse;

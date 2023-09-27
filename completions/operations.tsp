@@ -17,8 +17,8 @@ namespace Chat {
     @tag("OpenAI")
     @post
     @operationId("createChatCompletion")
-    create(
-      ... CreateChatCompletionRequest
+    createChatCompletion(
+      ...CreateChatCompletionRequest,
     ): CreateChatCompletionResponse | ErrorResponse;
   }
 }
@@ -27,7 +27,7 @@ interface Completions {
   @tag("OpenAI")
   @post
   @operationId("createCompletion")
-  create(
-    ... CreateCompletionRequest
+  createCompletion(
+    ...CreateCompletionRequest,
   ): CreateCompletionResponse | ErrorResponse;
 }

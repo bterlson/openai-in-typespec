@@ -15,13 +15,13 @@ interface Files {
   @get
   @summary("Returns a list of files that belong to the user's organization.")
   @operationId("listFiles")
-  list(): ListFilesResponse | ErrorResponse;
+  listFiles(): ListFilesResponse | ErrorResponse;
 
   @tag("OpenAI")
   @post
   @summary("Returns a list of files that belong to the user's organization.")
   @operationId("createFile")
-  create(
+  createFile(
     @header contentType: "multipart/form-data",
     @body file: CreateFileRequest,
   ): OpenAIFile | ErrorResponse;
@@ -31,7 +31,7 @@ interface Files {
   @summary("Returns information about a specific file.")
   @operationId("retrieveFile")
   @route("/files/{file_id}")
-  retrieve(
+  retrieveFile(
     /** The ID of the file to use for this request. */
     @path file_id: string,
   ): OpenAIFile | ErrorResponse;
@@ -41,7 +41,7 @@ interface Files {
   @summary("Delete a file")
   @operationId("deleteFile")
   @route("/files/{file_id}")
-  delete(
+  deleteFile(
     /** The ID of the file to use for this request. */
     @path file_id: string,
   ): DeleteFileResponse | ErrorResponse;
@@ -51,7 +51,7 @@ interface Files {
   @get
   @summary("Returns the contents of the specified file.")
   @operationId("downloadFile")
-  download(
+  downloadFile(
     /** The ID of the file to use for this request. */
     @path file_id: string,
   ): string | ErrorResponse;

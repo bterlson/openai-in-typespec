@@ -24,14 +24,14 @@ namespace FineTuning {
     @post
     @tag("OpenAI")
     @operationId("createFineTuningJob")
-    create(
+    createFineTuningJob(
       @body job: CreateFineTuningJobRequest,
     ): FineTuningJob | ErrorResponse;
 
     @get
     @tag("OpenAI")
     @operationId("listPaginatedFineTuningJobs")
-    list(
+    listPaginatedFineTuningJobs(
       /** Identifier for the last job from the previous pagination request. */
       @query after?: string,
 
@@ -48,14 +48,16 @@ namespace FineTuning {
     @tag("OpenAI")
     @get
     @operationId("retrieveFineTuningJob")
-    retrieve(@path fine_tuning_job_id: string): FineTuningJob | ErrorResponse;
+    retrieveFineTuningJob(
+      @path fine_tuning_job_id: string,
+    ): FineTuningJob | ErrorResponse;
 
     @summary("Get status updates for a fine-tuning job.")
     @tag("OpenAI")
     @route("{fine_tuning_job_id}/events")
     @get
     @operationId("listFineTuningEvents")
-    listEvents(
+    listFineTuningEvents(
       /** The ID of the fine-tuning job to get events for. */
       @path fine_tuning_job_id: string,
 
@@ -71,7 +73,7 @@ namespace FineTuning {
     @route("{fine_tuning_job_id}/cancel")
     @post
     @operationId("cancelFineTuningJob")
-    cancel(
+    cancelFineTuningJob(
       /** The ID of the fine-tuning job to cancel. */
       @path fine_tuning_job_id: string,
     ): FineTuningJob | ErrorResponse;
@@ -91,14 +93,16 @@ interface FineTunes {
   [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
   """)
   @operationId("createFineTune")
-  create(@body fine_tune: CreateFineTuneRequest): FineTune | ErrorResponse;
+  createFineTune(
+    @body fine_tune: CreateFineTuneRequest,
+  ): FineTune | ErrorResponse;
 
   #deprecated "deprecated"
   @get
   @tag("OpenAI")
   @summary("List your organization's fine-tuning jobs")
   @operationId("listFineTunes")
-  list(): ListFineTunesResponse | ErrorResponse;
+  listFineTunes(): ListFineTunesResponse | ErrorResponse;
 
   #deprecated "deprecated"
   @get
@@ -110,7 +114,7 @@ interface FineTunes {
   [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
   """)
   @operationId("retrieveFineTune")
-  retrieve(
+  retrieveFineTune(
     /** The ID of the fine-tune job */
     @path fine_tune_id: string,
   ): FineTune | ErrorResponse;
@@ -121,7 +125,7 @@ interface FineTunes {
   @tag("OpenAI")
   @summary("Get fine-grained status updates for a fine-tune job.")
   @operationId("listFineTuneEvents")
-  listEvents(
+  listFineTuneEvents(
     /** The ID of the fine-tune job to get events for. */
     @path fine_tune_id: string,
 
@@ -143,7 +147,7 @@ interface FineTunes {
   @tag("OpenAI")
   @summary("Immediately cancel a fine-tune job.")
   @operationId("cancelFineTune")
-  cancel(
+  cancelFineTune(
     /** The ID of the fine-tune job to cancel */
     @path fine_tune_id: string,
   ): FineTune | ErrorResponse;
@@ -158,7 +162,7 @@ interface Models {
   owner and availability.
   """)
   @operationId("listModels")
-  list(): ListModelsResponse | ErrorResponse;
+  listModels(): ListModelsResponse | ErrorResponse;
 
   @get
   @route("{model}")

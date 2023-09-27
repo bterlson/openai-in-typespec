@@ -418,7 +418,3 @@ model CreateCompletionResponse {
 
   usage?: CompletionUsage;
 }
-
-@minValue(0)
-@maxValue(5)
-scalar LogProbs extends safeint;

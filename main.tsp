@@ -27,5 +27,5 @@ using TypeSpec.Http;
   },
   version: "2.0.0",
 })
-@useAuth(ApiKeyAuth<ApiKeyLocation.query, "AUTHORIZATION">)
+@useAuth(ApiKeyAuth<ApiKeyLocation.header, "AUTHORIZATION">)
 namespace OpenAI;

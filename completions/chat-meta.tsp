@@ -1,6 +1,6 @@
 using TypeSpec.OpenAPI;
 
-@@extension(OpenAI.Completions.create,
+@@extension(OpenAI.Completions.createCompletion,
   "x-oaiMeta",
   {
     name: "Create chat completion",

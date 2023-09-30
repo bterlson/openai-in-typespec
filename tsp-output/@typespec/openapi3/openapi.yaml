@@ -2811,11 +2811,6 @@ components:
             $ref: '#/components/schemas/FineTuningJob'
         has_more:
           type: boolean
-    LogProbs:
-      type: integer
-      format: int64
-      minimum: 0
-      maximum: 5
     MaxTokens:
       type: integer
       format: int64
@@ -2962,3 +2957,7 @@ components:
     BearerAuth:
       type: http
       scheme: bearer
+servers:
+  - url: https://api.openai.com/v1
+    description: OpenAI Endpoint
+    variables: {}

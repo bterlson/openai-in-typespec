@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-export { OpenAIClient, OpenAIClientOptions } from "./OpenAIClient.js";
 export {
   CreateTranscriptionRequest,
   CreateTranscriptionResponse,
@@ -45,6 +44,8 @@ export {
   CreateImageVariationRequest,
   CreateModerationRequest,
   CreateModerationResponse,
+} from "./models.js";
+export {
   CreateTranscriptionOptions,
   CreateTranslationOptions,
   CreateChatCompletionOptions,
@@ -73,4 +74,4 @@ export {
   CreateImageEditOptions,
   CreateImageVariationOptions,
   CreateModerationOptions,
-} from "./models/index.js";
+} from "./options.js";

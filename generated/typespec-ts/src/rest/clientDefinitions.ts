@@ -30,7 +30,7 @@ import {
   CreateImageEditParameters,
   CreateImageVariationParameters,
   CreateModerationParameters,
-} from "./parameters";
+} from "./parameters.js";
 import {
   CreateTranscription200Response,
   CreateTranscriptionDefaultResponse,
@@ -88,7 +88,7 @@ import {
   CreateImageVariationDefaultResponse,
   CreateModeration200Response,
   CreateModerationDefaultResponse,
-} from "./responses";
+} from "./responses.js";
 import { Client, StreamableMethod } from "@azure-rest/core-client";
 
 export interface CreateTranscription {
@@ -353,6 +353,6 @@ export interface Routes {
   (path: "/moderations"): CreateModeration;
 }
 
-export type OpenAIClient = Client & {
+export type OpenAIContext = Client & {
   path: Routes;
 };

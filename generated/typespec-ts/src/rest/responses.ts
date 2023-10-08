@@ -24,7 +24,7 @@ import {
   DeleteModelResponseOutput,
   ImagesResponseOutput,
   CreateModerationResponseOutput,
-} from "./outputModels";
+} from "./outputModels.js";
 
 /** The request has succeeded. */
 export interface CreateTranscription200Response extends HttpResponse {

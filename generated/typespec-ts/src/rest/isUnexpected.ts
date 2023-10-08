@@ -58,7 +58,7 @@ import {
   CreateImageVariationDefaultResponse,
   CreateModeration200Response,
   CreateModerationDefaultResponse,
-} from "./responses";
+} from "./responses.js";
 
 const responseMap: Record<string, string[]> = {
   "POST /audio/transcriptions": ["200"],

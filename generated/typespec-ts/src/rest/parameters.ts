@@ -11,7 +11,7 @@ import {
   CreateFineTuneRequest,
   CreateImageRequest,
   CreateModerationRequest,
-} from "./models";
+} from "./models.js";
 
 export interface CreateTranscriptionBodyParam {
   body: CreateTranscriptionFormBody;

@@ -1,0 +1,13 @@
+emit:
+  - "@typespec/openapi3"
+  - "@azure-tools/typespec-ts"
+options:
+  "@typespec/openapi3":
+    "emitter-output-dir": "{project-root}/generated/openapi3"
+  "@azure-tools/typespec-ts":
+    azureSdkForJs: false
+    # isModularLibrary: true
+    "emitter-output-dir": "{project-root}/generated/typespec-ts"
+    packageDetails:
+      name: "openai"
+      description: "OpenAI Service"

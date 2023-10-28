@@ -9,6 +9,8 @@ using TypeSpec.OpenAPI;
 
 namespace OpenAI;
 
+using ModelDefinitions;
+
 @route("/fine_tuning")
 namespace FineTuning {
   @route("jobs")

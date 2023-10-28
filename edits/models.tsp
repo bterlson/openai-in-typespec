@@ -1,4 +1,5 @@
-namespace OpenAI;
+namespace ModelDefinitions;
+
 using TypeSpec.OpenAPI;
 
 model CreateEditRequest {

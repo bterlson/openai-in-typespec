@@ -9,6 +9,8 @@ using TypeSpec.OpenAPI;
 
 namespace OpenAI;
 
+using ModelDefinitions;
+
 @route("/files")
 interface Files {
   @tag("OpenAI")

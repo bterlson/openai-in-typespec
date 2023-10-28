@@ -1,6 +1,6 @@
 import "../common/models.tsp";
 
-namespace OpenAI;
+namespace ModelDefinitions;
 using TypeSpec.OpenAPI;
 
 model CreateEmbeddingRequest {

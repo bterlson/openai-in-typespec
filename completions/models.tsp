@@ -1,5 +1,11 @@
-namespace OpenAI;
+import "@typespec/versioning";
+
+import "../versions.tsp";
+
+namespace ModelDefinitions;
+
 using TypeSpec.OpenAPI;
+using TypeSpec.Versioning;
 
 alias CHAT_COMPLETION_MODELS =
   | "gpt4"
@@ -142,6 +148,9 @@ scalar N extends safeint;
 scalar MaxTokens extends safeint;
 
 model CreateChatCompletionRequest {
+  @added(ModelDefinitions.OpenAIFlavors.Azure)
+  deploymentId: string;
+
   /**
    * ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility)
    * table for details on which models work with the Chat API.
@@ -204,6 +213,9 @@ model ChatCompletionFunctions {
 model ChatCompletionFunctionParameters is Record<unknown>;
 
 model ChatCompletionRequestMessage {
+  @added(ModelDefinitions.OpenAIFlavors.Azure)
+  deploymentId: string;
+
   /** The role of the messages author. One of `system`, `user`, `assistant`, or `function`. */
   role: "system" | "user" | "assistant" | "function";
 
@@ -309,9 +321,16 @@ model ChatCompletionResponseMessage {
      */
     arguments: string;
   };
+
+  @added(OpenAIFlavors.Azure)
+  content_filter_results?: ContentFilterResults
+
 }
 
 model CreateCompletionRequest {
+  @added(OpenAIFlavors.Azure)
+  @TypeSpec.Http.path deploymentId: string;
+
   /**
    * ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to
    * see all of your available models, or see our [Model overview](/docs/models/overview) for
@@ -417,4 +436,28 @@ model CreateCompletionResponse {
   }[];
 
   usage?: CompletionUsage;
+
+  @added(OpenAIFlavors.Azure)
+  content_filter_results?: ContentFilterResults
+}
+
+@added(OpenAIFlavors.Azure)
+model ContentFilterResult {
+  severity: "safe" | "low" | "medium" | "high";
+  filtered: boolean;
+}
+
+@added(OpenAIFlavors.Azure)
+model ErrorBase {
+  code?: string;
+  message?: string;
+};
+
+@added(OpenAIFlavors.Azure)
+model ContentFilterResults {
+  sexual: ContentFilterResult;
+  violence: ContentFilterResult;
+  hate: ContentFilterResult;
+  self_harm: ContentFilterResult;
+  error: ErrorBase;
 }

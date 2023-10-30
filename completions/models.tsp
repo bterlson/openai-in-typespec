@@ -1,6 +1,5 @@
-import "@typespec/versioning";
-
 import "../versions.tsp";
+import "./azuremodels.tsp";
 
 namespace ModelDefinitions;
 
@@ -271,6 +270,9 @@ model CreateChatCompletionResponse {
   /** The model used for the chat completion. */
   `model`: string;
 
+  @added(OpenAIFlavors.Azure)
+  promp_filter_results: ContentFilterResult[];
+
   /** A list of chat completion choices. Can be more than one if `n` is greater than 1. */
   choices: {
     /** The index of the choice in the list of choices. */
@@ -285,6 +287,9 @@ model CreateChatCompletionResponse {
      * a flag from our content filters, or `function_call` if the model called a function.
      */
     finish_reason: "stop" | "length" | "function_call" | "content_filter";
+
+    @added(OpenAIFlavors.Azure)
+    content_filter_results?: ContentFilterResult;
   }[];
 
   usage?: CompletionUsage;
@@ -324,7 +329,6 @@ model ChatCompletionResponseMessage {
 
   @added(OpenAIFlavors.Azure)
   content_filter_results?: ContentFilterResults
-
 }
 
 model CreateCompletionRequest {
@@ -439,25 +443,4 @@ model CreateCompletionResponse {
 
   @added(OpenAIFlavors.Azure)
   content_filter_results?: ContentFilterResults
-}
-
-@added(OpenAIFlavors.Azure)
-model ContentFilterResult {
-  severity: "safe" | "low" | "medium" | "high";
-  filtered: boolean;
-}
-
-@added(OpenAIFlavors.Azure)
-model ErrorBase {
-  code?: string;
-  message?: string;
-};
-
-@added(OpenAIFlavors.Azure)
-model ContentFilterResults {
-  sexual: ContentFilterResult;
-  violence: ContentFilterResult;
-  hate: ContentFilterResult;
-  self_harm: ContentFilterResult;
-  error: ErrorBase;
 }

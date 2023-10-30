@@ -43,11 +43,26 @@ namespace AzureOpenAI {
             op createCompletion is OpenAI.Chat.Completions.createChatCompletion;
 
             @route("extensions/completions")
-            op createCompletionOnYourOwnData(... ModelDefinitions.CreateChatCompletionRequest): ModelDefinitions.CreateChatCompletionResponse;
+            op createCompletionOnYourOwnData(... ModelDefinitions.CreateChatCompletionRequest, dataSources: DataSource[]): ModelDefinitions.CreateChatCompletionResponse;
         };
     }
     @route("deployments/{deploymentId}/completions")
     namespace Completions {
       op createCompletion is OpenAI.Completions.createCompletion;
     }
+
+    @route("deployments/{deploymentId}/embeddings")
+    namespace Embeddings {
+      op createEmbedding is OpenAI.Embeddings.createEmbedding;
+    }
+
+    @route("deployments/{deploymentId}/audio")
+    namespace Audio {
+      @route("transcriptions")
+      op transcriptions is OpenAI.Audio.Transcriptions.createTranscription;
+
+      @route("translations")
+      op translations is OpenAI.Audio.Translations.createTranslation;
+    }
+    model DataSource {};
 }

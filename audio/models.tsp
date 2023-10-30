@@ -1,7 +1,14 @@
-namespace OpenAI;
+import "../versions.tsp";
+
+namespace ModelDefinitions;
+
 using TypeSpec.OpenAPI;
+using TypeSpec.Versioning;
 
 model CreateTranscriptionRequest {
+  @added(OpenAIFlavors.Azure)
+  @TypeSpec.Http.path deploymentId: string;
+
   /**
    * The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4,
    * mpeg, mpga, m4a, ogg, wav, or webm.
@@ -50,6 +57,9 @@ model CreateTranscriptionResponse {
 }
 
 model CreateTranslationRequest {
+  @added(OpenAIFlavors.Azure)
+  @TypeSpec.Http.path deploymentId: string;
+
   /**
    * The audio file object (not file name) to translate, in one of these formats: flac, mp3, mp4,
    * mpeg, mpga, m4a, ogg, wav, or webm.

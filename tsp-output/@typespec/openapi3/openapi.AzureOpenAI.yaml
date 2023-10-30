@@ -6,6 +6,68 @@ info:
 tags:
   - name: OpenAI
 paths:
+  /deployments/{deploymentId}/audio/transcriptions:
+    post:
+      tags:
+        - OpenAI
+      operationId: createTranscription
+      summary: Transcribes audio into the input language.
+      parameters:
+        - name: deploymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.CreateTranscriptionResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateTranscriptionRequest'
+  /deployments/{deploymentId}/audio/translations:
+    post:
+      tags:
+        - OpenAI
+      operationId: createTranslation
+      summary: Transcribes audio into the input language.
+      parameters:
+        - name: deploymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.CreateTranslationResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateTranslationRequest'
   /deployments/{deploymentId}/chat/completions:
     post:
       tags:
@@ -199,6 +261,7 @@ paths:
               required:
                 - model
                 - messages
+                - dataSources
               properties:
                 model:
                   anyOf:
@@ -342,6 +405,10 @@ paths:
                     as they become available, with the stream terminated by a `data: [DONE]` message.
                     [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb).
                   default: true
+                dataSources:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DataSource'
   /deployments/{deploymentId}/completions:
     post:
       tags:
@@ -516,6 +583,37 @@ paths:
                   "finish_reason": "stop"
                 }]
               }
+  /deployments/{deploymentId}/embeddings:
+    post:
+      tags:
+        - OpenAI
+      operationId: createEmbedding
+      summary: Creates an embedding vector representing the input text.
+      parameters:
+        - name: deploymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.CreateEmbeddingResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateEmbeddingRequest'
 security:
   - BearerAuth: []
 components:
@@ -533,6 +631,8 @@ components:
       schema:
         type: string
   schemas:
+    DataSource:
+      type: object
     ModelDefinitions.ChatCompletionFunctionCallOption:
       type: object
       required:
@@ -712,6 +812,7 @@ components:
         - object
         - created
         - model
+        - promp_filter_results
         - choices
       properties:
         id:
@@ -727,6 +828,10 @@ components:
         model:
           type: string
           description: The model used for the chat completion.
+        promp_filter_results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.ContentFilterResult'
         choices:
           type: array
           items:
@@ -754,6 +859,8 @@ components:
                   natural stop point or a provided stop sequence, `length` if the maximum number of tokens
                   specified in the request was reached, `content_filter` if the content was omitted due to
                   a flag from our content filters, or `function_call` if the model called a function.
+              content_filter_results:
+                $ref: '#/components/schemas/ModelDefinitions.ContentFilterResult'
           description: A list of chat completion choices. Can be more than one if `n` is greater than 1.
         usage:
           $ref: '#/components/schemas/ModelDefinitions.CompletionUsage'
@@ -1017,6 +1124,215 @@ components:
         name: The  completion object
         legacy: true
         example: ''
+    ModelDefinitions.CreateEmbeddingRequest:
+      type: object
+      required:
+        - model
+        - input
+      properties:
+        model:
+          anyOf:
+            - type: string
+            - type: string
+              enum:
+                - text-embedding-ada-002
+          description: ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them.
+          x-oaiTypeLabel: string
+        input:
+          anyOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+            - $ref: '#/components/schemas/ModelDefinitions.TokenArray'
+            - $ref: '#/components/schemas/ModelDefinitions.TokenArrayArray'
+          description: |-
+            Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a
+            single request, pass an array of strings or array of token arrays. Each input must not exceed
+            the max input tokens for the model (8191 tokens for `text-embedding-ada-002`) and cannot be an empty string.
+            [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)
+            for counting tokens.
+        user:
+          $ref: '#/components/schemas/ModelDefinitions.User'
+    ModelDefinitions.CreateEmbeddingResponse:
+      type: object
+      required:
+        - object
+        - model
+        - data
+        - usage
+      properties:
+        object:
+          type: string
+          enum:
+            - embedding
+          description: The object type, which is always "embedding".
+        model:
+          type: string
+          description: The name of the model used to generate the embedding.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.Embedding'
+          description: The list of embeddings generated by the model.
+        usage:
+          type: object
+          description: The usage information for the request.
+          required:
+            - prompt_tokens
+            - total_tokens
+          properties:
+            prompt_tokens:
+              type: integer
+              format: int64
+              description: The number of tokens used by the prompt.
+            total_tokens:
+              type: integer
+              format: int64
+              description: The total number of tokens used by the request.
+    ModelDefinitions.CreateTranscriptionRequest:
+      type: object
+      required:
+        - file
+        - model
+      properties:
+        file:
+          type: string
+          format: binary
+          description: |-
+            The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4,
+            mpeg, mpga, m4a, ogg, wav, or webm.
+          x-oaiTypeLabel: file
+        model:
+          anyOf:
+            - type: string
+            - type: string
+              enum:
+                - whisper-1
+          description: ID of the model to use. Only `whisper-1` is currently available.
+          x-oaiTypeLabel: string
+        prompt:
+          type: string
+          description: |-
+            An optional text to guide the model's style or continue a previous audio segment. The
+            [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.
+        response_format:
+          type: string
+          enum:
+            - json
+            - text
+            - srt
+            - verbose_json
+            - vtt
+          description: |-
+            The format of the transcript output, in one of these options: json, text, srt, verbose_json, or
+            vtt.
+          default: json
+        temperature:
+          type: number
+          format: double
+          description: |-
+            The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more
+            random, while lower values like 0.2 will make it more focused and deterministic. If set to 0,
+            the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to
+            automatically increase the temperature until certain thresholds are hit.
+          minimum: 0
+          maximum: 1
+          default: 0
+        language:
+          type: string
+          description: |-
+            The language of the input audio. Supplying the input language in
+            [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy
+            and latency.
+    ModelDefinitions.CreateTranscriptionResponse:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+    ModelDefinitions.CreateTranslationRequest:
+      type: object
+      required:
+        - file
+        - model
+      properties:
+        file:
+          type: string
+          format: binary
+          description: |-
+            The audio file object (not file name) to translate, in one of these formats: flac, mp3, mp4,
+            mpeg, mpga, m4a, ogg, wav, or webm.
+          x-oaiTypeLabel: file
+        model:
+          anyOf:
+            - type: string
+            - type: string
+              enum:
+                - whisper-1
+          description: ID of the model to use. Only `whisper-1` is currently available.
+          x-oaiTypeLabel: string
+        prompt:
+          type: string
+          description: |-
+            An optional text to guide the model's style or continue a previous audio segment. The
+            [prompt](/docs/guides/speech-to-text/prompting) should match the audio language.
+        response_format:
+          type: string
+          enum:
+            - json
+            - text
+            - srt
+            - verbose_json
+            - vtt
+          description: |-
+            The format of the transcript output, in one of these options: json, text, srt, verbose_json, or
+            vtt.
+          default: json
+        temperature:
+          type: number
+          format: double
+          description: |-
+            The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more
+            random, while lower values like 0.2 will make it more focused and deterministic. If set to 0,
+            the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to
+            automatically increase the temperature until certain thresholds are hit.
+          minimum: 0
+          maximum: 1
+          default: 0
+    ModelDefinitions.CreateTranslationResponse:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+    ModelDefinitions.Embedding:
+      type: object
+      description: Represents an embedding vector returned by embedding endpoint.
+      required:
+        - index
+        - object
+        - embedding
+      properties:
+        index:
+          type: integer
+          format: int64
+          description: The index of the embedding in the list of embeddings.
+        object:
+          type: string
+          enum:
+            - embedding
+          description: The object type, which is always "embedding".
+        embedding:
+          type: array
+          items:
+            type: number
+            format: double
+          description: |-
+            The embedding vector, which is a list of floats. The length of vector depends on the model as\
+            listed in the [embedding guide](/docs/guides/embeddings).
     ModelDefinitions.ErrorBase:
       type: object
       properties:

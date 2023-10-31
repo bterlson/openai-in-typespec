@@ -6,7 +6,7 @@ using TypeSpec.OpenAPI;
 using TypeSpec.Versioning;
 
 model CreateTranscriptionRequest {
-  @added(OpenAIFlavors.Azure)
+  @azure
   @TypeSpec.Http.path deploymentId: string;
 
   /**
@@ -57,7 +57,7 @@ model CreateTranscriptionResponse {
 }
 
 model CreateTranslationRequest {
-  @added(OpenAIFlavors.Azure)
+  @azure
   @TypeSpec.Http.path deploymentId: string;
 
   /**
@@ -93,6 +93,7 @@ model CreateTranslationRequest {
    */
   @minValue(0)
   @maxValue(1)
+  @azure
   temperature?: float64 = 0;
 }
 

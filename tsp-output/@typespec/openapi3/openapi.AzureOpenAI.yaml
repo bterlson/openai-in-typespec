@@ -18,6 +18,8 @@ paths:
           required: true
           schema:
             type: string
+            x-ms-azure-openai: true
+          x-ms-azure-openai: true
       responses:
         '200':
           description: The request has succeeded.
@@ -49,6 +51,8 @@ paths:
           required: true
           schema:
             type: string
+            x-ms-azure-openai: true
+          x-ms-azure-openai: true
       responses:
         '200':
           description: The request has succeeded.
@@ -240,175 +244,6 @@ paths:
                     as they become available, with the stream terminated by a `data: [DONE]` message.
                     [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb).
                   default: true
-  /deployments/{deploymentId}/chat/extensions/completions:
-    post:
-      operationId: Completions_createCompletionOnYourOwnData
-      parameters:
-        - $ref: '#/components/parameters/ModelDefinitions.CreateChatCompletionRequest.deploymentId'
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ModelDefinitions.CreateChatCompletionResponse'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - model
-                - messages
-                - dataSources
-              properties:
-                model:
-                  anyOf:
-                    - type: string
-                    - type: string
-                      enum:
-                        - gpt4
-                        - gpt-4-0314
-                        - gpt-4-0613
-                        - gpt-4-32k
-                        - gpt-4-32k-0314
-                        - gpt-4-32k-0613
-                        - gpt-3.5-turbo
-                        - gpt-3.5-turbo-16k
-                        - gpt-3.5-turbo-0301
-                        - gpt-3.5-turbo-0613
-                        - gpt-3.5-turbo-16k-0613
-                  description: |-
-                    ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility)
-                    table for details on which models work with the Chat API.
-                  x-oaiTypeLabel: string
-                messages:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ModelDefinitions.ChatCompletionRequestMessage'
-                  description: |-
-                    A list of messages comprising the conversation so far.
-                    [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb).
-                  minItems: 1
-                functions:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ModelDefinitions.ChatCompletionFunctions'
-                  description: A list of functions the model may generate JSON inputs for.
-                  minItems: 1
-                  maxItems: 128
-                function_call:
-                  anyOf:
-                    - type: string
-                      enum:
-                        - none
-                        - auto
-                    - $ref: '#/components/schemas/ModelDefinitions.ChatCompletionFunctionCallOption'
-                  description: |-
-                    Controls how the model responds to function calls. `none` means the model does not call a
-                    function, and responds to the end-user. `auto` means the model can pick between an end-user or
-                    calling a function.  Specifying a particular function via `{\"name":\ \"my_function\"}` forces the
-                    model to call that function. `none` is the default when no functions are present. `auto` is the
-                    default if functions are present.
-                temperature:
-                  oneOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.Temperature'
-                  nullable: true
-                  description: |-
-                    What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output
-                    more random, while lower values like 0.2 will make it more focused and deterministic.
-
-                    We generally recommend altering this or `top_p` but not both.
-                  default: 1
-                top_p:
-                  oneOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.TopP'
-                  nullable: true
-                  description: |-
-                    An alternative to sampling with temperature, called nucleus sampling, where the model considers
-                    the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising
-                    the top 10% probability mass are considered.
-
-                    We generally recommend altering this or `temperature` but not both.
-                  default: 1
-                n:
-                  oneOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.N'
-                  nullable: true
-                  description: |-
-                    How many completions to generate for each prompt.
-                    **Note:** Because this parameter generates many completions, it can quickly consume your token
-                    quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
-                  default: 1
-                max_tokens:
-                  oneOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.MaxTokens'
-                  nullable: true
-                  description: |-
-                    The maximum number of [tokens](/tokenizer) to generate in the completion.
-
-                    The token count of your prompt plus `max_tokens` cannot exceed the model's context length.
-                    [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)
-                    for counting tokens.
-                  default: 16
-                stop:
-                  allOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.Stop'
-                  description: Up to 4 sequences where the API will stop generating further tokens.
-                  default: null
-                presence_penalty:
-                  oneOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.Penalty'
-                  nullable: true
-                  description: |-
-                    Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear
-                    in the text so far, increasing the model's likelihood to talk about new topics.
-
-                    [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
-                frequency_penalty:
-                  oneOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.Penalty'
-                  nullable: true
-                  description: |-
-                    Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing
-                    frequency in the text so far, decreasing the model's likelihood to repeat the same line
-                    verbatim.
-
-                    [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
-                logit_bias:
-                  type: object
-                  description: |-
-                    Modify the likelihood of specified tokens appearing in the completion.
-                    Accepts a json object that maps tokens (specified by their token ID in the tokenizer) to an
-                    associated bias value from -100 to 100. Mathematically, the bias is added to the logits
-                    generated by the model prior to sampling. The exact effect will vary per model, but values
-                    between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100
-                    should result in a ban or exclusive selection of the relevant token.
-                  additionalProperties:
-                    type: integer
-                    format: int64
-                  nullable: true
-                  x-oaiTypeLabel: map
-                user:
-                  allOf:
-                    - $ref: '#/components/schemas/ModelDefinitions.User'
-                  description: |-
-                    A unique identifier representing your end-user, which can help OpenAI to monitor and detect
-                    abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
-                stream:
-                  type: boolean
-                  nullable: true
-                  description: |-
-                    If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only
-                    [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-                    as they become available, with the stream terminated by a `data: [DONE]` message.
-                    [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb).
-                  default: true
-                dataSources:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/DataSource'
   /deployments/{deploymentId}/completions:
     post:
       tags:
@@ -595,6 +430,8 @@ paths:
           required: true
           schema:
             type: string
+            x-ms-azure-openai: true
+          x-ms-azure-openai: true
       responses:
         '200':
           description: The request has succeeded.
@@ -614,6 +451,175 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ModelDefinitions.CreateEmbeddingRequest'
+  /deployments/{deploymentId}/extensions/chat/completions:
+    post:
+      operationId: ChatExtensions_createCompletionOnYourOwnData
+      parameters:
+        - $ref: '#/components/parameters/ModelDefinitions.CreateChatCompletionRequest.deploymentId'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.CreateChatCompletionResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - model
+                - messages
+                - dataSources
+              properties:
+                model:
+                  anyOf:
+                    - type: string
+                    - type: string
+                      enum:
+                        - gpt4
+                        - gpt-4-0314
+                        - gpt-4-0613
+                        - gpt-4-32k
+                        - gpt-4-32k-0314
+                        - gpt-4-32k-0613
+                        - gpt-3.5-turbo
+                        - gpt-3.5-turbo-16k
+                        - gpt-3.5-turbo-0301
+                        - gpt-3.5-turbo-0613
+                        - gpt-3.5-turbo-16k-0613
+                  description: |-
+                    ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility)
+                    table for details on which models work with the Chat API.
+                  x-oaiTypeLabel: string
+                messages:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ModelDefinitions.ChatCompletionRequestMessage'
+                  description: |-
+                    A list of messages comprising the conversation so far.
+                    [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb).
+                  minItems: 1
+                functions:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ModelDefinitions.ChatCompletionFunctions'
+                  description: A list of functions the model may generate JSON inputs for.
+                  minItems: 1
+                  maxItems: 128
+                function_call:
+                  anyOf:
+                    - type: string
+                      enum:
+                        - none
+                        - auto
+                    - $ref: '#/components/schemas/ModelDefinitions.ChatCompletionFunctionCallOption'
+                  description: |-
+                    Controls how the model responds to function calls. `none` means the model does not call a
+                    function, and responds to the end-user. `auto` means the model can pick between an end-user or
+                    calling a function.  Specifying a particular function via `{\"name":\ \"my_function\"}` forces the
+                    model to call that function. `none` is the default when no functions are present. `auto` is the
+                    default if functions are present.
+                temperature:
+                  oneOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.Temperature'
+                  nullable: true
+                  description: |-
+                    What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output
+                    more random, while lower values like 0.2 will make it more focused and deterministic.
+
+                    We generally recommend altering this or `top_p` but not both.
+                  default: 1
+                top_p:
+                  oneOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.TopP'
+                  nullable: true
+                  description: |-
+                    An alternative to sampling with temperature, called nucleus sampling, where the model considers
+                    the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising
+                    the top 10% probability mass are considered.
+
+                    We generally recommend altering this or `temperature` but not both.
+                  default: 1
+                n:
+                  oneOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.N'
+                  nullable: true
+                  description: |-
+                    How many completions to generate for each prompt.
+                    **Note:** Because this parameter generates many completions, it can quickly consume your token
+                    quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
+                  default: 1
+                max_tokens:
+                  oneOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.MaxTokens'
+                  nullable: true
+                  description: |-
+                    The maximum number of [tokens](/tokenizer) to generate in the completion.
+
+                    The token count of your prompt plus `max_tokens` cannot exceed the model's context length.
+                    [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)
+                    for counting tokens.
+                  default: 16
+                stop:
+                  allOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.Stop'
+                  description: Up to 4 sequences where the API will stop generating further tokens.
+                  default: null
+                presence_penalty:
+                  oneOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.Penalty'
+                  nullable: true
+                  description: |-
+                    Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear
+                    in the text so far, increasing the model's likelihood to talk about new topics.
+
+                    [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
+                frequency_penalty:
+                  oneOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.Penalty'
+                  nullable: true
+                  description: |-
+                    Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing
+                    frequency in the text so far, decreasing the model's likelihood to repeat the same line
+                    verbatim.
+
+                    [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
+                logit_bias:
+                  type: object
+                  description: |-
+                    Modify the likelihood of specified tokens appearing in the completion.
+                    Accepts a json object that maps tokens (specified by their token ID in the tokenizer) to an
+                    associated bias value from -100 to 100. Mathematically, the bias is added to the logits
+                    generated by the model prior to sampling. The exact effect will vary per model, but values
+                    between -1 and 1 should decrease or increase likelihood of selection; values like -100 or 100
+                    should result in a ban or exclusive selection of the relevant token.
+                  additionalProperties:
+                    type: integer
+                    format: int64
+                  nullable: true
+                  x-oaiTypeLabel: map
+                user:
+                  allOf:
+                    - $ref: '#/components/schemas/ModelDefinitions.User'
+                  description: |-
+                    A unique identifier representing your end-user, which can help OpenAI to monitor and detect
+                    abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
+                stream:
+                  type: boolean
+                  nullable: true
+                  description: |-
+                    If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only
+                    [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
+                    as they become available, with the stream terminated by a `data: [DONE]` message.
+                    [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb).
+                  default: true
+                dataSources:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DataSource'
 security:
   - BearerAuth: []
 components:
@@ -624,12 +630,16 @@ components:
       required: true
       schema:
         type: string
+        x-ms-azure-openai: true
+      x-ms-azure-openai: true
     ModelDefinitions.CreateCompletionRequest.deploymentId:
       name: deploymentId
       in: path
       required: true
       schema:
         type: string
+        x-ms-azure-openai: true
+      x-ms-azure-openai: true
   schemas:
     DataSource:
       type: object
@@ -678,6 +688,7 @@ components:
       properties:
         deploymentId:
           type: string
+          x-ms-azure-openai: true
         role:
           type: string
           enum:
@@ -749,7 +760,9 @@ components:
                 the model does not always generate valid JSON, and may hallucinate parameters not defined by
                 your function schema. Validate the arguments in your code before calling your function.
         content_filter_results:
-          $ref: '#/components/schemas/ModelDefinitions.ContentFilterResults'
+          allOf:
+            - $ref: '#/components/schemas/ModelDefinitions.ContentFilterResults'
+          x-ms-azure-openai: true
     ModelDefinitions.CompletionUsage:
       type: object
       description: Usage statistics for the completion request.
@@ -785,6 +798,7 @@ components:
             - high
         filtered:
           type: boolean
+      x-ms-azure-openai: true
     ModelDefinitions.ContentFilterResults:
       type: object
       required:
@@ -804,6 +818,7 @@ components:
           $ref: '#/components/schemas/ModelDefinitions.ContentFilterResult'
         error:
           $ref: '#/components/schemas/ModelDefinitions.ErrorBase'
+      x-ms-azure-openai: true
     ModelDefinitions.CreateChatCompletionResponse:
       type: object
       description: Represents a chat completion response returned by model, based on the provided input.
@@ -832,6 +847,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ModelDefinitions.ContentFilterResult'
+          x-ms-azure-openai: true
         choices:
           type: array
           items:
@@ -860,7 +876,9 @@ components:
                   specified in the request was reached, `content_filter` if the content was omitted due to
                   a flag from our content filters, or `function_call` if the model called a function.
               content_filter_results:
-                $ref: '#/components/schemas/ModelDefinitions.ContentFilterResult'
+                allOf:
+                  - $ref: '#/components/schemas/ModelDefinitions.ContentFilterResult'
+                x-ms-azure-openai: true
           description: A list of chat completion choices. Can be more than one if `n` is greater than 1.
         usage:
           $ref: '#/components/schemas/ModelDefinitions.CompletionUsage'
@@ -1300,6 +1318,7 @@ components:
             automatically increase the temperature until certain thresholds are hit.
           minimum: 0
           maximum: 1
+          x-ms-azure-openai: true
           default: 0
     ModelDefinitions.CreateTranslationResponse:
       type: object
@@ -1340,6 +1359,7 @@ components:
           type: string
         message:
           type: string
+      x-ms-azure-openai: true
     ModelDefinitions.MaxTokens:
       type: integer
       format: int64

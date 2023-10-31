@@ -41,11 +41,15 @@ namespace AzureOpenAI {
         interface Completions {
             @route("completions")
             op createCompletion is OpenAI.Chat.Completions.createChatCompletion;
-
-            @route("extensions/completions")
-            op createCompletionOnYourOwnData(... ModelDefinitions.CreateChatCompletionRequest, dataSources: DataSource[]): ModelDefinitions.CreateChatCompletionResponse;
         };
     }
+
+    @route("deployments/{deploymentId}/extensions/chat")
+    namespace ChatExtensions {
+      @route("completions")
+      op createCompletionOnYourOwnData(... ModelDefinitions.CreateChatCompletionRequest, dataSources: DataSource[]): ModelDefinitions.CreateChatCompletionResponse;
+    }
+
     @route("deployments/{deploymentId}/completions")
     namespace Completions {
       op createCompletion is OpenAI.Completions.createCompletion;

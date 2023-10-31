@@ -4,19 +4,19 @@ namespace ModelDefinitions;
 
 using TypeSpec.Versioning;
 
-@added(OpenAIFlavors.Azure)
+@azure
 model ContentFilterResult {
   severity: "safe" | "low" | "medium" | "high";
   filtered: boolean;
 }
 
-@added(OpenAIFlavors.Azure)
+@azure
 model ErrorBase {
   code?: string;
   message?: string;
 };
 
-@added(OpenAIFlavors.Azure)
+@azure
 model ContentFilterResults {
   sexual: ContentFilterResult;
   violence: ContentFilterResult;

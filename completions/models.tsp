@@ -147,7 +147,7 @@ scalar N extends safeint;
 scalar MaxTokens extends safeint;
 
 model CreateChatCompletionRequest {
-  @added(ModelDefinitions.OpenAIFlavors.Azure)
+  @azure
   deploymentId: string;
 
   /**
@@ -212,7 +212,7 @@ model ChatCompletionFunctions {
 model ChatCompletionFunctionParameters is Record<unknown>;
 
 model ChatCompletionRequestMessage {
-  @added(ModelDefinitions.OpenAIFlavors.Azure)
+  @azure
   deploymentId: string;
 
   /** The role of the messages author. One of `system`, `user`, `assistant`, or `function`. */
@@ -270,7 +270,7 @@ model CreateChatCompletionResponse {
   /** The model used for the chat completion. */
   `model`: string;
 
-  @added(OpenAIFlavors.Azure)
+  @azure
   promp_filter_results: ContentFilterResult[];
 
   /** A list of chat completion choices. Can be more than one if `n` is greater than 1. */
@@ -288,7 +288,7 @@ model CreateChatCompletionResponse {
      */
     finish_reason: "stop" | "length" | "function_call" | "content_filter";
 
-    @added(OpenAIFlavors.Azure)
+    @azure
     content_filter_results?: ContentFilterResult;
   }[];
 
@@ -327,12 +327,12 @@ model ChatCompletionResponseMessage {
     arguments: string;
   };
 
-  @added(OpenAIFlavors.Azure)
+  @azure
   content_filter_results?: ContentFilterResults
 }
 
 model CreateCompletionRequest {
-  @added(OpenAIFlavors.Azure)
+  @azure
   @TypeSpec.Http.path deploymentId: string;
 
   /**

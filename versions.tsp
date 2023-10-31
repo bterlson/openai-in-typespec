@@ -1,9 +1,16 @@
 import "@typespec/versioning";
+import "./openai.js";
+
+extern dec azure(target);
+extern dec azureVersion(target);
 
 @Versioning.versioned(OpenAIFlavors)
-namespace ModelDefinitions;
+namespace ModelDefinitions {
 
-enum OpenAIFlavors {
-    OpenAI,
-    Azure,
+
+    enum OpenAIFlavors {
+        OpenAI,
+        @azureVersion
+        Azure,
+    }
 }

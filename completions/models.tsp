@@ -382,6 +382,9 @@ model CreateCompletionRequest {
    * quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
    */
   best_of?: safeint | null = 1;
+
+  @azure
+  completion_config?: string | null;
 }
 
 @oneOf
@@ -441,6 +444,6 @@ model CreateCompletionResponse {
 
   usage?: CompletionUsage;
 
-  @added(OpenAIFlavors.Azure)
+  @azure
   content_filter_results?: ContentFilterResults
 }

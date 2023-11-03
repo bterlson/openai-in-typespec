@@ -23,6 +23,9 @@ model CreateEmbeddingRequest {
   input: string | string[] | TokenArray | TokenArrayArray;
 
   user?: User;
+
+  @azure
+  input_type?: string;
 }
 model CreateEmbeddingResponse {
   /** The object type, which is always "embedding". */

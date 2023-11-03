@@ -5,13 +5,13 @@ import {
 
 import { $added } from "@typespec/versioning";
 
-var map = {};
+var state = {};
 
 export function $azureVersion(context, target) {
-    map.azureVersion = target;
+    state.azureVersion = target;
 };
 
 export function $azure(context, target) {
-    $added(context, target, map.azureVersion);
+    $added(context, target, state.azureVersion);
     $extension(context, target, "x-ms-azure-openai", true);
 }

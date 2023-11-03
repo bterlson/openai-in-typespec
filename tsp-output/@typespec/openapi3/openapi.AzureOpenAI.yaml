@@ -620,6 +620,581 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/DataSource'
+  /files:
+    get:
+      tags:
+        - OpenAI
+      operationId: listFiles
+      summary: Returns a list of files that belong to the user's organization.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ListFilesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+    post:
+      tags:
+        - OpenAI
+      operationId: createFile
+      summary: Returns a list of files that belong to the user's organization.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateFileRequest'
+  /files/files/{file_id}:
+    post:
+      tags:
+        - OpenAI
+      operationId: retrieveFile
+      summary: Returns information about a specific file.
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          description: The ID of the file to use for this request.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+    delete:
+      tags:
+        - OpenAI
+      operationId: deleteFile
+      summary: Delete a file
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          description: The ID of the file to use for this request.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.DeleteFileResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+  /files/files/{file_id}/content:
+    get:
+      tags:
+        - OpenAI
+      operationId: downloadFile
+      summary: Returns the contents of the specified file.
+      parameters:
+        - name: file_id
+          in: path
+          required: true
+          description: The ID of the file to use for this request.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: string
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+  /fine-tunes:
+    post:
+      tags:
+        - OpenAI
+      operationId: createFineTune
+      summary: |-
+        Creates a job that fine-tunes a specified model from a given dataset.
+
+        Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.
+
+        [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateFineTuneRequest'
+      deprecated: true
+    get:
+      tags:
+        - OpenAI
+      operationId: listFineTunes
+      summary: List your organization's fine-tuning jobs
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ListFineTunesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /fine-tunes/{fine_tune_id}:
+    get:
+      tags:
+        - OpenAI
+      operationId: retrieveFineTune
+      summary: |-
+        Gets info about the fine-tune job.
+
+        [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
+      parameters:
+        - name: fine_tune_id
+          in: path
+          required: true
+          description: The ID of the fine-tune job
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /fine-tunes/{fine_tune_id}/cancel:
+    post:
+      tags:
+        - OpenAI
+      operationId: cancelFineTune
+      summary: Immediately cancel a fine-tune job.
+      parameters:
+        - name: fine_tune_id
+          in: path
+          required: true
+          description: The ID of the fine-tune job to cancel
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /fine-tunes/{fine_tune_id}/events:
+    get:
+      tags:
+        - OpenAI
+      operationId: listFineTuneEvents
+      summary: Get fine-grained status updates for a fine-tune job.
+      parameters:
+        - name: fine_tune_id
+          in: path
+          required: true
+          description: The ID of the fine-tune job to get events for.
+          schema:
+            type: string
+        - name: stream
+          in: query
+          required: false
+          description: |-
+            Whether to stream events for the fine-tune job. If set to true, events will be sent as
+            data-only
+            [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
+            as they become available. The stream will terminate with a `data: [DONE]` message when the
+            job is finished (succeeded, cancelled, or failed).
+
+            If set to false, only events generated so far will be returned.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ListFineTuneEventsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /fine-tuning:
+    post:
+      tags:
+        - OpenAI
+      operationId: createFineTune
+      summary: |-
+        Creates a job that fine-tunes a specified model from a given dataset.
+
+        Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.
+
+        [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateFineTuneRequest'
+      deprecated: true
+    get:
+      tags:
+        - OpenAI
+      operationId: listFineTunes
+      summary: List your organization's fine-tuning jobs
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ListFineTunesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /fine-tuning/{fine_tune_id}:
+    get:
+      tags:
+        - OpenAI
+      operationId: retrieveFineTune
+      summary: |-
+        Gets info about the fine-tune job.
+
+        [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
+      parameters:
+        - name: fine_tune_id
+          in: path
+          required: true
+          description: The ID of the fine-tune job
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /fine-tuning/{fine_tune_id}/cancel:
+    post:
+      tags:
+        - OpenAI
+      operationId: cancelFineTune
+      summary: Immediately cancel a fine-tune job.
+      parameters:
+        - name: fine_tune_id
+          in: path
+          required: true
+          description: The ID of the fine-tune job to cancel
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /fine-tuning/{fine_tune_id}/events:
+    get:
+      tags:
+        - OpenAI
+      operationId: listFineTuneEvents
+      summary: Get fine-grained status updates for a fine-tune job.
+      parameters:
+        - name: fine_tune_id
+          in: path
+          required: true
+          description: The ID of the fine-tune job to get events for.
+          schema:
+            type: string
+        - name: stream
+          in: query
+          required: false
+          description: |-
+            Whether to stream events for the fine-tune job. If set to true, events will be sent as
+            data-only
+            [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
+            as they become available. The stream will terminate with a `data: [DONE]` message when the
+            job is finished (succeeded, cancelled, or failed).
+
+            If set to false, only events generated so far will be returned.
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ListFineTuneEventsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      deprecated: true
+  /models:
+    get:
+      tags:
+        - OpenAI
+      operationId: listModels
+      summary: |-
+        Lists the currently available models, and provides basic information about each one such as the
+        owner and availability.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ListModelsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+  /models/edits:
+    post:
+      tags:
+        - OpenAI
+      operationId: createImageEdit
+      summary: Creates an edited or extended image given an original image and a prompt.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ImagesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateImageEditRequest'
+  /models/generations:
+    post:
+      tags:
+        - OpenAI
+      operationId: createImage
+      summary: Creates an image given a prompt
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ImagesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateImageRequest'
+  /models/variations:
+    post:
+      tags:
+        - OpenAI
+      operationId: createImageVariation
+      summary: Creates an edited or extended image given an original image and a prompt.
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.ImagesResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ModelDefinitions.CreateImageVariationRequest'
+  /models/{model}:
+    get:
+      tags:
+        - OpenAI
+      operationId: retrieveModel
+      summary: |-
+        Retrieves a model instance, providing basic information about the model such as the owner and
+        permissioning.
+      parameters:
+        - name: model
+          in: path
+          required: true
+          description: The ID of the model to use for this request.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.Model'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
+    delete:
+      tags:
+        - OpenAI
+      operationId: deleteModel
+      summary: Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
+      parameters:
+        - name: model
+          in: path
+          required: true
+          description: The model to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelDefinitions.DeleteModelResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpenAI.ErrorResponse'
 security:
   - BearerAuth: []
 components:
@@ -1051,6 +1626,10 @@ components:
             **Note:** Because this parameter generates many completions, it can quickly consume your token
             quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
           default: 1
+        completion_config:
+          type: string
+          nullable: true
+          x-ms-azure-openai: true
     ModelDefinitions.CreateCompletionResponse:
       type: object
       description: |-
@@ -1137,7 +1716,9 @@ components:
         usage:
           $ref: '#/components/schemas/ModelDefinitions.CompletionUsage'
         content_filter_results:
-          $ref: '#/components/schemas/ModelDefinitions.ContentFilterResults'
+          allOf:
+            - $ref: '#/components/schemas/ModelDefinitions.ContentFilterResults'
+          x-ms-azure-openai: true
       x-oaiMeta:
         name: The  completion object
         legacy: true
@@ -1172,6 +1753,9 @@ components:
             for counting tokens.
         user:
           $ref: '#/components/schemas/ModelDefinitions.User'
+        input_type:
+          type: string
+          x-ms-azure-openai: true
     ModelDefinitions.CreateEmbeddingResponse:
       type: object
       required:
@@ -1208,6 +1792,290 @@ components:
               type: integer
               format: int64
               description: The total number of tokens used by the request.
+    ModelDefinitions.CreateFileRequest:
+      type: object
+      required:
+        - file
+        - purpose
+      properties:
+        file:
+          type: string
+          format: binary
+          description: |-
+            Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.
+
+            If the `purpose` is set to "fine-tune", the file will be used for fine-tuning.
+        purpose:
+          type: string
+          description: |-
+            The intended purpose of the uploaded documents. Use "fine-tune" for
+            [fine-tuning](/docs/api-reference/fine-tuning). This allows us to validate the format of the
+            uploaded file.
+    ModelDefinitions.CreateFineTuneRequest:
+      type: object
+      required:
+        - training_file
+      properties:
+        training_file:
+          type: string
+          description: |-
+            The ID of an uploaded file that contains training data.
+
+            See [upload file](/docs/api-reference/files/upload) for how to upload a file.
+
+            Your dataset must be formatted as a JSONL file, where each training example is a JSON object
+            with the keys "prompt" and "completion". Additionally, you must upload your file with the
+            purpose `fine-tune`.
+
+            See the [fine-tuning guide](/docs/guides/legacy-fine-tuning/creating-training-data) for more
+            details.
+        validation_file:
+          type: string
+          nullable: true
+          description: |-
+            The ID of an uploaded file that contains validation data.
+
+            If you provide this file, the data is used to generate validation metrics periodically during
+            fine-tuning. These metrics can be viewed in the
+            [fine-tuning results file](/docs/guides/legacy-fine-tuning/analyzing-your-fine-tuned-model).
+            Your train and validation data should be mutually exclusive.
+
+            Your dataset must be formatted as a JSONL file, where each validation example is a JSON object
+            with the keys "prompt" and "completion". Additionally, you must upload your file with the
+            purpose `fine-tune`.
+
+            See the [fine-tuning guide](/docs/guides/legacy-fine-tuning/creating-training-data) for more
+            details.
+        model:
+          anyOf:
+            - type: string
+            - type: string
+              enum:
+                - ada
+                - babbage
+                - curie
+                - davinci
+          nullable: true
+          description: |-
+            The name of the base model to fine-tune. You can select one of "ada", "babbage", "curie",
+            "davinci", or a fine-tuned model created after 2022-04-21 and before 2023-08-22. To learn more
+            about these models, see the [Models](/docs/models) documentation.
+          x-oaiTypeLabel: string
+        n_epochs:
+          type: integer
+          format: int64
+          nullable: true
+          description: |-
+            The number of epochs to train the model for. An epoch refers to one full cycle through the
+            training dataset.
+          default: 4
+        batch_size:
+          type: integer
+          format: int64
+          nullable: true
+          description: |-
+            The batch size to use for training. The batch size is the number of training examples used to
+            train a single forward and backward pass.
+
+            By default, the batch size will be dynamically configured to be ~0.2% of the number of examples
+            in the training set, capped at 256 - in general, we've found that larger batch sizes tend to
+            work better for larger datasets.
+          default: null
+        learning_rate_multiplier:
+          type: number
+          format: double
+          nullable: true
+          description: |-
+            The learning rate multiplier to use for training. The fine-tuning learning rate is the original
+            learning rate used for pretraining multiplied by this value.
+
+            By default, the learning rate multiplier is the 0.05, 0.1, or 0.2 depending on final
+            `batch_size` (larger learning rates tend to perform better with larger batch sizes). We
+            recommend experimenting with values in the range 0.02 to 0.2 to see what produces the best
+            results.
+          default: null
+        prompt_loss_rate:
+          type: number
+          format: double
+          nullable: true
+          description: |-
+            The weight to use for loss on the prompt tokens. This controls how much the model tries to
+            learn to generate the prompt (as compared to the completion which always has a weight of 1.0),
+            and can add a stabilizing effect to training when completions are short.
+
+            If prompts are extremely long (relative to completions), it may make sense to reduce this
+            weight so as to avoid over-prioritizing learning the prompt.
+          default: 0.01
+        compute_classification_metrics:
+          type: boolean
+          nullable: true
+          description: |-
+            If set, we calculate classification-specific metrics such as accuracy and F-1 score using the
+            validation set at the end of every epoch. These metrics can be viewed in the
+            [results file](/docs/guides/legacy-fine-tuning/analyzing-your-fine-tuned-model).
+
+            In order to compute classification metrics, you must provide a `validation_file`. Additionally,
+            you must specify `classification_n_classes` for multiclass classification or
+            `classification_positive_class` for binary classification.
+          default: false
+        classification_n_classes:
+          type: integer
+          format: int64
+          nullable: true
+          description: |-
+            The number of classes in a classification task.
+
+            This parameter is required for multiclass classification.
+          default: null
+        classification_positive_class:
+          type: string
+          nullable: true
+          description: |-
+            The positive class in binary classification.
+
+            This parameter is needed to generate precision, recall, and F1 metrics when doing binary
+            classification.
+          default: null
+        classification_betas:
+          type: array
+          items:
+            type: number
+            format: double
+          nullable: true
+          description: |-
+            If this is provided, we calculate F-beta scores at the specified beta values. The F-beta score
+            is a generalization of F-1 score. This is only used for binary classification.
+
+            With a beta of 1 (i.e. the F-1 score), precision and recall are given the same weight. A larger
+            beta score puts more weight on recall and less on precision. A smaller beta score puts more
+            weight on precision and less on recall.
+          default: null
+        suffix:
+          oneOf:
+            - $ref: '#/components/schemas/ModelDefinitions.SuffixString'
+          nullable: true
+          description: |-
+            A string of up to 18 characters that will be added to your fine-tuned model name.
+
+            For example, a `suffix` of "custom-model-name" would produce a model name like
+            `ada:ft-your-org:custom-model-name-2022-02-15-04-21-04`.
+          default: null
+    ModelDefinitions.CreateImageEditRequest:
+      type: object
+      required:
+        - prompt
+        - image
+      properties:
+        prompt:
+          type: string
+          description: A text description of the desired image(s). The maximum length is 1000 characters.
+        image:
+          type: string
+          format: binary
+          description: |-
+            The image to edit. Must be a valid PNG file, less than 4MB, and square. If mask is not
+            provided, image must have transparency, which will be used as the mask.
+        mask:
+          type: string
+          format: binary
+          description: |-
+            An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where
+            `image` should be edited. Must be a valid PNG file, less than 4MB, and have the same dimensions
+            as `image`.
+        n:
+          oneOf:
+            - $ref: '#/components/schemas/ModelDefinitions.ImagesN'
+          nullable: true
+          description: The number of images to generate. Must be between 1 and 10.
+          default: 1
+        size:
+          type: string
+          enum:
+            - 256x256
+            - 512x512
+            - 1024x1024
+          nullable: true
+          description: The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
+          default: 1024x1024
+        response_format:
+          type: string
+          enum:
+            - url
+            - b64_json
+          nullable: true
+          description: The format in which the generated images are returned. Must be one of `url` or `b64_json`.
+          default: url
+        user:
+          $ref: '#/components/schemas/ModelDefinitions.User'
+    ModelDefinitions.CreateImageRequest:
+      type: object
+      required:
+        - prompt
+      properties:
+        prompt:
+          type: string
+          description: A text description of the desired image(s). The maximum length is 1000 characters.
+        n:
+          oneOf:
+            - $ref: '#/components/schemas/ModelDefinitions.ImagesN'
+          nullable: true
+          description: The number of images to generate. Must be between 1 and 10.
+          default: 1
+        size:
+          type: string
+          enum:
+            - 256x256
+            - 512x512
+            - 1024x1024
+          nullable: true
+          description: The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
+          default: 1024x1024
+        response_format:
+          type: string
+          enum:
+            - url
+            - b64_json
+          nullable: true
+          description: The format in which the generated images are returned. Must be one of `url` or `b64_json`.
+          default: url
+        user:
+          $ref: '#/components/schemas/ModelDefinitions.User'
+    ModelDefinitions.CreateImageVariationRequest:
+      type: object
+      required:
+        - image
+      properties:
+        image:
+          type: string
+          format: binary
+          description: |-
+            The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB,
+            and square.
+        n:
+          oneOf:
+            - $ref: '#/components/schemas/ModelDefinitions.ImagesN'
+          nullable: true
+          description: The number of images to generate. Must be between 1 and 10.
+          default: 1
+        size:
+          type: string
+          enum:
+            - 256x256
+            - 512x512
+            - 1024x1024
+          nullable: true
+          description: The size of the generated images. Must be one of `256x256`, `512x512`, or `1024x1024`.
+          default: 1024x1024
+        response_format:
+          type: string
+          enum:
+            - url
+            - b64_json
+          nullable: true
+          description: The format in which the generated images are returned. Must be one of `url` or `b64_json`.
+          default: url
+        user:
+          $ref: '#/components/schemas/ModelDefinitions.User'
     ModelDefinitions.CreateTranscriptionRequest:
       type: object
       required:
@@ -1327,6 +2195,32 @@ components:
       properties:
         text:
           type: string
+    ModelDefinitions.DeleteFileResponse:
+      type: object
+      required:
+        - id
+        - object
+        - deleted
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+        deleted:
+          type: boolean
+    ModelDefinitions.DeleteModelResponse:
+      type: object
+      required:
+        - id
+        - object
+        - deleted
+      properties:
+        id:
+          type: string
+        object:
+          type: string
+        deleted:
+          type: boolean
     ModelDefinitions.Embedding:
       type: object
       description: Represents an embedding vector returned by embedding endpoint.
@@ -1360,15 +2254,301 @@ components:
         message:
           type: string
       x-ms-azure-openai: true
+    ModelDefinitions.FineTune:
+      type: object
+      description: The `FineTune` object represents a legacy fine-tune job that has been created through the API.
+      required:
+        - id
+        - object
+        - created_at
+        - updated_at
+        - model
+        - fine_tuned_model
+        - organization_id
+        - status
+        - hyperparams
+        - training_files
+        - validation_files
+        - result_files
+      properties:
+        id:
+          type: string
+          description: The object identifier, which can be referenced in the API endpoints.
+        object:
+          type: string
+          enum:
+            - fine-tune
+          description: The object type, which is always "fine-tune".
+        created_at:
+          type: integer
+          format: unixtime
+          description: The Unix timestamp (in seconds) for when the fine-tuning job was created.
+        updated_at:
+          type: integer
+          format: unixtime
+          description: The Unix timestamp (in seconds) for when the fine-tuning job was last updated.
+        model:
+          type: string
+          description: The base model that is being fine-tuned.
+        fine_tuned_model:
+          type: string
+          nullable: true
+          description: The name of the fine-tuned model that is being created.
+        organization_id:
+          type: string
+          description: The organization that owns the fine-tuning job.
+        status:
+          type: string
+          enum:
+            - created
+            - running
+            - succeeded
+            - failed
+            - cancelled
+          description: |-
+            The current status of the fine-tuning job, which can be either `created`, `running`,
+            `succeeded`, `failed`, or `cancelled`.
+        hyperparams:
+          type: object
+          description: |-
+            The hyperparameters used for the fine-tuning job. See the
+            [fine-tuning guide](/docs/guides/legacy-fine-tuning/hyperparameters) for more details.
+          required:
+            - n_epochs
+            - batch_size
+            - prompt_loss_weight
+            - learning_rate_multiplier
+          properties:
+            n_epochs:
+              type: integer
+              format: int64
+              description: |-
+                The number of epochs to train the model for. An epoch refers to one full cycle through the
+                training dataset.
+            batch_size:
+              type: integer
+              format: int64
+              description: |-
+                The batch size to use for training. The batch size is the number of training examples used to
+                train a single forward and backward pass.
+            prompt_loss_weight:
+              type: number
+              format: double
+              description: The weight to use for loss on the prompt tokens.
+            learning_rate_multiplier:
+              type: number
+              format: double
+              description: The learning rate multiplier to use for training.
+            compute_classification_metrics:
+              type: boolean
+              description: The classification metrics to compute using the validation dataset at the end of every epoch.
+            classification_positive_class:
+              type: string
+              description: The positive class to use for computing classification metrics.
+            classification_n_classes:
+              type: integer
+              format: int64
+              description: The number of classes to use for computing classification metrics.
+        training_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
+          description: The list of files used for training.
+        validation_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
+          description: The list of files used for validation.
+        result_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
+          description: The compiled results files for the fine-tuning job.
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.FineTuneEvent'
+          description: The list of events that have been observed in the lifecycle of the FineTune job.
+    ModelDefinitions.FineTuneEvent:
+      type: object
+      required:
+        - object
+        - created_at
+        - level
+        - message
+      properties:
+        object:
+          type: string
+        created_at:
+          type: integer
+          format: unixtime
+        level:
+          type: string
+        message:
+          type: string
+    ModelDefinitions.Image:
+      type: object
+      description: Represents the url or the content of an image generated by the OpenAI API.
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL of the generated image, if `response_format` is `url` (default).
+        b64_json:
+          type: string
+          format: base64
+          description: The base64-encoded JSON of the generated image, if `response_format` is `b64_json`.
+    ModelDefinitions.ImagesN:
+      type: integer
+      format: int64
+      minimum: 1
+      maximum: 10
+    ModelDefinitions.ImagesResponse:
+      type: object
+      required:
+        - created
+        - data
+      properties:
+        created:
+          type: integer
+          format: unixtime
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.Image'
+    ModelDefinitions.ListFilesResponse:
+      type: object
+      required:
+        - object
+        - data
+      properties:
+        object:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
+    ModelDefinitions.ListFineTuneEventsResponse:
+      type: object
+      required:
+        - object
+        - data
+      properties:
+        object:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.FineTuneEvent'
+    ModelDefinitions.ListFineTunesResponse:
+      type: object
+      required:
+        - object
+        - data
+      properties:
+        object:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.FineTune'
+    ModelDefinitions.ListModelsResponse:
+      type: object
+      required:
+        - object
+        - data
+      properties:
+        object:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelDefinitions.Model'
     ModelDefinitions.MaxTokens:
       type: integer
       format: int64
       minimum: 0
+    ModelDefinitions.Model:
+      type: object
+      description: Describes an OpenAI model offering that can be used with the API.
+      required:
+        - id
+        - object
+        - created
+        - owned_by
+      properties:
+        id:
+          type: string
+          description: The model identifier, which can be referenced in the API endpoints.
+        object:
+          type: string
+          enum:
+            - model
+          description: The object type, which is always "model".
+        created:
+          type: integer
+          format: unixtime
+          description: The Unix timestamp (in seconds) when the model was created.
+        owned_by:
+          type: string
+          description: The organization that owns the model.
     ModelDefinitions.N:
       type: integer
       format: int64
       minimum: 1
       maximum: 128
+    ModelDefinitions.OpenAIFile:
+      type: object
+      description: The `File` object represents a document that has been uploaded to OpenAI.
+      required:
+        - id
+        - object
+        - bytes
+        - createdAt
+        - filename
+        - purpose
+        - status
+      properties:
+        id:
+          type: string
+          description: The file identifier, which can be referenced in the API endpoints.
+        object:
+          type: string
+          enum:
+            - file
+          description: The object type, which is always "file".
+        bytes:
+          type: integer
+          format: int64
+          description: The size of the file in bytes.
+        createdAt:
+          type: integer
+          format: unixtime
+          description: The Unix timestamp (in seconds) for when the file was created.
+        filename:
+          type: string
+          description: The name of the file.
+        purpose:
+          type: string
+          description: The intended purpose of the file. Currently, only "fine-tune" is supported.
+        status:
+          type: string
+          enum:
+            - uploaded
+            - processed
+            - pending
+            - error
+            - deleting
+            - deleted
+          description: |-
+            The current status of the file, which can be either `uploaded`, `processed`, `pending`,
+            `error`, `deleting` or `deleted`.
+        status_details:
+          type: string
+          nullable: true
+          description: |-
+            Additional details about the status of the file. If the file is in the `error` state, this will
+            include a message describing the error.
     ModelDefinitions.Penalty:
       type: number
       format: double
@@ -1394,6 +2574,10 @@ components:
         type: string
       minItems: 1
       maxItems: 4
+    ModelDefinitions.SuffixString:
+      type: string
+      minLength: 1
+      maxLength: 40
     ModelDefinitions.Temperature:
       type: number
       format: double

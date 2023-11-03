@@ -68,5 +68,21 @@ namespace AzureOpenAI {
       @route("translations")
       op translations is OpenAI.Audio.Translations.createTranslation;
     }
+
+    @route("/files")
+    interface Files extends OpenAI.Files {};
+
+    @route("/fine-tunes")
+    interface FineTunes extends OpenAI.FineTunes {};
+
+    @route("/fine-tuning")
+    interface FineTuning extends OpenAI.FineTunes {};
+
+    @route("/models")
+    interface Models extends OpenAI.Models {};
+
+    @route("/models")
+    interface Images extends OpenAI.Images {};
+
     model DataSource {};
 }

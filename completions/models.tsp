@@ -148,6 +148,7 @@ scalar MaxTokens extends safeint;
 
 model CreateChatCompletionRequest {
   @azure
+  @TypeSpec.Http.path
   deploymentId: string;
 
   /**
@@ -213,6 +214,7 @@ model ChatCompletionFunctionParameters is Record<unknown>;
 
 model ChatCompletionRequestMessage {
   @azure
+  @TypeSpec.Http.path
   deploymentId: string;
 
   /** The role of the messages author. One of `system`, `user`, `assistant`, or `function`. */
@@ -333,7 +335,8 @@ model ChatCompletionResponseMessage {
 
 model CreateCompletionRequest {
   @azure
-  @TypeSpec.Http.path deploymentId: string;
+  @TypeSpec.Http.path
+  deploymentId: string;
 
   /**
    * ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to

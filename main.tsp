@@ -1,6 +1,7 @@
 import "@typespec/http";
 import "@typespec/openapi3";
 import "@typespec/openapi";
+import "@typespec/versioning";
 
 import "./audio";
 import "./completions";
@@ -10,8 +11,11 @@ import "./files";
 import "./fine-tuning";
 import "./images";
 import "./moderation";
+import "./versions.tsp";
 
 using TypeSpec.Http;
+using TypeSpec.Versioning;
+
 
 /** The OpenAI REST API. Please see https://platform.openai.com/docs/api-reference for more details. */
 @service({
@@ -24,9 +28,10 @@ using TypeSpec.Http;
   license: {
     name: "MIT",
     url: "https://github.com/openai/openai-openapi/blob/master/LICENSE",
-  },
-  version: "2.0.0",
+  }
 })
 @server("https://api.openai.com/v1", "OpenAI Endpoint")
 @useAuth(BearerAuth)
+@useDependency(ModelDefinitions.OpenAIFlavors.OpenAI)
 namespace OpenAI;
+

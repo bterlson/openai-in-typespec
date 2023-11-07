@@ -10,6 +10,8 @@ using TypeSpec.OpenAPI;
 
 namespace OpenAI;
 
+using ModelDefinitions;
+
 @route("/chat")
 namespace Chat {
   @route("/completions")

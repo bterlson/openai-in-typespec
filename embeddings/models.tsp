@@ -1,9 +1,14 @@
 import "../common/models.tsp";
+import "../versions.tsp";
 
-namespace OpenAI;
+namespace ModelDefinitions;
 using TypeSpec.OpenAPI;
+using TypeSpec.Versioning;
 
 model CreateEmbeddingRequest {
+  @azure
+  @TypeSpec.Http.path deploymentId: string;
+
   /** ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to see all of your available models, or see our [Model overview](/docs/models/overview) for descriptions of them. */
   @extension("x-oaiTypeLabel", "string")
   `model`: string | "text-embedding-ada-002";
@@ -18,6 +23,9 @@ model CreateEmbeddingRequest {
   input: string | string[] | TokenArray | TokenArrayArray;
 
   user?: User;
+
+  @azure
+  input_type?: string;
 }
 model CreateEmbeddingResponse {
   /** The object type, which is always "embedding". */

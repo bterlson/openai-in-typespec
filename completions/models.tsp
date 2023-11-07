@@ -1,5 +1,10 @@
-namespace OpenAI;
+import "../versions.tsp";
+import "./azuremodels.tsp";
+
+namespace ModelDefinitions;
+
 using TypeSpec.OpenAPI;
+using TypeSpec.Versioning;
 
 alias CHAT_COMPLETION_MODELS =
   | "gpt4"
@@ -142,6 +147,10 @@ scalar N extends safeint;
 scalar MaxTokens extends safeint;
 
 model CreateChatCompletionRequest {
+  @azure
+  @TypeSpec.Http.path
+  deploymentId: string;
+
   /**
    * ID of the model to use. See the [model endpoint compatibility](/docs/models/model-endpoint-compatibility)
    * table for details on which models work with the Chat API.
@@ -204,6 +213,10 @@ model ChatCompletionFunctions {
 model ChatCompletionFunctionParameters is Record<unknown>;
 
 model ChatCompletionRequestMessage {
+  @azure
+  @TypeSpec.Http.path
+  deploymentId: string;
+
   /** The role of the messages author. One of `system`, `user`, `assistant`, or `function`. */
   role: "system" | "user" | "assistant" | "function";
 
@@ -259,6 +272,9 @@ model CreateChatCompletionResponse {
   /** The model used for the chat completion. */
   `model`: string;
 
+  @azure
+  promp_filter_results: ContentFilterResult[];
+
   /** A list of chat completion choices. Can be more than one if `n` is greater than 1. */
   choices: {
     /** The index of the choice in the list of choices. */
@@ -273,6 +289,9 @@ model CreateChatCompletionResponse {
      * a flag from our content filters, or `function_call` if the model called a function.
      */
     finish_reason: "stop" | "length" | "function_call" | "content_filter";
+
+    @azure
+    content_filter_results?: ContentFilterResult;
   }[];
 
   usage?: CompletionUsage;
@@ -309,9 +328,16 @@ model ChatCompletionResponseMessage {
      */
     arguments: string;
   };
+
+  @azure
+  content_filter_results?: ContentFilterResults
 }
 
 model CreateCompletionRequest {
+  @azure
+  @TypeSpec.Http.path
+  deploymentId: string;
+
   /**
    * ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to
    * see all of your available models, or see our [Model overview](/docs/models/overview) for
@@ -359,6 +385,9 @@ model CreateCompletionRequest {
    * quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
    */
   best_of?: safeint | null = 1;
+
+  @azure
+  completion_config?: string | null;
 }
 
 @oneOf
@@ -417,4 +446,7 @@ model CreateCompletionResponse {
   }[];
 
   usage?: CompletionUsage;
+
+  @azure
+  content_filter_results?: ContentFilterResults
 }

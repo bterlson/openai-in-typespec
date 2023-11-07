@@ -9,6 +9,8 @@ using TypeSpec.OpenAPI;
 
 namespace OpenAI;
 
+using ModelDefinitions;
+
 @route("/embeddings")
 interface Embeddings {
   @tag("OpenAI")

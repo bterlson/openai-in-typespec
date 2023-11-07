@@ -1,8 +1,7 @@
 openapi: 3.0.0
 info:
   title: OpenAI API
-  version: 2.0.0
-  description: The OpenAI REST API. Please see https://platform.openai.com/docs/api-reference for more details.
+  version: 0000-00-00
 tags:
   - name: OpenAI
 paths:
@@ -19,7 +18,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTranscriptionResponse'
+                $ref: '#/components/schemas/ModelDefinitions.CreateTranscriptionResponse'
         default:
           description: An unexpected error response.
           content:
@@ -31,7 +30,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CreateTranscriptionRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateTranscriptionRequest'
   /audio/translations:
     post:
       tags:
@@ -45,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTranslationResponse'
+                $ref: '#/components/schemas/ModelDefinitions.CreateTranslationResponse'
         default:
           description: An unexpected error response.
           content:
@@ -57,7 +56,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CreateTranslationRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateTranslationRequest'
   /chat/completions:
     post:
       tags:
@@ -70,7 +69,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateChatCompletionResponse'
+                $ref: '#/components/schemas/ModelDefinitions.CreateChatCompletionResponse'
         default:
           description: An unexpected error response.
           content:
@@ -82,7 +81,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateChatCompletionRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateChatCompletionRequest'
   /completions:
     post:
       tags:
@@ -95,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCompletionResponse'
+                $ref: '#/components/schemas/ModelDefinitions.CreateCompletionResponse'
         default:
           description: An unexpected error response.
           content:
@@ -107,7 +106,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCompletionRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateCompletionRequest'
       x-oaiMeta:
         name: Create chat completion
         group: chat
@@ -268,7 +267,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateEditResponse'
+                $ref: '#/components/schemas/ModelDefinitions.CreateEditResponse'
         default:
           description: An unexpected error response.
           content:
@@ -280,7 +279,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateEditRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateEditRequest'
       deprecated: true
   /embeddings:
     post:
@@ -295,7 +294,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateEmbeddingResponse'
+                $ref: '#/components/schemas/ModelDefinitions.CreateEmbeddingResponse'
         default:
           description: An unexpected error response.
           content:
@@ -307,7 +306,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateEmbeddingRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateEmbeddingRequest'
   /files:
     get:
       tags:
@@ -321,7 +320,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListFilesResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ListFilesResponse'
         default:
           description: An unexpected error response.
           content:
@@ -340,7 +339,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OpenAIFile'
+                $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
         default:
           description: An unexpected error response.
           content:
@@ -352,7 +351,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CreateFileRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateFileRequest'
   /files/files/{file_id}:
     post:
       tags:
@@ -372,7 +371,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OpenAIFile'
+                $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
         default:
           description: An unexpected error response.
           content:
@@ -397,7 +396,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeleteFileResponse'
+                $ref: '#/components/schemas/ModelDefinitions.DeleteFileResponse'
         default:
           description: An unexpected error response.
           content:
@@ -448,7 +447,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FineTune'
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
         default:
           description: An unexpected error response.
           content:
@@ -460,7 +459,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateFineTuneRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateFineTuneRequest'
       deprecated: true
     get:
       tags:
@@ -474,7 +473,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListFineTunesResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ListFineTunesResponse'
         default:
           description: An unexpected error response.
           content:
@@ -504,7 +503,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FineTune'
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
         default:
           description: An unexpected error response.
           content:
@@ -531,7 +530,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FineTune'
+                $ref: '#/components/schemas/ModelDefinitions.FineTune'
         default:
           description: An unexpected error response.
           content:
@@ -572,7 +571,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListFineTuneEventsResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ListFineTuneEventsResponse'
         default:
           description: An unexpected error response.
           content:
@@ -599,7 +598,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FineTuningJob'
+                $ref: '#/components/schemas/ModelDefinitions.FineTuningJob'
         default:
           description: An unexpected error response.
           content:
@@ -611,7 +610,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateFineTuningJobRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateFineTuningJobRequest'
     get:
       tags:
         - OpenAI
@@ -637,7 +636,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListPaginatedFineTuningJobsResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ListPaginatedFineTuningJobsResponse'
         default:
           description: An unexpected error response.
           content:
@@ -665,7 +664,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FineTuningJob'
+                $ref: '#/components/schemas/ModelDefinitions.FineTuningJob'
         default:
           description: An unexpected error response.
           content:
@@ -691,7 +690,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FineTuningJob'
+                $ref: '#/components/schemas/ModelDefinitions.FineTuningJob'
         default:
           description: An unexpected error response.
           content:
@@ -730,7 +729,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListFineTuningJobEventsResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ListFineTuningJobEventsResponse'
         default:
           description: An unexpected error response.
           content:
@@ -750,7 +749,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ImagesResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ImagesResponse'
         default:
           description: An unexpected error response.
           content:
@@ -762,7 +761,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CreateImageEditRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateImageEditRequest'
   /images/generations:
     post:
       tags:
@@ -776,7 +775,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ImagesResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ImagesResponse'
         default:
           description: An unexpected error response.
           content:
@@ -788,7 +787,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateImageRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateImageRequest'
   /images/variations:
     post:
       tags:
@@ -802,7 +801,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ImagesResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ImagesResponse'
         default:
           description: An unexpected error response.
           content:
@@ -814,7 +813,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/CreateImageVariationRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateImageVariationRequest'
   /models:
     get:
       tags:
@@ -830,7 +829,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListModelsResponse'
+                $ref: '#/components/schemas/ModelDefinitions.ListModelsResponse'
         default:
           description: An unexpected error response.
           content:
@@ -858,7 +857,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Model'
+                $ref: '#/components/schemas/ModelDefinitions.Model'
         default:
           description: An unexpected error response.
           content:
@@ -883,7 +882,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeleteModelResponse'
+                $ref: '#/components/schemas/ModelDefinitions.DeleteModelResponse'
         default:
           description: An unexpected error response.
           content:
@@ -903,7 +902,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateModerationResponse'
+                $ref: '#/components/schemas/ModelDefinitions.CreateModerationResponse'
         default:
           description: An unexpected error response.
           content:
@@ -915,12 +914,37 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateModerationRequest'
+              $ref: '#/components/schemas/ModelDefinitions.CreateModerationRequest'
 security:
   - BearerAuth: []
 components:
   schemas:
-    ChatCompletionFunctionCallOption:
+    Error:
+      type: object
+      required:
+        - type
+        - message
+        - param
+        - code
+      properties:
+        type:
+          type: string
+        message:
+          type: string
+        param:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+    ModelDefinitions.ChatCompletionFunctionCallOption:
       type: object
       required:
         - name
@@ -928,10 +952,10 @@ components:
         name:
           type: string
           description: The name of the function to call.
-    ChatCompletionFunctionParameters:
+    ModelDefinitions.ChatCompletionFunctionParameters:
       type: object
       additionalProperties: {}
-    ChatCompletionFunctions:
+    ModelDefinitions.ChatCompletionFunctions:
       type: object
       required:
         - name
@@ -949,14 +973,14 @@ components:
             function.
         parameters:
           allOf:
-            - $ref: '#/components/schemas/ChatCompletionFunctionParameters'
+            - $ref: '#/components/schemas/ModelDefinitions.ChatCompletionFunctionParameters'
           description: |-
             The parameters the functions accepts, described as a JSON Schema object. See the
             [guide](/docs/guides/gpt/function-calling) for examples, and the
             [JSON Schema reference](https://json-schema.org/understanding-json-schema/) for documentation
             about the format.\n\nTo describe a function that accepts no parameters, provide the value
             `{\"type\": \"object\", \"properties\": {}}`.
-    ChatCompletionRequestMessage:
+    ModelDefinitions.ChatCompletionRequestMessage:
       type: object
       required:
         - role
@@ -998,7 +1022,7 @@ components:
                 The arguments to call the function with, as generated by the model in JSON format. Note that
                 the model does not always generate valid JSON, and may hallucinate parameters not defined by
                 your function schema. Validate the arguments in your code before calling your function.
-    ChatCompletionResponseMessage:
+    ModelDefinitions.ChatCompletionResponseMessage:
       type: object
       required:
         - role
@@ -1032,7 +1056,7 @@ components:
                 The arguments to call the function with, as generated by the model in JSON format. Note that
                 the model does not always generate valid JSON, and may hallucinate parameters not defined by
                 your function schema. Validate the arguments in your code before calling your function.
-    CompletionUsage:
+    ModelDefinitions.CompletionUsage:
       type: object
       description: Usage statistics for the completion request.
       required:
@@ -1052,7 +1076,7 @@ components:
           type: integer
           format: int64
           description: Total number of tokens used in the request (prompt + completion).
-    CreateChatCompletionRequest:
+    ModelDefinitions.CreateChatCompletionRequest:
       type: object
       required:
         - model
@@ -1081,7 +1105,7 @@ components:
         messages:
           type: array
           items:
-            $ref: '#/components/schemas/ChatCompletionRequestMessage'
+            $ref: '#/components/schemas/ModelDefinitions.ChatCompletionRequestMessage'
           description: |-
             A list of messages comprising the conversation so far.
             [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_format_inputs_to_ChatGPT_models.ipynb).
@@ -1089,7 +1113,7 @@ components:
         functions:
           type: array
           items:
-            $ref: '#/components/schemas/ChatCompletionFunctions'
+            $ref: '#/components/schemas/ModelDefinitions.ChatCompletionFunctions'
           description: A list of functions the model may generate JSON inputs for.
           minItems: 1
           maxItems: 128
@@ -1099,7 +1123,7 @@ components:
               enum:
                 - none
                 - auto
-            - $ref: '#/components/schemas/ChatCompletionFunctionCallOption'
+            - $ref: '#/components/schemas/ModelDefinitions.ChatCompletionFunctionCallOption'
           description: |-
             Controls how the model responds to function calls. `none` means the model does not call a
             function, and responds to the end-user. `auto` means the model can pick between an end-user or
@@ -1108,7 +1132,7 @@ components:
             default if functions are present.
         temperature:
           oneOf:
-            - $ref: '#/components/schemas/Temperature'
+            - $ref: '#/components/schemas/ModelDefinitions.Temperature'
           nullable: true
           description: |-
             What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output
@@ -1118,7 +1142,7 @@ components:
           default: 1
         top_p:
           oneOf:
-            - $ref: '#/components/schemas/TopP'
+            - $ref: '#/components/schemas/ModelDefinitions.TopP'
           nullable: true
           description: |-
             An alternative to sampling with temperature, called nucleus sampling, where the model considers
@@ -1129,7 +1153,7 @@ components:
           default: 1
         n:
           oneOf:
-            - $ref: '#/components/schemas/N'
+            - $ref: '#/components/schemas/ModelDefinitions.N'
           nullable: true
           description: |-
             How many completions to generate for each prompt.
@@ -1138,7 +1162,7 @@ components:
           default: 1
         max_tokens:
           oneOf:
-            - $ref: '#/components/schemas/MaxTokens'
+            - $ref: '#/components/schemas/ModelDefinitions.MaxTokens'
           nullable: true
           description: |-
             The maximum number of [tokens](/tokenizer) to generate in the completion.
@@ -1149,12 +1173,12 @@ components:
           default: 16
         stop:
           allOf:
-            - $ref: '#/components/schemas/Stop'
+            - $ref: '#/components/schemas/ModelDefinitions.Stop'
           description: Up to 4 sequences where the API will stop generating further tokens.
           default: null
         presence_penalty:
           oneOf:
-            - $ref: '#/components/schemas/Penalty'
+            - $ref: '#/components/schemas/ModelDefinitions.Penalty'
           nullable: true
           description: |-
             Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear
@@ -1163,7 +1187,7 @@ components:
             [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
         frequency_penalty:
           oneOf:
-            - $ref: '#/components/schemas/Penalty'
+            - $ref: '#/components/schemas/ModelDefinitions.Penalty'
           nullable: true
           description: |-
             Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing
@@ -1187,7 +1211,7 @@ components:
           x-oaiTypeLabel: map
         user:
           allOf:
-            - $ref: '#/components/schemas/User'
+            - $ref: '#/components/schemas/ModelDefinitions.User'
           description: |-
             A unique identifier representing your end-user, which can help OpenAI to monitor and detect
             abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
@@ -1200,7 +1224,7 @@ components:
             as they become available, with the stream terminated by a `data: [DONE]` message.
             [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_stream_completions.ipynb).
           default: true
-    CreateChatCompletionResponse:
+    ModelDefinitions.CreateChatCompletionResponse:
       type: object
       description: Represents a chat completion response returned by model, based on the provided input.
       required:
@@ -1237,7 +1261,7 @@ components:
                 format: int64
                 description: The index of the choice in the list of choices.
               message:
-                $ref: '#/components/schemas/ChatCompletionResponseMessage'
+                $ref: '#/components/schemas/ModelDefinitions.ChatCompletionResponseMessage'
               finish_reason:
                 type: string
                 enum:
@@ -1252,12 +1276,12 @@ components:
                   a flag from our content filters, or `function_call` if the model called a function.
           description: A list of chat completion choices. Can be more than one if `n` is greater than 1.
         usage:
-          $ref: '#/components/schemas/CompletionUsage'
+          $ref: '#/components/schemas/ModelDefinitions.CompletionUsage'
       x-oaiMeta:
         name: The chat completion object
         group: chat
         example: ''
-    CreateCompletionRequest:
+    ModelDefinitions.CreateCompletionRequest:
       type: object
       required:
         - model
@@ -1284,7 +1308,7 @@ components:
           x-oaiTypeLabel: string
         prompt:
           allOf:
-            - $ref: '#/components/schemas/Prompt'
+            - $ref: '#/components/schemas/ModelDefinitions.Prompt'
           description: |-
             The prompt(s) to generate completions for, encoded as a string, array of strings, array of
             tokens, or array of token arrays.
@@ -1299,7 +1323,7 @@ components:
           default: null
         temperature:
           oneOf:
-            - $ref: '#/components/schemas/Temperature'
+            - $ref: '#/components/schemas/ModelDefinitions.Temperature'
           nullable: true
           description: |-
             What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output
@@ -1309,7 +1333,7 @@ components:
           default: 1
         top_p:
           oneOf:
-            - $ref: '#/components/schemas/TopP'
+            - $ref: '#/components/schemas/ModelDefinitions.TopP'
           nullable: true
           description: |-
             An alternative to sampling with temperature, called nucleus sampling, where the model considers
@@ -1320,7 +1344,7 @@ components:
           default: 1
         n:
           oneOf:
-            - $ref: '#/components/schemas/N'
+            - $ref: '#/components/schemas/ModelDefinitions.N'
           nullable: true
           description: |-
             How many completions to generate for each prompt.
@@ -1329,7 +1353,7 @@ components:
           default: 1
         max_tokens:
           oneOf:
-            - $ref: '#/components/schemas/MaxTokens'
+            - $ref: '#/components/schemas/ModelDefinitions.MaxTokens'
           nullable: true
           description: |-
             The maximum number of [tokens](/tokenizer) to generate in the completion.
@@ -1340,12 +1364,12 @@ components:
           default: 16
         stop:
           allOf:
-            - $ref: '#/components/schemas/Stop'
+            - $ref: '#/components/schemas/ModelDefinitions.Stop'
           description: Up to 4 sequences where the API will stop generating further tokens.
           default: null
         presence_penalty:
           oneOf:
-            - $ref: '#/components/schemas/Penalty'
+            - $ref: '#/components/schemas/ModelDefinitions.Penalty'
           nullable: true
           description: |-
             Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear
@@ -1354,7 +1378,7 @@ components:
             [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
         frequency_penalty:
           oneOf:
-            - $ref: '#/components/schemas/Penalty'
+            - $ref: '#/components/schemas/ModelDefinitions.Penalty'
           nullable: true
           description: |-
             Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing
@@ -1378,7 +1402,7 @@ components:
           x-oaiTypeLabel: map
         user:
           allOf:
-            - $ref: '#/components/schemas/User'
+            - $ref: '#/components/schemas/ModelDefinitions.User'
           description: |-
             A unique identifier representing your end-user, which can help OpenAI to monitor and detect
             abuse. [Learn more](/docs/guides/safety-best-practices/end-user-ids).
@@ -1422,7 +1446,7 @@ components:
             **Note:** Because this parameter generates many completions, it can quickly consume your token
             quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
           default: 1
-    CreateCompletionResponse:
+    ModelDefinitions.CreateCompletionResponse:
       type: object
       description: |-
         Represents a completion response from the API. Note: both the streamed and non-streamed response
@@ -1506,12 +1530,12 @@ components:
                   content filters.
           description: The list of completion choices the model generated for the input.
         usage:
-          $ref: '#/components/schemas/CompletionUsage'
+          $ref: '#/components/schemas/ModelDefinitions.CompletionUsage'
       x-oaiMeta:
         name: The  completion object
         legacy: true
         example: ''
-    CreateEditRequest:
+    ModelDefinitions.CreateEditRequest:
       type: object
       required:
         - model
@@ -1538,13 +1562,13 @@ components:
           description: The instruction that tells the model how to edit the prompt.
         n:
           oneOf:
-            - $ref: '#/components/schemas/EditN'
+            - $ref: '#/components/schemas/ModelDefinitions.EditN'
           nullable: true
           description: How many edits to generate for the input and instruction.
           default: 1
         temperature:
           oneOf:
-            - $ref: '#/components/schemas/Temperature'
+            - $ref: '#/components/schemas/ModelDefinitions.Temperature'
           nullable: true
           description: |-
             What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output
@@ -1554,7 +1578,7 @@ components:
           default: 1
         top_p:
           oneOf:
-            - $ref: '#/components/schemas/TopP'
+            - $ref: '#/components/schemas/ModelDefinitions.TopP'
           nullable: true
           description: |-
             An alternative to sampling with temperature, called nucleus sampling, where the model considers
@@ -1563,7 +1587,7 @@ components:
 
             We generally recommend altering this or `temperature` but not both.
           default: 1
-    CreateEditResponse:
+    ModelDefinitions.CreateEditResponse:
       type: object
       required:
         - object
@@ -1607,8 +1631,8 @@ components:
                   specified in the request was reached.
           description: 'description: A list of edit choices. Can be more than one if `n` is greater than 1.'
         usage:
-          $ref: '#/components/schemas/CompletionUsage'
-    CreateEmbeddingRequest:
+          $ref: '#/components/schemas/ModelDefinitions.CompletionUsage'
+    ModelDefinitions.CreateEmbeddingRequest:
       type: object
       required:
         - model
@@ -1628,8 +1652,8 @@ components:
             - type: array
               items:
                 type: string
-            - $ref: '#/components/schemas/TokenArray'
-            - $ref: '#/components/schemas/TokenArrayArray'
+            - $ref: '#/components/schemas/ModelDefinitions.TokenArray'
+            - $ref: '#/components/schemas/ModelDefinitions.TokenArrayArray'
           description: |-
             Input text to embed, encoded as a string or array of tokens. To embed multiple inputs in a
             single request, pass an array of strings or array of token arrays. Each input must not exceed
@@ -1637,8 +1661,8 @@ components:
             [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)
             for counting tokens.
         user:
-          $ref: '#/components/schemas/User'
-    CreateEmbeddingResponse:
+          $ref: '#/components/schemas/ModelDefinitions.User'
+    ModelDefinitions.CreateEmbeddingResponse:
       type: object
       required:
         - object
@@ -1657,7 +1681,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Embedding'
+            $ref: '#/components/schemas/ModelDefinitions.Embedding'
           description: The list of embeddings generated by the model.
         usage:
           type: object
@@ -1674,7 +1698,7 @@ components:
               type: integer
               format: int64
               description: The total number of tokens used by the request.
-    CreateFileRequest:
+    ModelDefinitions.CreateFileRequest:
       type: object
       required:
         - file
@@ -1693,7 +1717,7 @@ components:
             The intended purpose of the uploaded documents. Use "fine-tune" for
             [fine-tuning](/docs/api-reference/fine-tuning). This allows us to validate the format of the
             uploaded file.
-    CreateFineTuneRequest:
+    ModelDefinitions.CreateFineTuneRequest:
       type: object
       required:
         - training_file
@@ -1834,7 +1858,7 @@ components:
           default: null
         suffix:
           oneOf:
-            - $ref: '#/components/schemas/SuffixString'
+            - $ref: '#/components/schemas/ModelDefinitions.SuffixString'
           nullable: true
           description: |-
             A string of up to 18 characters that will be added to your fine-tuned model name.
@@ -1842,7 +1866,7 @@ components:
             For example, a `suffix` of "custom-model-name" would produce a model name like
             `ada:ft-your-org:custom-model-name-2022-02-15-04-21-04`.
           default: null
-    CreateFineTuningJobRequest:
+    ModelDefinitions.CreateFineTuningJobRequest:
       type: object
       required:
         - training_file
@@ -1894,14 +1918,14 @@ components:
                 - type: string
                   enum:
                     - auto
-                - $ref: '#/components/schemas/NEpochs'
+                - $ref: '#/components/schemas/ModelDefinitions.NEpochs'
               description: |-
                 The number of epochs to train the model for. An epoch refers to one full cycle through the
                 training dataset.
               default: auto
         suffix:
           oneOf:
-            - $ref: '#/components/schemas/SuffixString'
+            - $ref: '#/components/schemas/ModelDefinitions.SuffixString'
           nullable: true
           description: |-
             A string of up to 18 characters that will be added to your fine-tuned model name.
@@ -1909,7 +1933,7 @@ components:
             For example, a `suffix` of "custom-model-name" would produce a model name like
             `ft:gpt-3.5-turbo:openai:custom-model-name:7p4lURel`.
           default: null
-    CreateImageEditRequest:
+    ModelDefinitions.CreateImageEditRequest:
       type: object
       required:
         - prompt
@@ -1933,7 +1957,7 @@ components:
             as `image`.
         n:
           oneOf:
-            - $ref: '#/components/schemas/ImagesN'
+            - $ref: '#/components/schemas/ModelDefinitions.ImagesN'
           nullable: true
           description: The number of images to generate. Must be between 1 and 10.
           default: 1
@@ -1955,8 +1979,8 @@ components:
           description: The format in which the generated images are returned. Must be one of `url` or `b64_json`.
           default: url
         user:
-          $ref: '#/components/schemas/User'
-    CreateImageRequest:
+          $ref: '#/components/schemas/ModelDefinitions.User'
+    ModelDefinitions.CreateImageRequest:
       type: object
       required:
         - prompt
@@ -1966,7 +1990,7 @@ components:
           description: A text description of the desired image(s). The maximum length is 1000 characters.
         n:
           oneOf:
-            - $ref: '#/components/schemas/ImagesN'
+            - $ref: '#/components/schemas/ModelDefinitions.ImagesN'
           nullable: true
           description: The number of images to generate. Must be between 1 and 10.
           default: 1
@@ -1988,8 +2012,8 @@ components:
           description: The format in which the generated images are returned. Must be one of `url` or `b64_json`.
           default: url
         user:
-          $ref: '#/components/schemas/User'
-    CreateImageVariationRequest:
+          $ref: '#/components/schemas/ModelDefinitions.User'
+    ModelDefinitions.CreateImageVariationRequest:
       type: object
       required:
         - image
@@ -2002,7 +2026,7 @@ components:
             and square.
         n:
           oneOf:
-            - $ref: '#/components/schemas/ImagesN'
+            - $ref: '#/components/schemas/ModelDefinitions.ImagesN'
           nullable: true
           description: The number of images to generate. Must be between 1 and 10.
           default: 1
@@ -2024,8 +2048,8 @@ components:
           description: The format in which the generated images are returned. Must be one of `url` or `b64_json`.
           default: url
         user:
-          $ref: '#/components/schemas/User'
-    CreateModerationRequest:
+          $ref: '#/components/schemas/ModelDefinitions.User'
+    ModelDefinitions.CreateModerationRequest:
       type: object
       required:
         - input
@@ -2052,7 +2076,7 @@ components:
             of `text-moderation-stable` may be slightly lower than for `text-moderation-latest`.
           x-oaiTypeLabel: string
           default: text-moderation-latest
-    CreateModerationResponse:
+    ModelDefinitions.CreateModerationResponse:
       type: object
       required:
         - id
@@ -2201,7 +2225,7 @@ components:
                     format: double
                     description: The score for the category 'violence/graphic'.
           description: A list of moderation objects.
-    CreateTranscriptionRequest:
+    ModelDefinitions.CreateTranscriptionRequest:
       type: object
       required:
         - file
@@ -2256,14 +2280,14 @@ components:
             The language of the input audio. Supplying the input language in
             [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy
             and latency.
-    CreateTranscriptionResponse:
+    ModelDefinitions.CreateTranscriptionResponse:
       type: object
       required:
         - text
       properties:
         text:
           type: string
-    CreateTranslationRequest:
+    ModelDefinitions.CreateTranslationRequest:
       type: object
       required:
         - file
@@ -2301,25 +2325,14 @@ components:
             The format of the transcript output, in one of these options: json, text, srt, verbose_json, or
             vtt.
           default: json
-        temperature:
-          type: number
-          format: double
-          description: |-
-            The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more
-            random, while lower values like 0.2 will make it more focused and deterministic. If set to 0,
-            the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to
-            automatically increase the temperature until certain thresholds are hit.
-          minimum: 0
-          maximum: 1
-          default: 0
-    CreateTranslationResponse:
+    ModelDefinitions.CreateTranslationResponse:
       type: object
       required:
         - text
       properties:
         text:
           type: string
-    DeleteFileResponse:
+    ModelDefinitions.DeleteFileResponse:
       type: object
       required:
         - id
@@ -2332,7 +2345,7 @@ components:
           type: string
         deleted:
           type: boolean
-    DeleteModelResponse:
+    ModelDefinitions.DeleteModelResponse:
       type: object
       required:
         - id
@@ -2345,12 +2358,12 @@ components:
           type: string
         deleted:
           type: boolean
-    EditN:
+    ModelDefinitions.EditN:
       type: integer
       format: int64
       minimum: 0
       maximum: 20
-    Embedding:
+    ModelDefinitions.Embedding:
       type: object
       description: Represents an embedding vector returned by embedding endpoint.
       required:
@@ -2375,32 +2388,7 @@ components:
           description: |-
             The embedding vector, which is a list of floats. The length of vector depends on the model as\
             listed in the [embedding guide](/docs/guides/embeddings).
-    Error:
-      type: object
-      required:
-        - type
-        - message
-        - param
-        - code
-      properties:
-        type:
-          type: string
-        message:
-          type: string
-        param:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-    ErrorResponse:
-      type: object
-      required:
-        - error
-      properties:
-        error:
-          $ref: '#/components/schemas/Error'
-    FineTune:
+    ModelDefinitions.FineTune:
       type: object
       description: The `FineTune` object represents a legacy fine-tune job that has been created through the API.
       required:
@@ -2498,24 +2486,24 @@ components:
         training_files:
           type: array
           items:
-            $ref: '#/components/schemas/OpenAIFile'
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
           description: The list of files used for training.
         validation_files:
           type: array
           items:
-            $ref: '#/components/schemas/OpenAIFile'
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
           description: The list of files used for validation.
         result_files:
           type: array
           items:
-            $ref: '#/components/schemas/OpenAIFile'
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
           description: The compiled results files for the fine-tuning job.
         events:
           type: array
           items:
-            $ref: '#/components/schemas/FineTuneEvent'
+            $ref: '#/components/schemas/ModelDefinitions.FineTuneEvent'
           description: The list of events that have been observed in the lifecycle of the FineTune job.
-    FineTuneEvent:
+    ModelDefinitions.FineTuneEvent:
       type: object
       required:
         - object
@@ -2532,33 +2520,7 @@ components:
           type: string
         message:
           type: string
-    FineTuningEvent:
-      type: object
-      required:
-        - object
-        - created_at
-        - level
-        - message
-      properties:
-        object:
-          type: string
-        created_at:
-          type: integer
-          format: unixtime
-        level:
-          type: string
-        message:
-          type: string
-        data:
-          type: object
-          additionalProperties: {}
-          nullable: true
-        type:
-          type: string
-          enum:
-            - message
-            - metrics
-    FineTuningJob:
+    ModelDefinitions.FineTuningJob:
       type: object
       required:
         - id
@@ -2630,7 +2592,7 @@ components:
                 - type: string
                   enum:
                     - auto
-                - $ref: '#/components/schemas/NEpochs'
+                - $ref: '#/components/schemas/ModelDefinitions.NEpochs'
               description: |-
                 The number of epochs to train the model for. An epoch refers to one full cycle through the
                 training dataset.
@@ -2682,7 +2644,7 @@ components:
                 The parameter that was invalid, usually `training_file` or `validation_file`. This field
                 will be null if the failure was not parameter-specific.
           nullable: true
-    FineTuningJobEvent:
+    ModelDefinitions.FineTuningJobEvent:
       type: object
       required:
         - id
@@ -2706,7 +2668,7 @@ components:
             - error
         message:
           type: string
-    Image:
+    ModelDefinitions.Image:
       type: object
       description: Represents the url or the content of an image generated by the OpenAI API.
       properties:
@@ -2718,12 +2680,12 @@ components:
           type: string
           format: base64
           description: The base64-encoded JSON of the generated image, if `response_format` is `b64_json`.
-    ImagesN:
+    ModelDefinitions.ImagesN:
       type: integer
       format: int64
       minimum: 1
       maximum: 10
-    ImagesResponse:
+    ModelDefinitions.ImagesResponse:
       type: object
       required:
         - created
@@ -2735,8 +2697,8 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Image'
-    ListFilesResponse:
+            $ref: '#/components/schemas/ModelDefinitions.Image'
+    ModelDefinitions.ListFilesResponse:
       type: object
       required:
         - object
@@ -2747,8 +2709,8 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/OpenAIFile'
-    ListFineTuneEventsResponse:
+            $ref: '#/components/schemas/ModelDefinitions.OpenAIFile'
+    ModelDefinitions.ListFineTuneEventsResponse:
       type: object
       required:
         - object
@@ -2759,8 +2721,8 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/FineTuneEvent'
-    ListFineTunesResponse:
+            $ref: '#/components/schemas/ModelDefinitions.FineTuneEvent'
+    ModelDefinitions.ListFineTunesResponse:
       type: object
       required:
         - object
@@ -2771,8 +2733,8 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/FineTune'
-    ListFineTuningJobEventsResponse:
+            $ref: '#/components/schemas/ModelDefinitions.FineTune'
+    ModelDefinitions.ListFineTuningJobEventsResponse:
       type: object
       required:
         - object
@@ -2783,8 +2745,8 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/FineTuningJobEvent'
-    ListModelsResponse:
+            $ref: '#/components/schemas/ModelDefinitions.FineTuningJobEvent'
+    ModelDefinitions.ListModelsResponse:
       type: object
       required:
         - object
@@ -2795,8 +2757,8 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Model'
-    ListPaginatedFineTuningJobsResponse:
+            $ref: '#/components/schemas/ModelDefinitions.Model'
+    ModelDefinitions.ListPaginatedFineTuningJobsResponse:
       type: object
       required:
         - object
@@ -2808,14 +2770,14 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/FineTuningJob'
+            $ref: '#/components/schemas/ModelDefinitions.FineTuningJob'
         has_more:
           type: boolean
-    MaxTokens:
+    ModelDefinitions.MaxTokens:
       type: integer
       format: int64
       minimum: 0
-    Model:
+    ModelDefinitions.Model:
       type: object
       description: Describes an OpenAI model offering that can be used with the API.
       required:
@@ -2839,17 +2801,17 @@ components:
         owned_by:
           type: string
           description: The organization that owns the model.
-    N:
+    ModelDefinitions.N:
       type: integer
       format: int64
       minimum: 1
       maximum: 128
-    NEpochs:
+    ModelDefinitions.NEpochs:
       type: integer
       format: int64
       minimum: 1
       maximum: 50
-    OpenAIFile:
+    ModelDefinitions.OpenAIFile:
       type: object
       description: The `File` object represents a document that has been uploaded to OpenAI.
       required:
@@ -2901,57 +2863,57 @@ components:
           description: |-
             Additional details about the status of the file. If the file is in the `error` state, this will
             include a message describing the error.
-    Penalty:
+    ModelDefinitions.Penalty:
       type: number
       format: double
       minimum: -2
       maximum: 2
-    Prompt:
+    ModelDefinitions.Prompt:
       oneOf:
         - type: string
         - type: array
           items:
             type: string
-        - $ref: '#/components/schemas/TokenArray'
-        - $ref: '#/components/schemas/TokenArrayArray'
+        - $ref: '#/components/schemas/ModelDefinitions.TokenArray'
+        - $ref: '#/components/schemas/ModelDefinitions.TokenArrayArray'
       nullable: true
-    Stop:
+    ModelDefinitions.Stop:
       oneOf:
         - type: string
-        - $ref: '#/components/schemas/StopSequences'
+        - $ref: '#/components/schemas/ModelDefinitions.StopSequences'
       nullable: true
-    StopSequences:
+    ModelDefinitions.StopSequences:
       type: array
       items:
         type: string
       minItems: 1
       maxItems: 4
-    SuffixString:
+    ModelDefinitions.SuffixString:
       type: string
       minLength: 1
       maxLength: 40
-    Temperature:
+    ModelDefinitions.Temperature:
       type: number
       format: double
       minimum: 0
       maximum: 2
-    TokenArray:
+    ModelDefinitions.TokenArray:
       type: array
       items:
         type: integer
         format: int64
       minItems: 1
-    TokenArrayArray:
+    ModelDefinitions.TokenArrayArray:
       type: array
       items:
-        $ref: '#/components/schemas/TokenArray'
+        $ref: '#/components/schemas/ModelDefinitions.TokenArray'
       minItems: 1
-    TopP:
+    ModelDefinitions.TopP:
       type: number
       format: double
       minimum: 0
       maximum: 1
-    User:
+    ModelDefinitions.User:
       type: string
   securitySchemes:
     BearerAuth:

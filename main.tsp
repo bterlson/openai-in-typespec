@@ -3,13 +3,14 @@ import "@typespec/openapi3";
 import "@typespec/openapi";
 
 import "./audio";
+import "./chat";
 import "./completions";
-import "./edits";
 import "./embeddings";
 import "./files";
 import "./fine-tuning";
 import "./images";
-import "./moderation";
+import "./models";
+import "./moderations";
 
 using TypeSpec.Http;
 

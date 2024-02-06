@@ -3,30 +3,18 @@ import "@typespec/openapi";
 
 import "../common/errors.tsp";
 import "./models.tsp";
-import "./chat-meta.tsp";
 
 using TypeSpec.Http;
 using TypeSpec.OpenAPI;
 
 namespace OpenAI;
 
-@route("/chat")
-namespace Chat {
-  @route("/completions")
-  interface Completions {
-    @tag("OpenAI")
-    @post
-    @operationId("createChatCompletion")
-    createChatCompletion(
-      ...CreateChatCompletionRequest,
-    ): CreateChatCompletionResponse | ErrorResponse;
-  }
-}
 @route("/completions")
 interface Completions {
-  @tag("OpenAI")
   @post
   @operationId("createCompletion")
+  @tag("OpenAI")
+  @summary("Creates a completion for the provided prompt and parameters.")
   createCompletion(
     ...CreateCompletionRequest,
   ): CreateCompletionResponse | ErrorResponse;

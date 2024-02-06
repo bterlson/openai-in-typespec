@@ -16,7 +16,9 @@ interface Images {
   @operationId("createImage")
   @tag("OpenAI")
   @summary("Creates an image given a prompt")
-  createImage(@body image: CreateImageRequest): ImagesResponse | ErrorResponse;
+  createImage(
+    @body image: CreateImageRequest
+  ): ImagesResponse | ErrorResponse;
 
   @route("edits")
   @post

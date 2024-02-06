@@ -1,5 +1,6 @@
-namespace OpenAI;
 using TypeSpec.OpenAPI;
+
+namespace OpenAI;
 
 model CreateModerationRequest {
   /** The input text to classify */
@@ -13,9 +14,20 @@ model CreateModerationRequest {
    * of `text-moderation-stable` may be slightly lower than for `text-moderation-latest`.
    */
   @extension("x-oaiTypeLabel", "string")
-  `model`?: string | "text-moderation-latest" | "text-moderation-stable" = "text-moderation-latest";
+  `model`?: string | MODERATION_MODELS = "text-moderation-latest";
 }
 
+/**
+ * Represents policy compliance report by OpenAI's content moderation model against a given input.
+ */
+// TODO: Fill in example here.
+@extension(
+  "x-oaiMeta",
+  {
+    name: "The moderation object",
+    example: "*moderation_example"
+  }
+)
 model CreateModerationResponse {
   /** The unique identifier for the moderation request. */
   id: string;
@@ -66,7 +78,7 @@ model CreateModerationResponse {
        * Content that encourages performing acts of self-harm, such as suicide, cutting, and eating
        * disorders, or that gives instructions or advice on how to commit such acts.
        */
-      `self-harm/instructive`: boolean;
+      `self-harm/instructions`: boolean;
 
       /**
        * Content meant to arouse sexual excitement, such as the description of sexual activity, or
@@ -105,7 +117,7 @@ model CreateModerationResponse {
       `self-harm/intent`: float64;
 
       /** The score for the category 'self-harm/instructive'. */
-      `self-harm/instructive`: float64;
+      `self-harm/instructions`: float64;
 
       /** The score for the category 'sexual'. */
       sexual: float64;
@@ -121,3 +133,7 @@ model CreateModerationResponse {
     };
   }[];
 }
+
+alias MODERATION_MODELS =
+  | "text-moderation-latest"
+  | "text-moderation-stable";

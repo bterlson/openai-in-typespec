@@ -1,6 +1,9 @@
+import "./operations.tsp";
+
+namespace OpenAI;
 using TypeSpec.OpenAPI;
 
-@@extension(OpenAI.Completions.createCompletion,
+@@extension(OpenAI.Chat.createChatCompletion,
   "x-oaiMeta",
   {
     name: "Create chat completion",
@@ -164,5 +167,15 @@ using TypeSpec.OpenAPI;
           """,
       }
     ],
+  }
+);
+
+// TODO: Fill in example here.
+@@extension(OpenAI.CreateChatCompletionResponse,
+  "x-oaiMeta",
+  {
+    name: "The chat completion object",
+    group: "chat",
+    example: "",
   }
 );

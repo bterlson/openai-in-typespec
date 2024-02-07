@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Completions {
   @post
   @operationId("createCompletion")
-  @tag("OpenAI")
+  @tag("Completions")
   @summary("Creates a completion for the provided prompt and parameters.")
   createCompletion(
     ...CreateCompletionRequest,

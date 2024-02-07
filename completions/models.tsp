@@ -22,7 +22,7 @@ model CreateCompletionRequest {
    * prompt is not specified the model will generate as if from the beginning of a new document.
    */
   // TODO: consider inlining when https://github.com/microsoft/typespec/issues/2356 fixed
-  prompt: Prompt = "<|endoftext|>";
+  prompt: Prompt | null = "<|endoftext|>";
 
   /**
    * Generates `best_of` completions server-side and returns the "best" (the one with the highest
@@ -48,7 +48,9 @@ model CreateCompletionRequest {
    *
    * [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
    */
-  frequency_penalty?: Penalty | null = 0;
+  @minValue(-2)
+  @maxValue(2)
+  frequency_penalty?: float64 | null = 0;
 
   /**
    * Modify the likelihood of specified tokens appearing in the completion.
@@ -85,7 +87,8 @@ model CreateCompletionRequest {
    * [Example Python code](https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb)
    * for counting tokens.
    */
-  max_tokens?: MaxTokens | null = 16;
+  @minValue(0)
+  max_tokens?: safeint | null = 16;
 
   /**
    * How many completions to generate for each prompt.
@@ -93,7 +96,9 @@ model CreateCompletionRequest {
    * **Note:** Because this parameter generates many completions, it can quickly consume your token
    * quota. Use carefully and ensure that you have reasonable settings for `max_tokens` and `stop`.
    */
-  n?: N | null = 1;
+  @minValue(1)
+  @maxValue(128)
+  n?: safeint | null = 1;
 
   /**
    * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear
@@ -101,7 +106,9 @@ model CreateCompletionRequest {
    *
    * [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
    */
-  presence_penalty?: Penalty | null = 0;
+  @minValue(-2)
+  @maxValue(2)
+  presence_penalty?: float64 | null = 0;
 
   /** 
    * If specified, our system will make a best effort to sample deterministically, such that
@@ -116,9 +123,11 @@ model CreateCompletionRequest {
       beta: true
     }
   )
-  seed?: Seed | null;
+  @minValue(-9223372036854775808) // TODO: Min and max exceed the limits of safeint.
+  @maxValue(9223372036854775807)
+  seed?: safeint | null;
 
-  // todo: consider inlining when https://github.com/microsoft/typespec/issues/2356 is resolved
+  // TODO: Consider inlining when https://github.com/microsoft/typespec/issues/2356 is resolved
   // https://github.com/microsoft/typespec/issues/2355
   /** Up to 4 sequences where the API will stop generating further tokens. */
   stop?: Stop | null = null;
@@ -140,7 +149,9 @@ model CreateCompletionRequest {
    *
    * We generally recommend altering this or `top_p` but not both.
    */
-  temperature?: Temperature | null = 1;
+  @minValue(0)
+  @maxValue(2)
+  temperature?: float64 | null = 1;
 
   /**
    * An alternative to sampling with temperature, called nucleus sampling, where the model considers
@@ -149,7 +160,9 @@ model CreateCompletionRequest {
    *
    * We generally recommend altering this or `temperature` but not both.
    */
-  top_p?: TopP | null = 1;
+  @minValue(0)
+  @maxValue(1)
+  top_p?: float64 | null = 1;
 
   /**
    * A unique identifier representing your end-user, which can help OpenAI to monitor and detect
@@ -162,14 +175,6 @@ model CreateCompletionRequest {
  * Represents a completion response from the API. Note: both the streamed and non-streamed response
  * objects share the same shape (unlike the chat endpoint).
  */
-@extension(
-  "x-oaiMeta",
-  {
-    name: "The  completion object",
-    legacy: true,
-    example: "", // fill in
-  }
-)
 model CreateCompletionResponse {
   /** A unique identifier for the completion. */
   id: string;
@@ -192,6 +197,8 @@ model CreateCompletionResponse {
      * in the request was reached, or `content_filter` if content was omitted due to a flag from our
      * content filters.
      */
+    // TODO: The generated spec includes other values like "tool_calls" and "function_call".
+    // Is it because we're importing /chat/models.tsp?
     finish_reason: "stop" | "length" | "content_filter";
   }[];
 
@@ -228,5 +235,4 @@ union Prompt {
   string[],
   TokenArray,
   TokenArrayArray,
-  null,
 }

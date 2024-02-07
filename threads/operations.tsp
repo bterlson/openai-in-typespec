@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Threads {
   @post
   @operationId("createThread")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Create a thread.")
   createThread(
     @body thread: CreateThreadRequest,
@@ -22,7 +22,7 @@ interface Threads {
   @route("{thread_id}")
   @get
   @operationId("getThread")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Retrieves a thread.")
   getThread(
     /** The ID of the thread to retrieve. */
@@ -32,7 +32,7 @@ interface Threads {
   @route("{thread_id}")
   @post
   @operationId("modifyThread")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Modifies a thread.")
   modifyThread(
     /** The ID of the thread to modify. Only the `metadata` can be modified. */
@@ -43,7 +43,7 @@ interface Threads {
   @route("{thread_id}")
   @delete
   @operationId("deleteThread")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Delete a thread.")
   deleteThread(
     /** The ID of the thread to delete. */

@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Messages {
   @post
   @operationId("createMessage")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Create a message.")
   createMessage(
     /** The ID of the [thread](/docs/api-reference/threads) to create a message for. */
@@ -24,7 +24,7 @@ interface Messages {
 
   @get
   @operationId("listMessages")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Returns a list of messages for a given thread.")
   listMessages(
     /** The ID of the [thread](/docs/api-reference/threads) the messages belong to. */
@@ -60,7 +60,7 @@ interface Messages {
   @route("{message_id}")
   @get
   @operationId("getMessage")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Retrieve a message.")
   getMessage(
     /** The ID of the [thread](/docs/api-reference/threads) to which this message belongs. */
@@ -73,7 +73,7 @@ interface Messages {
   @route("{message_id}")
   @post
   @operationId("modifyMessage")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Modifies a message.")
   modifyMessage(
     /** The ID of the thread to which this message belongs. */
@@ -88,7 +88,7 @@ interface Messages {
   @route("{message_id}/files")
   @get
   @operationId("listMessageFiles")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Returns a list of message files.")
   listMessageFiles(
     /** The ID of the thread that the message and files belong to. */
@@ -127,8 +127,8 @@ interface Messages {
   @route("{message_id}/files/{file_id}")
   @get
   @operationId("getMessageFile")
-  @tag("OpenAI")
-  @summary("RRetrieves a message file.")
+  @tag("Assistants")
+  @summary("Retrieves a message file.")
   getMessageFile(
     /** The ID of the thread to which the message and File belong. */
     @path thread_id: string,

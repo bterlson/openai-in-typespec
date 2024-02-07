@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Models {
   @get
   @operationId("listModels")
-  @tag("OpenAI")
+  @tag("Models")
   @summary("""
   Lists the currently available models, and provides basic information about each one such as the
   owner and availability.
@@ -23,7 +23,7 @@ interface Models {
   @route("{model}")
   @get
   @operationId("retrieveModel")
-  @tag("OpenAI")
+  @tag("Models")
   @summary("""
   Retrieves a model instance, providing basic information about the model such as the owner and
   permissioning.
@@ -36,7 +36,7 @@ interface Models {
   @route("{model}")
   @delete
   @operationId("deleteModel")
-  @tag("OpenAI")
+  @tag("Models")
   @summary("""
   Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
   """)

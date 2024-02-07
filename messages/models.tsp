@@ -7,7 +7,7 @@ namespace OpenAI;
 
 model CreateMessageRequest {
   /** The role of the entity that is creating the message. Currently only `user` is supported. */
-  role: "user";
+  role: "user"; // TODO: The generated spec add "assistants" to this enum.
 
   /** The content of the message. */
   @minLength(1)
@@ -125,9 +125,10 @@ model MessageContentImageFileObject {
   }
 }
 
+/** The text content that is part of a message. */
 model MessageContentTextObject {
   /** Always `text`. */
-  type: "text";
+  type: "text"; // TODO: The generated spec adds "json_object" to this enum.
 
   text: {
     /** The data that makes up the text. */

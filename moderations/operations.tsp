@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Moderations {
   @post
   @operationId("createModeration")
-  @tag("OpenAI")
+  @tag("Moderations")
   @summary("Classifies if text violates OpenAI's Content Policy")
   createModeration(
     @body content: CreateModerationRequest,

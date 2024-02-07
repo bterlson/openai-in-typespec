@@ -36,22 +36,6 @@ alias FILE_PURPOSE =
   | "assistants_output";
 
 /** The `File` object represents a document that has been uploaded to OpenAI. */
-@extension(
-  "x-oaiMeta",
-  {
-    name: "The file object",
-    example: | """
-      {
-        "id": "file-abc123",
-        "object": "file",
-        "bytes": 120000,
-        "created_at": 1677610602,
-        "filename": "salesOverview.pdf",
-        "purpose": "assistants",
-      }
-      """
-  }
-)
 model OpenAIFile {
   /** The file identifier, which can be referenced in the API endpoints. */
   id: string;

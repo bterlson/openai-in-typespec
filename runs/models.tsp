@@ -328,7 +328,7 @@ model RunObject {
    */
   required_action: {
     /** For now, this is always `submit_tool_outputs`. */
-    type: "ubmit_tool_outputs";
+    type: "submit_tool_outputs";
 
     /** Details on the tool outputs needed for this run to continue. */
     submit_tool_outputs: {
@@ -439,7 +439,7 @@ model RunStepObject {
    * if the parent run is expired.
    */
   @encode("unixTimestamp", int32)
-  expires_at: utcDateTime;
+  expires_at: utcDateTime | null;
 
   /** The Unix timestamp (in seconds) for when the run step was cancelled. */
   @encode("unixTimestamp", int32)

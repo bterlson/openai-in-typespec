@@ -30,7 +30,7 @@ model CreateAssistantRequest {
    * Tools can be of types `code_interpreter`, `retrieval`, or `function`.
    */
   
-  tools?: CreateAssistantRequestTools = []; // TODO: Double-check default empty array
+  tools?: CreateAssistantRequestTools = [];
 
   /**
    * A list of [file](/docs/api-reference/files) IDs attached to this assistant. There can be a
@@ -73,8 +73,7 @@ model ModifyAssistantRequest {
    * A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
    * Tools can be of types `code_interpreter`, `retrieval`, or `function`.
    */
-  @maxItems(128)
-  tools?: CreateAssistantRequestTools[] = []; // TODO: Double-check default empty array
+  tools?: CreateAssistantRequestTools = [];
 
   /**
    * A list of [file](/docs/api-reference/files) IDs attached to this assistant. There can be a
@@ -196,8 +195,7 @@ model AssistantObject {
    * A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
    * Tools can be of types `code_interpreter`, `retrieval`, or `function`.
    */
-  @maxItems(128)
-  tools: CreateAssistantRequestTools[] = []; // TODO: Double-check default empty array
+  tools: CreateAssistantRequestTools = [];
 
   /**
     * A list of [file](/docs/api-reference/files) IDs attached to this assistant. There can be a

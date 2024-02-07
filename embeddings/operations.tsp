@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Embeddings {
   @post
   @operationId("createEmbedding")
-  @tag("OpenAI")
+  @tag("Embeddings")
   @summary("Creates an embedding vector representing the input text.")
   createEmbedding(
     @body embedding: CreateEmbeddingRequest,

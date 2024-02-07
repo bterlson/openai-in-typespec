@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Files {
   @post
   @operationId("createFile")
-  @tag("OpenAI")
+  @tag("Files")
   @summary("""
   Upload a file that can be used across various endpoints. The size of all the files uploaded by
   one organization can be up to 100 GB.
@@ -31,17 +31,18 @@ interface Files {
 
   @get
   @operationId("listFiles")
-  @tag("OpenAI")
+  @tag("Files")
   @summary("Returns a list of files that belong to the user's organization.")
   listFiles(
     /** Only return files with the given purpose. */
+    // NOTE: This is just a string in the OpenAPI spec.
     @query purpose?: FILE_PURPOSE,
   ): ListFilesResponse | ErrorResponse;
 
   @route("{file_id}")
   @get
   @operationId("retrieveFile")
-  @tag("OpenAI")
+  @tag("Files")
   @summary("Returns information about a specific file.")
   retrieveFile(
     /** The ID of the file to use for this request. */
@@ -51,7 +52,7 @@ interface Files {
   @route("{file_id}")
   @delete
   @operationId("deleteFile")
-  @tag("OpenAI")
+  @tag("Files")
   @summary("Delete a file")
   deleteFile(
     /** The ID of the file to use for this request. */
@@ -61,10 +62,10 @@ interface Files {
   @route("{file_id}/content")
   @get
   @operationId("downloadFile")
-  @tag("OpenAI")
+  @tag("Files")
   @summary("Returns the contents of the specified file.")
   downloadFile(
     /** The ID of the file to use for this request. */
     @path file_id: string,
-  ): string | ErrorResponse;
+  ): string | ErrorResponse; // TODO: The OpenAPI spec says this is a string but the Content-Type is application/json?
 }

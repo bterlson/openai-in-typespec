@@ -4,7 +4,7 @@ namespace OpenAI;
 
 model CreateModerationRequest {
   /** The input text to classify */
-  input: string | string[];
+  input: CreateModerationRequestInput;
 
   /**
    * Two content moderations models are available: `text-moderation-stable` and
@@ -20,14 +20,6 @@ model CreateModerationRequest {
 /**
  * Represents policy compliance report by OpenAI's content moderation model against a given input.
  */
-// TODO: Fill in example here.
-@extension(
-  "x-oaiMeta",
-  {
-    name: "The moderation object",
-    example: "*moderation_example"
-  }
-)
 model CreateModerationResponse {
   /** The unique identifier for the moderation request. */
   id: string;
@@ -137,3 +129,9 @@ model CreateModerationResponse {
 alias MODERATION_MODELS =
   | "text-moderation-latest"
   | "text-moderation-stable";
+
+@oneOf
+union CreateModerationRequestInput {
+  string,
+  string[]
+}

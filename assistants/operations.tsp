@@ -13,7 +13,7 @@ namespace OpenAI;
 interface Assistants {
   @post
   @operationId("createAssistant")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Create an assistant with a model and instructions.")
   createAssistant(
     @body assistant: CreateAssistantRequest,
@@ -21,7 +21,7 @@ interface Assistants {
 
   @get
   @operationId("listAssistants")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Returns a list of assistants.")
   listFiles(
     /** 
@@ -54,7 +54,7 @@ interface Assistants {
   @route("{assistant_id}")
   @get
   @operationId("getAssistant")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Retrieves an assistant.")
   getAssistant(
     /** The ID of the assistant to retrieve. */
@@ -64,7 +64,7 @@ interface Assistants {
   @route("{assistant_id}")
   @post
   @operationId("modifyAssistant")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Modifies an assistant.")
   modifyAssistant(
     /** The ID of the assistant to modify. */
@@ -76,7 +76,7 @@ interface Assistants {
   @route("{assistant_id}")
   @delete
   @operationId("deleteAssistant")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Delete an assistant.")
   deleteAssistant(
     /** The ID of the assistant to delete. */
@@ -86,7 +86,7 @@ interface Assistants {
   @route("{assistant_id}/files")
   @post
   @operationId("createAssistantFile")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("""
   Create an assistant file by attaching a [File](/docs/api-reference/files) to a
   [assistant](/docs/api-reference/assistants).
@@ -100,7 +100,7 @@ interface Assistants {
   @route("{assistant_id}/files")
   @get
   @operationId("listAssistantFiles")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Returns a list of assistant files.")
   listAssistantFiles(
     /** The ID of the assistant the file belongs to. */
@@ -136,7 +136,7 @@ interface Assistants {
   @route("{assistant_id}/files/{file_id}")
   @get
   @operationId("getAssistantFile")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Retrieves an assistant file.")
   getAssistantFile(
     /** The ID of the assistant the file belongs to. */
@@ -149,7 +149,7 @@ interface Assistants {
   @route("{assistant_id}/files/{file_id}")
   @delete
   @operationId("deleteAssistantFile")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Delete an assistant file.")
   deleteAssistantFile(
     /** The ID of the assistant the file belongs to. */

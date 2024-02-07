@@ -14,20 +14,22 @@ interface Audio {
   @route("speech")
   @post
   @operationId("createSpeech")
-  @tag("OpenAI")
+  @tag("Audio")
   @summary("Generates audio from the input text.")
   createSpeech(
     @body speech: CreateSpeechRequest,
   ): {
+    /** chunked */
+    @header("Transfer-Encoding") transferEncoding?: string;
+
     @header contentType: "application/octet-stream";
-    @header("Transfer-Encoding") transferEncoding: "chunked";
     @body @encode("binary") audio: bytes;
   };
 
   @route("transcriptions")
   @post
   @operationId("createTranscription")
-  @tag("OpenAI")
+  @tag("Audio")
   @summary("Transcribes audio into the input language.")
   createTranscription(
     @header contentType: "multipart/form-data",
@@ -35,6 +37,7 @@ interface Audio {
   ):
   | CreateTranscriptionResponse
   | {
+      // TODO: Is this the appropriate way to describe the multiple possible response types?
       @header contentType: "text/plain";
       @body text: string; 
     }
@@ -43,14 +46,15 @@ interface Audio {
   @route("translations")
   @post
   @operationId("createTranslation")
-  @tag("OpenAI")
-  @summary("Transcribes audio into the input language.")
+  @tag("Audio")
+  @summary("Translates audio into English..")
   createTranslation(
     @header contentType: "multipart/form-data",
     @body audio: CreateTranslationRequest,
   ): 
   | CreateTranslationResponse
   | {
+      // TODO: Is this the appropriate way to describe the multiple possible response types?
       @header contentType: "text/plain";
       @body text: string; 
     }

@@ -33,4 +33,6 @@ model FunctionObject {
  * about the format.\n\nTo describe a function that accepts no parameters, provide the value
  * `{\"type\": \"object\", \"properties\": {}}`.
  */
+// TODO: The generated spec produces "additionalProperties: {}" for this instead of
+// "additionalProperties: true". Are they equivalent?
 model FunctionParameters is Record<unknown>;

@@ -10,18 +10,10 @@ model ListModelsResponse {
 model DeleteModelResponse {
   id: string;
   deleted: boolean;
-  object: "model";
+  object: "model"; // NOTE: This is just a string in the OpenAPI spec, no enum.
 }
 
 /** Describes an OpenAI model offering that can be used with the API. */
-// TODO: Fill in example here.
-@extension(
-  "x-oaiMeta",
-  {
-    name: "The model object",
-    example: "*retrieve_model_response"
-  }
-)
 model Model {
   /** The model identifier, which can be referenced in the API endpoints. */
   id: string;

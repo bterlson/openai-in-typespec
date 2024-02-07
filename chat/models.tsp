@@ -26,7 +26,9 @@ model CreateChatCompletionRequest {
    *
    * [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
    */
-  frequency_penalty?: Penalty | null = 0;
+  @minValue(-2)
+  @maxValue(2)
+  frequency_penalty?: float64 | null = 0;
 
   /**
    * Modify the likelihood of specified tokens appearing in the completion.
@@ -52,7 +54,9 @@ model CreateChatCompletionRequest {
    * position, each with an associated log probability. `logprobs` must be set to `true` if this
    * parameter is used.
    */
-  top_logprobs?: TopLogprobs | null;
+  @minValue(0)
+  @maxValue(5)
+  top_logprobs?: safeint | null;
 
   /**
    * The maximum number of [tokens](/tokenizer) that can be generated in the chat completion.
@@ -61,14 +65,17 @@ model CreateChatCompletionRequest {
    * [Example Python code](https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken)
    * for counting tokens.
    */
-  max_tokens?: MaxTokens | null = 16;
+  @minValue(0)
+  max_tokens?: safeint | null = 16;
 
   /**
    * How many chat completion choices to generate for each input message. Note that you will be
    * charged based on the number of generated tokens across all of the choices. Keep `n` as `1` to
    * minimize costs.
    */
-  n?: N | null = 1;
+  @minValue(1)
+  @maxValue(128)
+  n?: safeint | null = 1;
 
   /**
    * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear
@@ -76,7 +83,9 @@ model CreateChatCompletionRequest {
    *
    * [See more information about frequency and presence penalties.](/docs/guides/gpt/parameter-details)
    */
-  presence_penalty?: Penalty | null = 0;
+  @minValue(-2)
+  @maxValue(2)
+  presence_penalty?: float64 | null = 0;
 
   /** 
    * An object specifying the format that the model must output. Compatible with
@@ -112,7 +121,9 @@ model CreateChatCompletionRequest {
       beta: true
     }
   )
-  seed?: Seed | null;
+  @minValue(-9223372036854775808) // TODO: Min and max exceed the limits of safeint.
+  @maxValue(9223372036854775807)
+  seed?: safeint | null;
 
   // TODO: Consider inlining when https://github.com/microsoft/typespec/issues/2356 is resolved
   // https://github.com/microsoft/typespec/issues/2355
@@ -133,7 +144,9 @@ model CreateChatCompletionRequest {
    *
    * We generally recommend altering this or `top_p` but not both.
    */
-  temperature?: Temperature | null = 1;
+  @minValue(0)
+  @maxValue(2)
+  temperature?: float64 | null = 1;
 
   /**
    * An alternative to sampling with temperature, called nucleus sampling, where the model considers
@@ -142,7 +155,9 @@ model CreateChatCompletionRequest {
    *
    * We generally recommend altering this or `temperature` but not both.
    */
-  top_p?: TopP | null = 1;
+  @minValue(0)
+  @maxValue(1)
+  top_p?: float64 | null = 1;
 
   /**
    * A list of tools the model may call. Currently, only functions are supported as a tool. Use this
@@ -248,34 +263,6 @@ alias CHAT_COMPLETION_MODELS =
   | "gpt-3.5-turbo-0613"
   | "gpt-3.5-turbo-1106"
   | "gpt-3.5-turbo-16k-0613";
-
-@minValue(-2)
-@maxValue(2)
-scalar Penalty extends float64;
-
-@minValue(0)
-@maxValue(2)
-scalar Temperature extends float64;
-
-@minValue(0)
-@maxValue(1)
-scalar TopP extends float64;
-
-@minValue(0)
-@maxValue(5)
-scalar TopLogprobs extends safeint;
-
-@minValue(1)
-@maxValue(128)
-scalar N extends safeint;
-
-@minValue(0)
-scalar MaxTokens extends safeint;
-
-// TODO: Min and max exceed the limits of safeint.
-@minValue(-9223372036854775808)
-@maxValue(9223372036854775807)
-scalar Seed extends safeint;
 
 @oneOf
 union Stop {

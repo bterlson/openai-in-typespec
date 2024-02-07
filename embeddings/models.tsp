@@ -14,7 +14,7 @@ model CreateEmbeddingRequest {
    * for counting tokens.
    */
   @extension("x-oaiExpandable", true)
-  input: string | string[] | TokenArray | TokenArrayArray;
+  input: CreateEmbeddingRequestInput;
 
   /**
    * ID of the model to use. You can use the [List models](/docs/api-reference/models/list) API to
@@ -28,12 +28,13 @@ model CreateEmbeddingRequest {
    * The format to return the embeddings in. Can be either `float` or
    * [`base64`](https://pypi.org/project/pybase64/).
    */
-  encoding_format?: "float" | "base64" | null = "float";
+  encoding_format?: "float" | "base64" = "float";
 
   /** 
    * The number of dimensions the resulting output embeddings should have. Only supported in
    * `text-embedding-3` and later models. 
    */
+  @minValue(1)
   dimensions?: safeint;
 
   /**
@@ -50,7 +51,7 @@ model CreateEmbeddingResponse {
   /** The name of the model used to generate the embedding. */
   `model`: string;
   
-  /** The object type, which is always "embedding". */
+  /** The object type, which is always "list". */
   object: "list";
 
   /** The usage information for the request. */
@@ -68,25 +69,23 @@ alias EMBEDDINGS_MODELS =
   | "text-embedding-3-small"
   | "text-embedding-3-large";
 
+@oneOf
+union CreateEmbeddingRequestInput
+{
+  /** The string that will be turned into an embedding. */
+  string,
+
+  /** The array of strings that will be turned into an embedding. */
+  string[],
+
+  /** The array of integers that will be turned into an embedding. */
+  TokenArray,
+
+  /** The array of arrays containing integers that will be turned into an embedding. */
+  TokenArrayArray;
+}
+
 /** Represents an embedding vector returned by embedding endpoint. */
-@extension(
-  "x-oaiMeta",
-  {
-    name: "The embedding object",
-    example: | """
-      {
-        "object": "embedding",
-        "embedding": [
-          0.0023064255,
-          -0.009327292,
-          .... (1536 floats total for ada-002)
-          -0.0028842222,
-        ],
-        "index": 0
-      }
-      """
-  }
-)
 model Embedding {
   /** The index of the embedding in the list of embeddings. */
   index: safeint;

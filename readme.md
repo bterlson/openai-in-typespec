@@ -1,5 +1,7 @@
 A conversion of the OpenAI OpenAPI to TypeSpec.
 
+Snapshot: https://raw.githubusercontent.com/openai/openai-openapi/b648b7823135e6fa5148ac9a303c16fdad050da6/openapi.yaml
+
 There are some deltas:
 
 ### Changes to API Semantics:

@@ -23,11 +23,8 @@ model CreateSpeechRequest {
    */
   voice: "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer";
 
-  /**
-   * The format of the transcript output, in one of these options: json, text, srt, verbose_json, or
-   * vtt.
-   */
-  response_format?: "json" | "text" | "srt" | "verbose_json" | "vtt" = "json";
+  /** The format to audio in. Supported formats are `mp3`, `opus`, `aac`, and `flac`. */
+  response_format?: "mp3" | "opus" | "aac" | "flac" = "mp3";
 
   /**
    * The speed of the generated audio. Select a value from `0.25` to `4.0`. `1.0` is the default.
@@ -75,6 +72,7 @@ model CreateTranscriptionRequest {
    * the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to
    * automatically increase the temperature until certain thresholds are hit.
    */
+  // NOTE: Min and max values are absent in the OpenAPI spec but mentioned in the description.
   @minValue(0)
   @maxValue(1)
   temperature?: float64 = 0;
@@ -112,12 +110,13 @@ model CreateTranslationRequest {
    * the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to
    * automatically increase the temperature until certain thresholds are hit.
    */
+  // NOTE: Min and max values are absent in the OpenAPI spec but mentioned in the description.
   @minValue(0)
   @maxValue(1)
   temperature?: float64 = 0;
 }
 
-// TODO: This model is not defined in the OpenAI API spec.
+// NOTE: This model is not defined in the OpenAI API spec.
 model CreateTranscriptionResponse {
   /** The transcribed text for the provided audio data. */
   text: string;
@@ -141,7 +140,7 @@ model CreateTranscriptionResponse {
   segments?: AudioSegment[];
 }
 
-// TODO: This model is not defined in the OpenAI API spec.
+// NOTE: This model is not defined in the OpenAI API spec.
 model CreateTranslationResponse {
   /** The translated text for the provided audio data. */
   text: string;
@@ -170,7 +169,7 @@ alias TEXT_TO_SPEECH_MODELS =
 alias SPEECH_TO_TEXT_MODELS =
   | "whisper-1";
 
-// TODO: This model is not defined in the OpenAI API spec.
+// NOTE: This model is not defined in the OpenAI API spec.
 model AudioSegment {
   /** The zero-based index of this segment. */
   id: safeint;

@@ -14,7 +14,7 @@ interface Chat {
   @route("completions")
   @post
   @operationId("createChatCompletion")
-  @tag("OpenAI")
+  @tag("Chat")
   @summary("Creates a model response for the given chat conversation.")
   createChatCompletion(
     ...CreateChatCompletionRequest,

@@ -22,14 +22,14 @@ namespace FineTuning {
      * [Learn more about fine-tuning](/docs/guides/fine-tuning)
      */
     @post
-    @tag("OpenAI")
+    @tag("Fine-tuning")
     @operationId("createFineTuningJob")
     createFineTuningJob(
       @body job: CreateFineTuningJobRequest,
     ): FineTuningJob | ErrorResponse;
 
     @get
-    @tag("OpenAI")
+    @tag("Fine-tuning")
     @operationId("listPaginatedFineTuningJobs")
     listPaginatedFineTuningJobs(
       /** Identifier for the last job from the previous pagination request. */
@@ -45,7 +45,7 @@ namespace FineTuning {
     [Learn more about fine-tuning](/docs/guides/fine-tuning)
     """)
     @route("{fine_tuning_job_id}")
-    @tag("OpenAI")
+    @tag("Fine-tuning")
     @get
     @operationId("retrieveFineTuningJob")
     retrieveFineTuningJob(
@@ -53,7 +53,7 @@ namespace FineTuning {
     ): FineTuningJob | ErrorResponse;
 
     @summary("Get status updates for a fine-tuning job.")
-    @tag("OpenAI")
+    @tag("Fine-tuning")
     @route("{fine_tuning_job_id}/events")
     @get
     @operationId("listFineTuningEvents")
@@ -69,7 +69,7 @@ namespace FineTuning {
     ): ListFineTuningJobEventsResponse | ErrorResponse;
 
     @summary("Immediately cancel a fine-tune job.")
-    @tag("OpenAI")
+    @tag("Fine-tuning")
     @route("{fine_tuning_job_id}/cancel")
     @post
     @operationId("cancelFineTuningJob")
@@ -84,7 +84,7 @@ namespace FineTuning {
 interface FineTunes {
   #deprecated "deprecated"
   @post
-  @tag("OpenAI")
+  @tag("Fine-tuning")
   @summary("""
   Creates a job that fine-tunes a specified model from a given dataset.
 
@@ -99,7 +99,7 @@ interface FineTunes {
 
   #deprecated "deprecated"
   @get
-  @tag("OpenAI")
+  @tag("Fine-tuning")
   @summary("List your organization's fine-tuning jobs")
   @operationId("listFineTunes")
   listFineTunes(): ListFineTunesResponse | ErrorResponse;
@@ -107,7 +107,7 @@ interface FineTunes {
   #deprecated "deprecated"
   @get
   @route("{fine_tune_id}")
-  @tag("OpenAI")
+  @tag("Fine-tuning")
   @summary("""
   Gets info about the fine-tune job.
 
@@ -122,7 +122,7 @@ interface FineTunes {
   #deprecated "deprecated"
   @route("{fine_tune_id}/events")
   @get
-  @tag("OpenAI")
+  @tag("Fine-tuning")
   @summary("Get fine-grained status updates for a fine-tune job.")
   @operationId("listFineTuneEvents")
   listFineTuneEvents(
@@ -144,7 +144,7 @@ interface FineTunes {
   #deprecated "deprecated"
   @route("{fine_tune_id}/cancel")
   @post
-  @tag("OpenAI")
+  @tag("Fine-tuning")
   @summary("Immediately cancel a fine-tune job.")
   @operationId("cancelFineTune")
   cancelFineTune(

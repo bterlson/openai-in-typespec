@@ -14,7 +14,7 @@ interface Runs {
   @route("runs")
   @post
   @operationId("createThreadAndRun")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Create a thread and run it in one request.")
   createThreadAndRun(
     @body threadAndRun: CreateThreadAndRunRequest;
@@ -23,7 +23,7 @@ interface Runs {
   @route("{thread_id}/runs")
   @post
   @operationId("createRun")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Create a run.")
   createRun(
     /** The ID of the thread to run. */
@@ -35,7 +35,7 @@ interface Runs {
   @route("thread_id}/runs")
   @get
   @operationId("listRuns")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Returns a list of runs belonging to a thread.")
   listRuns(
     /** The ID of the thread the run belongs to. */
@@ -71,7 +71,7 @@ interface Runs {
   @route("{thread_id}/runs/{run_id}")
   @get
   @operationId("getRun")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Retrieves a run.")
   getRun(
     /** The ID of the [thread](/docs/api-reference/threads) that was run. */
@@ -84,7 +84,7 @@ interface Runs {
   @route("{thread_id}/runs/{run_id}")
   @post
   @operationId("modifyRun")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Modifies a run.")
   modifyRun(
     /** The ID of the [thread](/docs/api-reference/threads) that was run. */
@@ -99,7 +99,7 @@ interface Runs {
   @route("{thread_id}/runs/{run_id}/cancel")
   @post
   @operationId("cancelRun")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Cancels a run that is `in_progress`.")
   cancelRun(
     /** The ID of the thread to which this run belongs. */
@@ -112,7 +112,7 @@ interface Runs {
   @route("{thread_id}/runs/{run_id}/submit_tool_outputs")
   @post
   @operationId("submitToolOuputsToRun")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("""
   When a run has the `status: "requires_action"` and `required_action.type` is
   `submit_tool_outputs`, this endpoint can be used to submit the outputs from the tool calls once
@@ -131,7 +131,7 @@ interface Runs {
   @route("{thread_id}/runs/{run_id}/steps")
   @get
   @operationId("listRunSteps")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Returns a list of run steps belonging to a run.")
   listRunSteps(
     /** The ID of the thread the run and run steps belong to. */
@@ -170,7 +170,7 @@ interface Runs {
   @route("{thread_id}/runs/{run_id}/steps/{step_id}")
   @get
   @operationId("getRunStep")
-  @tag("OpenAI")
+  @tag("Assistants")
   @summary("Retrieves a run step.")
   getRunStep(
     /** The ID of the thread to which the run and run step belongs. */

@@ -1,7 +1,8 @@
 import "./operations.tsp";
 
-namespace OpenAI;
 using TypeSpec.OpenAPI;
+
+namespace OpenAI;
 
 @@extension(OpenAI.Chat.createChatCompletion,
   "x-oaiMeta",

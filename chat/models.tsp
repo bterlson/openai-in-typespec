@@ -359,6 +359,7 @@ model ChatCompletionRequestMessageContentPartImage {
 
   image_url: {
     /** Either a URL of the image or the base64 encoded image data. */
+    // TODO: The original OpenAPI spec only describes this as a URL.
     url: url | string;
 
     /**
@@ -373,7 +374,6 @@ model ChatCompletionRequestMessageContentPartImage {
 model ChatCompletionMessageToolCalls is ChatCompletionMessageToolCall[];
 
 model ChatCompletionMessageToolCall {
-  // TODO: index included when streaming
   /** The ID of the tool call. */
   id: string;
 

@@ -23,7 +23,7 @@ interface Assistants {
   @operationId("listAssistants")
   @tag("Assistants")
   @summary("Returns a list of assistants.")
-  listFiles(
+  listAssistants(
     /** 
      * A limit on the number of objects to be returned. Limit can range between 1 and 100, and the
      * default is 20.

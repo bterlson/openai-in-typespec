@@ -1,5 +1,8 @@
-namespace OpenAI;
+import "../files/models.tsp";
+
 using TypeSpec.OpenAPI;
+
+namespace OpenAI;
 
 model FineTuningJob {
   /** The object identifier, which can be referenced in the API endpoints. */

@@ -1,5 +1,38 @@
-namespace OpenAI;
+import "../common/models.tsp";
+
+using TypeSpec.Http;
 using TypeSpec.OpenAPI;
+
+namespace OpenAI;
+
+model CreateSpeechRequest {
+  /** One of the available [TTS models](/docs/models/tts): `tts-1` or `tts-1-hd` */
+  @extension("x-oaiTypeLabel", "string")
+  `model`: string | TEXT_TO_SPEECH_MODELS;
+
+  /**
+   * The text to generate audio for. The maximum length is 4096 characters.
+   */
+  @maxLength(4096)
+  input: string;
+
+  /**
+   * The voice to use when generating the audio. Supported voices are `alloy`, `echo`, `fable`,
+   * `onyx`, `nova`, and `shimmer`. Previews of the voices are available in the
+   * [Text to speech guide](/docs/guides/text-to-speech/voice-options).
+   */
+  voice: "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer";
+
+  /** The format to audio in. Supported formats are `mp3`, `opus`, `aac`, and `flac`. */
+  response_format?: "mp3" | "opus" | "aac" | "flac" = "mp3";
+
+  /**
+   * The speed of the generated audio. Select a value from `0.25` to `4.0`. `1.0` is the default.
+   */
+  @minValue(0.25)
+  @maxValue(4.0)
+  speed?: float64 = 1.0;
+}
 
 model CreateTranscriptionRequest {
   /**
@@ -12,7 +45,14 @@ model CreateTranscriptionRequest {
 
   /** ID of the model to use. Only `whisper-1` is currently available. */
   @extension("x-oaiTypeLabel", "string")
-  `model`: string | "whisper-1";
+  `model`: string | SPEECH_TO_TEXT_MODELS;
+
+  /**
+   * The language of the input audio. Supplying the input language in
+   * [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy
+   * and latency.
+   */
+  language?: string;
 
   /**
    * An optional text to guide the model's style or continue a previous audio segment. The
@@ -32,21 +72,10 @@ model CreateTranscriptionRequest {
    * the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to
    * automatically increase the temperature until certain thresholds are hit.
    */
+  // NOTE: Min and max values are absent in the OpenAPI spec but mentioned in the description.
   @minValue(0)
   @maxValue(1)
   temperature?: float64 = 0;
-
-  /**
-   * The language of the input audio. Supplying the input language in
-   * [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) format will improve accuracy
-   * and latency.
-   */
-  language?: string;
-}
-
-// Note: This does not currently support the non-default response format types.
-model CreateTranscriptionResponse {
-  text: string;
 }
 
 model CreateTranslationRequest {
@@ -60,7 +89,7 @@ model CreateTranslationRequest {
 
   /** ID of the model to use. Only `whisper-1` is currently available. */
   @extension("x-oaiTypeLabel", "string")
-  `model`: string | "whisper-1";
+  `model`: string | SPEECH_TO_TEXT_MODELS;
 
   /**
    * An optional text to guide the model's style or continue a previous audio segment. The
@@ -81,12 +110,104 @@ model CreateTranslationRequest {
    * the model will use [log probability](https://en.wikipedia.org/wiki/Log_probability) to
    * automatically increase the temperature until certain thresholds are hit.
    */
+  // NOTE: Min and max values are absent in the OpenAPI spec but mentioned in the description.
   @minValue(0)
   @maxValue(1)
   temperature?: float64 = 0;
 }
 
-// Note: This does not currently support the non-default response format types.
-model CreateTranslationResponse {
+// NOTE: This model is not defined in the OpenAI API spec.
+model CreateTranscriptionResponse {
+  /** The transcribed text for the provided audio data. */
   text: string;
+
+  /** The label that describes which operation type generated the accompanying response data. */
+  task?: "transcribe";
+
+  /** The spoken language that was detected in the audio data. */
+  language?: string;
+
+  /**
+   * The total duration of the audio processed to produce accompanying transcription information.
+   */
+  @encode("seconds", float64)
+  duration?: duration;
+
+  /**
+   * A collection of information about the timing, probabilities, and other detail of each processed
+   * audio segment.
+   */
+  segments?: AudioSegment[];
+}
+
+// NOTE: This model is not defined in the OpenAI API spec.
+model CreateTranslationResponse {
+  /** The translated text for the provided audio data. */
+  text: string;
+
+  /** The label that describes which operation type generated the accompanying response data. */
+  task?: "translate";
+
+  /** The spoken language that was detected in the audio data. */
+  language?: string;
+
+  /** The total duration of the audio processed to produce accompanying translation information. */
+  @encode("seconds", float64)
+  duration?: duration;
+
+  /**
+   * A collection of information about the timing, probabilities, and other detail of each processed
+   * audio segment.
+   */
+  segments?: AudioSegment[];
+}
+
+alias TEXT_TO_SPEECH_MODELS =
+  | "tts-1"
+  | "tts-1-hd";
+
+alias SPEECH_TO_TEXT_MODELS =
+  | "whisper-1";
+
+// NOTE: This model is not defined in the OpenAI API spec.
+model AudioSegment {
+  /** The zero-based index of this segment. */
+  id: safeint;
+
+  /**
+   * The seek position associated with the processing of this audio segment. Seek positions are
+   * expressed as hundredths of seconds. The model may process several segments from a single seek
+   * position, so while the seek position will never represent a later time than the segment's
+   * start, the segment's start may represent a significantly later time than the segment's
+   * associated seek position.
+  */
+  seek: safeint;
+
+  /** The time at which this segment started relative to the beginning of the audio. */
+  @encode("seconds", float64)
+  start: duration;
+
+  /** The time at which this segment ended relative to the beginning of the audio. */
+  @encode("seconds", float64)
+  end: duration;
+
+  /** The text that was part of this audio segment. */
+  text: string;
+
+  /** The token IDs matching the text in this audio segment. */
+  tokens: TokenArray;
+
+  /** The temperature score associated with this audio segment. */
+  @minValue(0)
+  @maxValue(1)
+  temperature: float64;
+
+  /** The average log probability associated with this audio segment. */
+  avg_logprob: float64;
+
+  /** The compression ratio of this audio segment. */
+  compression_ratio: float64;
+
+  /** The probability of no speech detection within this audio segment. */
+  no_speech_prob: float64;
 }

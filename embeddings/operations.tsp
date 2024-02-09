@@ -11,10 +11,10 @@ namespace OpenAI;
 
 @route("/embeddings")
 interface Embeddings {
-  @tag("OpenAI")
-  @summary("Creates an embedding vector representing the input text.")
   @post
   @operationId("createEmbedding")
+  @tag("Embeddings")
+  @summary("Creates an embedding vector representing the input text.")
   createEmbedding(
     @body embedding: CreateEmbeddingRequest,
   ): CreateEmbeddingResponse | ErrorResponse;

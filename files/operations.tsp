@@ -11,48 +11,61 @@ namespace OpenAI;
 
 @route("/files")
 interface Files {
-  @tag("OpenAI")
-  @get
-  @summary("Returns a list of files that belong to the user's organization.")
-  @operationId("listFiles")
-  listFiles(): ListFilesResponse | ErrorResponse;
-
-  @tag("OpenAI")
   @post
-  @summary("Returns a list of files that belong to the user's organization.")
   @operationId("createFile")
+  @tag("Files")
+  @summary("""
+  Upload a file that can be used across various endpoints. The size of all the files uploaded by
+  one organization can be up to 100 GB.
+
+  The size of individual files can be a maximum of 512 MB or 2 million tokens for Assistants. See
+  the [Assistants Tools guide](/docs/assistants/tools) to learn more about the types of files
+  supported. The Fine-tuning API only supports `.jsonl` files.
+
+  Please [contact us](https://help.openai.com/) if you need to increase these storage limits.
+  """)
   createFile(
     @header contentType: "multipart/form-data",
     @body file: CreateFileRequest,
   ): OpenAIFile | ErrorResponse;
 
-  @tag("OpenAI")
-  @post
-  @summary("Returns information about a specific file.")
+  @get
+  @operationId("listFiles")
+  @tag("Files")
+  @summary("Returns a list of files that belong to the user's organization.")
+  listFiles(
+    /** Only return files with the given purpose. */
+    // NOTE: This is just a string in the OpenAPI spec.
+    @query purpose?: FILE_PURPOSE,
+  ): ListFilesResponse | ErrorResponse;
+
+  @route("{file_id}")
+  @get
   @operationId("retrieveFile")
-  @route("/files/{file_id}")
+  @tag("Files")
+  @summary("Returns information about a specific file.")
   retrieveFile(
     /** The ID of the file to use for this request. */
     @path file_id: string,
   ): OpenAIFile | ErrorResponse;
 
-  @tag("OpenAI")
+  @route("{file_id}")
   @delete
-  @summary("Delete a file")
   @operationId("deleteFile")
-  @route("/files/{file_id}")
+  @tag("Files")
+  @summary("Delete a file")
   deleteFile(
     /** The ID of the file to use for this request. */
     @path file_id: string,
   ): DeleteFileResponse | ErrorResponse;
 
-  @route("/files/{file_id}/content")
-  @tag("OpenAI")
+  @route("{file_id}/content")
   @get
-  @summary("Returns the contents of the specified file.")
   @operationId("downloadFile")
+  @tag("Files")
+  @summary("Returns the contents of the specified file.")
   downloadFile(
     /** The ID of the file to use for this request. */
     @path file_id: string,
-  ): string | ErrorResponse;
+  ): string | ErrorResponse; // TODO: The OpenAPI spec says this is a string but the Content-Type is application/json?
 }

@@ -32,7 +32,7 @@ interface Runs {
     @body run: CreateRunRequest,
   ): RunObject | ErrorResponse;
 
-  @route("thread_id}/runs")
+  @route("{thread_id}/runs")
   @get
   @operationId("listRuns")
   @tag("Assistants")

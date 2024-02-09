@@ -1196,77 +1196,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateThreadAndRunRequest'
-  /threads/thread_id}/runs/{thread_id}:
-    get:
-      tags:
-        - Assistants
-      operationId: listRuns
-      summary: Returns a list of runs belonging to a thread.
-      parameters:
-        - name: thread_id
-          in: path
-          required: true
-          description: The ID of the thread the run belongs to.
-          schema:
-            type: string
-        - name: limit
-          in: query
-          required: false
-          description: |-
-            A limit on the number of objects to be returned. Limit can range between 1 and 100, and the
-            default is 20.
-          schema:
-            type: integer
-            format: int32
-            default: 20
-        - name: order
-          in: query
-          required: false
-          description: |-
-            Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
-            for descending order.
-          schema:
-            type: string
-            enum:
-              - asc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-            default: desc
-        - name: after
-          in: query
-          required: false
-          description: |-
-            A cursor for use in pagination. `after` is an object ID that defines your place in the list.
-            For instance, if you make a list request and receive 100 objects, ending with obj_foo, your
-            subsequent call can include after=obj_foo in order to fetch the next page of the list.
-          schema:
-            type: string
-        - name: before
-          in: query
-          required: false
-          description: |-
-            A cursor for use in pagination. `before` is an object ID that defines your place in the list.
-            For instance, if you make a list request and receive 100 objects, ending with obj_foo, your
-            subsequent call can include before=obj_foo in order to fetch the previous page of the list.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListRunsResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /threads/{thread_id}:
     get:
       tags:
@@ -1667,6 +1596,76 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateRunRequest'
+    get:
+      tags:
+        - Assistants
+      operationId: listRuns
+      summary: Returns a list of runs belonging to a thread.
+      parameters:
+        - name: thread_id
+          in: path
+          required: true
+          description: The ID of the thread the run belongs to.
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: |-
+            A limit on the number of objects to be returned. Limit can range between 1 and 100, and the
+            default is 20.
+          schema:
+            type: integer
+            format: int32
+            default: 20
+        - name: order
+          in: query
+          required: false
+          description: |-
+            Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
+            for descending order.
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+              - desc
+              - desc
+              - desc
+              - desc
+              - desc
+            default: desc
+        - name: after
+          in: query
+          required: false
+          description: |-
+            A cursor for use in pagination. `after` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 objects, ending with obj_foo, your
+            subsequent call can include after=obj_foo in order to fetch the next page of the list.
+          schema:
+            type: string
+        - name: before
+          in: query
+          required: false
+          description: |-
+            A cursor for use in pagination. `before` is an object ID that defines your place in the list.
+            For instance, if you make a list request and receive 100 objects, ending with obj_foo, your
+            subsequent call can include before=obj_foo in order to fetch the previous page of the list.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRunsResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /threads/{thread_id}/runs/{run_id}:
     get:
       tags:

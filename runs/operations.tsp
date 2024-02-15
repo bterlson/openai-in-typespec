@@ -1,6 +1,7 @@
 import "@typespec/http";
 import "@typespec/openapi";
 
+import "../common/models.tsp";
 import "../common/errors.tsp";
 import "./models.tsp";
 
@@ -51,7 +52,7 @@ interface Runs {
      * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
      * for descending order.
      */
-    @query order?: "asc" | "desc" = "desc";
+    @query order?: ListOrder = ListOrder.desc;
 
     /**
      * A cursor for use in pagination. `after` is an object ID that defines your place in the list.
@@ -150,7 +151,7 @@ interface Runs {
      * Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
      * for descending order.
      */
-    @query order?: "asc" | "desc" = "desc";
+    @query order?: ListOrder = ListOrder.desc;
 
     /**
      * A cursor for use in pagination. `after` is an object ID that defines your place in the list.

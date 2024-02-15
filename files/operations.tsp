@@ -36,7 +36,7 @@ interface Files {
   listFiles(
     /** Only return files with the given purpose. */
     // NOTE: This is just a string in the OpenAPI spec.
-    @query purpose?: FILE_PURPOSE,
+    @query purpose?: string,
   ): ListFilesResponse | ErrorResponse;
 
   @route("{file_id}")

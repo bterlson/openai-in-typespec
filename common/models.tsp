@@ -10,6 +10,11 @@ model TokenArray is safeint[];
 @minItems(1)
 model TokenArrayArray is TokenArray[];
 
+enum ListOrder {
+  asc: "asc",
+  desc: "desc",
+}
+
 model FunctionObject {
   /**
    * A description of what the function does, used by the model to choose when and how to call the

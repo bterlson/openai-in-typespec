@@ -64,15 +64,7 @@ paths:
             Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
             for descending order.
           schema:
-            type: string
-            enum:
-              - asc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
+            $ref: '#/components/schemas/ListOrder'
             default: desc
         - name: after
           in: query
@@ -250,15 +242,7 @@ paths:
             Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
             for descending order.
           schema:
-            type: string
-            enum:
-              - asc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
+            $ref: '#/components/schemas/ListOrder'
             default: desc
         - name: after
           in: query
@@ -563,11 +547,6 @@ paths:
           description: Only return files with the given purpose.
           schema:
             type: string
-            enum:
-              - fine-tune
-              - fine-tune-results
-              - assistants
-              - assistants_output
       responses:
         '200':
           description: The request has succeeded.
@@ -1339,15 +1318,7 @@ paths:
             Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
             for descending order.
           schema:
-            type: string
-            enum:
-              - asc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
+            $ref: '#/components/schemas/ListOrder'
             default: desc
         - name: after
           in: query
@@ -1485,15 +1456,7 @@ paths:
             Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
             for descending order.
           schema:
-            type: string
-            enum:
-              - asc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
+            $ref: '#/components/schemas/ListOrder'
             default: desc
         - name: after
           in: query
@@ -1625,15 +1588,7 @@ paths:
             Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
             for descending order.
           schema:
-            type: string
-            enum:
-              - asc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
+            $ref: '#/components/schemas/ListOrder'
             default: desc
         - name: after
           in: query
@@ -1803,15 +1758,7 @@ paths:
             Sort order by the `created_at` timestamp of the objects. `asc` for ascending order and`desc`
             for descending order.
           schema:
-            type: string
-            enum:
-              - asc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
-              - desc
+            $ref: '#/components/schemas/ListOrder'
             default: desc
         - name: after
           in: query
@@ -4974,6 +4921,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Model'
+    ListOrder:
+      anyOf:
+        - type: string
+        - type: string
+          enum:
+            - asc
+            - desc
     ListPaginatedFineTuningJobsResponse:
       type: object
       required:

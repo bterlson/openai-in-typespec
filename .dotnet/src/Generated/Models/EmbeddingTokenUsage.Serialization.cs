@@ -8,14 +8,14 @@ using System.Text.Json;
 
 namespace OpenAI.Models
 {
-    public partial class CreateEmbeddingResponseUsage : IJsonModel<CreateEmbeddingResponseUsage>
+    public partial class EmbeddingTokenUsage : IJsonModel<EmbeddingTokenUsage>
     {
-        void IJsonModel<CreateEmbeddingResponseUsage>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
+        void IJsonModel<EmbeddingTokenUsage>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingResponseUsage>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<EmbeddingTokenUsage>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
-                throw new FormatException($"The model {nameof(CreateEmbeddingResponseUsage)} does not support '{format}' format.");
+                throw new FormatException($"The model {nameof(EmbeddingTokenUsage)} does not support '{format}' format.");
             }
 
             writer.WriteStartObject();
@@ -41,19 +41,19 @@ namespace OpenAI.Models
             writer.WriteEndObject();
         }
 
-        CreateEmbeddingResponseUsage IJsonModel<CreateEmbeddingResponseUsage>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
+        EmbeddingTokenUsage IJsonModel<EmbeddingTokenUsage>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingResponseUsage>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<EmbeddingTokenUsage>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
-                throw new FormatException($"The model {nameof(CreateEmbeddingResponseUsage)} does not support '{format}' format.");
+                throw new FormatException($"The model {nameof(EmbeddingTokenUsage)} does not support '{format}' format.");
             }
 
             using JsonDocument document = JsonDocument.ParseValue(ref reader);
-            return DeserializeCreateEmbeddingResponseUsage(document.RootElement, options);
+            return DeserializeEmbeddingTokenUsage(document.RootElement, options);
         }
 
-        internal static CreateEmbeddingResponseUsage DeserializeCreateEmbeddingResponseUsage(JsonElement element, ModelReaderWriterOptions options = null)
+        internal static EmbeddingTokenUsage DeserializeEmbeddingTokenUsage(JsonElement element, ModelReaderWriterOptions options = null)
         {
             options ??= new ModelReaderWriterOptions("W");
 
@@ -83,46 +83,46 @@ namespace OpenAI.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateEmbeddingResponseUsage(promptTokens, totalTokens, serializedAdditionalRawData);
+            return new EmbeddingTokenUsage(promptTokens, totalTokens, serializedAdditionalRawData);
         }
 
-        BinaryData IPersistableModel<CreateEmbeddingResponseUsage>.Write(ModelReaderWriterOptions options)
+        BinaryData IPersistableModel<EmbeddingTokenUsage>.Write(ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingResponseUsage>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<EmbeddingTokenUsage>)this).GetFormatFromOptions(options) : options.Format;
 
             switch (format)
             {
                 case "J":
                     return ModelReaderWriter.Write(this, options);
                 default:
-                    throw new FormatException($"The model {nameof(CreateEmbeddingResponseUsage)} does not support '{options.Format}' format.");
+                    throw new FormatException($"The model {nameof(EmbeddingTokenUsage)} does not support '{options.Format}' format.");
             }
         }
 
-        CreateEmbeddingResponseUsage IPersistableModel<CreateEmbeddingResponseUsage>.Create(BinaryData data, ModelReaderWriterOptions options)
+        EmbeddingTokenUsage IPersistableModel<EmbeddingTokenUsage>.Create(BinaryData data, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingResponseUsage>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<EmbeddingTokenUsage>)this).GetFormatFromOptions(options) : options.Format;
 
             switch (format)
             {
                 case "J":
                     {
                         using JsonDocument document = JsonDocument.Parse(data);
-                        return DeserializeCreateEmbeddingResponseUsage(document.RootElement, options);
+                        return DeserializeEmbeddingTokenUsage(document.RootElement, options);
                     }
                 default:
-                    throw new FormatException($"The model {nameof(CreateEmbeddingResponseUsage)} does not support '{options.Format}' format.");
+                    throw new FormatException($"The model {nameof(EmbeddingTokenUsage)} does not support '{options.Format}' format.");
             }
         }
 
-        string IPersistableModel<CreateEmbeddingResponseUsage>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
+        string IPersistableModel<EmbeddingTokenUsage>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
 
         /// <summary> Deserializes the model from a raw response. </summary>
         /// <param name="response"> The result to deserialize the model from. </param>
-        internal static CreateEmbeddingResponseUsage FromResponse(PipelineResponse response)
+        internal static EmbeddingTokenUsage FromResponse(PipelineResponse response)
         {
             using var document = JsonDocument.Parse(response.Content);
-            return DeserializeCreateEmbeddingResponseUsage(document.RootElement);
+            return DeserializeEmbeddingTokenUsage(document.RootElement);
         }
     }
 }

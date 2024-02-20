@@ -1,6 +1,7 @@
 import "@typespec/http";
 import "@typespec/openapi3";
 import "@typespec/openapi";
+import "@azure-tools/typespec-client-generator-core";
 
 import "./audio";
 import "./assistants";
@@ -17,6 +18,7 @@ import "./runs";
 import "./threads";
 
 using TypeSpec.Http;
+using Azure.ClientGenerator.Core;
 
 /** The OpenAI REST API. Please see https://platform.openai.com/docs/api-reference for more details. */
 @service({
@@ -35,3 +37,12 @@ using TypeSpec.Http;
 @server("https://api.openai.com/v1", "OpenAI Endpoint")
 @useAuth(BearerAuth)
 namespace OpenAI;
+
+@@projectedName(OpenAI.CreateEmbeddingRequest, "csharp", "GenerateEmbeddingsOptions");
+@@projectedName(OpenAI.CreateEmbeddingResponse, "csharp", "EmbeddingCollection");
+@@projectedName(OpenAI.EmbeddingUsage, "csharp", "EmbeddingTokenUsage");
+
+@@access(OpenAI.Embeddings.createEmbedding, Access.internal, "csharp");
+@@access(OpenAI.CreateEmbeddingRequest, Access.public, "csharp");
+@@access(OpenAI.CreateEmbeddingResponse, Access.public, "csharp");
+@@access(OpenAI.EmbeddingUsage, Access.public, "csharp");

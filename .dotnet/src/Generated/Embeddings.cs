@@ -40,27 +40,27 @@ namespace OpenAI
         }
 
         /// <summary> Creates an embedding vector representing the input text. </summary>
-        /// <param name="embedding"> The <see cref="CreateEmbeddingRequest"/> to use. </param>
+        /// <param name="embedding"> The <see cref="GenerateEmbeddingsOptions"/> to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="embedding"/> is null. </exception>
-        public virtual async Task<ClientResult<CreateEmbeddingResponse>> CreateEmbeddingAsync(CreateEmbeddingRequest embedding)
+        internal virtual async Task<ClientResult<EmbeddingCollection>> CreateEmbeddingAsync(GenerateEmbeddingsOptions embedding)
         {
             if (embedding is null) throw new ArgumentNullException(nameof(embedding));
 
             using BinaryContent content = BinaryContent.Create(embedding);
             ClientResult result = await CreateEmbeddingAsync(content).ConfigureAwait(false);
-            return ClientResult.FromValue(CreateEmbeddingResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
+            return ClientResult.FromValue(EmbeddingCollection.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
         /// <summary> Creates an embedding vector representing the input text. </summary>
-        /// <param name="embedding"> The <see cref="CreateEmbeddingRequest"/> to use. </param>
+        /// <param name="embedding"> The <see cref="GenerateEmbeddingsOptions"/> to use. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="embedding"/> is null. </exception>
-        public virtual ClientResult<CreateEmbeddingResponse> CreateEmbedding(CreateEmbeddingRequest embedding)
+        internal virtual ClientResult<EmbeddingCollection> CreateEmbedding(GenerateEmbeddingsOptions embedding)
         {
             if (embedding is null) throw new ArgumentNullException(nameof(embedding));
 
             using BinaryContent content = BinaryContent.Create(embedding);
             ClientResult result = CreateEmbedding(content);
-            return ClientResult.FromValue(CreateEmbeddingResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
+            return ClientResult.FromValue(EmbeddingCollection.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace OpenAI
         /// </item>
         /// <item>
         /// <description>
-        /// Please try the simpler <see cref="CreateEmbeddingAsync(CreateEmbeddingRequest)"/> convenience overload with strongly typed models first.
+        /// Please try the simpler <see cref="CreateEmbeddingAsync(GenerateEmbeddingsOptions)"/> convenience overload with strongly typed models first.
         /// </description>
         /// </item>
         /// </list>
@@ -83,7 +83,7 @@ namespace OpenAI
         /// <exception cref="ArgumentNullException"> <paramref name="content"/> is null. </exception>
         /// <exception cref="ClientResultException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        public virtual async Task<ClientResult> CreateEmbeddingAsync(BinaryContent content, RequestOptions options = null)
+        internal virtual async Task<ClientResult> CreateEmbeddingAsync(BinaryContent content, RequestOptions options = null)
         {
             if (content is null) throw new ArgumentNullException(nameof(content));
             options ??= new RequestOptions();
@@ -109,7 +109,7 @@ namespace OpenAI
         /// </item>
         /// <item>
         /// <description>
-        /// Please try the simpler <see cref="CreateEmbedding(CreateEmbeddingRequest)"/> convenience overload with strongly typed models first.
+        /// Please try the simpler <see cref="CreateEmbedding(GenerateEmbeddingsOptions)"/> convenience overload with strongly typed models first.
         /// </description>
         /// </item>
         /// </list>
@@ -119,7 +119,7 @@ namespace OpenAI
         /// <exception cref="ArgumentNullException"> <paramref name="content"/> is null. </exception>
         /// <exception cref="ClientResultException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        public virtual ClientResult CreateEmbedding(BinaryContent content, RequestOptions options = null)
+        internal virtual ClientResult CreateEmbedding(BinaryContent content, RequestOptions options = null)
         {
             if (content is null) throw new ArgumentNullException(nameof(content));
             options ??= new RequestOptions();

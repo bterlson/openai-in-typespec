@@ -55,13 +55,7 @@ model CreateEmbeddingResponse {
   object: "list";
 
   /** The usage information for the request. */
-  usage: {
-    /** The number of tokens used by the prompt. */
-    prompt_tokens: safeint;
-
-    /** The total number of tokens used by the request. */
-    total_tokens: safeint;
-  };
+  usage: EmbeddingUsage;
 }
 
 alias EMBEDDINGS_MODELS =
@@ -70,8 +64,7 @@ alias EMBEDDINGS_MODELS =
   | "text-embedding-3-large";
 
 @oneOf
-union CreateEmbeddingRequestInput
-{
+union CreateEmbeddingRequestInput {
   /** The string that will be turned into an embedding. */
   string,
 
@@ -99,3 +92,11 @@ model Embedding {
   /** The object type, which is always "embedding". */
   object: "embedding";
 }
+
+model EmbeddingUsage {
+  /** The number of tokens used by the prompt. */
+  prompt_tokens: safeint;
+
+  /** The total number of tokens used by the request. */
+  total_tokens: safeint;
+};

@@ -3112,19 +3112,8 @@ components:
             - list
           description: The object type, which is always "list".
         usage:
-          type: object
-          properties:
-            prompt_tokens:
-              type: integer
-              format: int64
-              description: The number of tokens used by the prompt.
-            total_tokens:
-              type: integer
-              format: int64
-              description: The total number of tokens used by the request.
-          required:
-            - prompt_tokens
-            - total_tokens
+          allOf:
+            - $ref: '#/components/schemas/EmbeddingUsage'
           description: The usage information for the request.
     CreateFileRequestMultiPart:
       type: object
@@ -4210,6 +4199,20 @@ components:
             - embedding
           description: The object type, which is always "embedding".
       description: Represents an embedding vector returned by embedding endpoint.
+    EmbeddingUsage:
+      type: object
+      required:
+        - prompt_tokens
+        - total_tokens
+      properties:
+        prompt_tokens:
+          type: integer
+          format: int64
+          description: The number of tokens used by the prompt.
+        total_tokens:
+          type: integer
+          format: int64
+          description: The total number of tokens used by the request.
     Error:
       type: object
       required:

@@ -89,12 +89,6 @@ namespace OpenAI
             return Volatile.Read(ref _cachedCompletions) ?? Interlocked.CompareExchange(ref _cachedCompletions, new Completions(_pipeline, _credential, _endpoint), null) ?? _cachedCompletions;
         }
 
-        /// <summary> Initializes a new instance of Embeddings. </summary>
-        public virtual Embeddings GetEmbeddingsClient()
-        {
-            return Volatile.Read(ref _cachedEmbeddings) ?? Interlocked.CompareExchange(ref _cachedEmbeddings, new Embeddings(_pipeline, _credential, _endpoint), null) ?? _cachedEmbeddings;
-        }
-
         /// <summary> Initializes a new instance of Files. </summary>
         public virtual Files GetFilesClient()
         {

@@ -5,7 +5,6 @@ function Update-ClientModelPackage {
     $current = Get-Location
     Set-Location -Path $directory
 
-    dotnet build
     dotnet remove "OpenAI.csproj" package "System.ClientModel"
     dotnet add "OpenAI.csproj" package "System.ClientModel" --version "1.1.0-alpha.20240215.1" --source "https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json"
 

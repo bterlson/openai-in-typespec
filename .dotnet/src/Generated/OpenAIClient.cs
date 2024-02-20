@@ -56,26 +56,19 @@ namespace OpenAI
             _endpoint = endpoint;
         }
 
-        private FineTuning _cachedFineTuning;
         private Audio _cachedAudio;
         private Assistants _cachedAssistants;
         private Chat _cachedChat;
         private Completions _cachedCompletions;
         private Embeddings _cachedEmbeddings;
         private Files _cachedFiles;
-        private FineTunes _cachedFineTunes;
+        private FineTuning _cachedFineTuning;
         private Images _cachedImages;
         private Messages _cachedMessages;
         private ModelsOps _cachedModelsOps;
         private Moderations _cachedModerations;
         private Runs _cachedRuns;
         private Threads _cachedThreads;
-
-        /// <summary> Initializes a new instance of FineTuning. </summary>
-        public virtual FineTuning GetFineTuningClient()
-        {
-            return Volatile.Read(ref _cachedFineTuning) ?? Interlocked.CompareExchange(ref _cachedFineTuning, new FineTuning(ClientDiagnostics, _pipeline, _keyCredential, _endpoint), null) ?? _cachedFineTuning;
-        }
 
         /// <summary> Initializes a new instance of Audio. </summary>
         public virtual Audio GetAudioClient()
@@ -113,10 +106,10 @@ namespace OpenAI
             return Volatile.Read(ref _cachedFiles) ?? Interlocked.CompareExchange(ref _cachedFiles, new Files(ClientDiagnostics, _pipeline, _keyCredential, _endpoint), null) ?? _cachedFiles;
         }
 
-        /// <summary> Initializes a new instance of FineTunes. </summary>
-        public virtual FineTunes GetFineTunesClient()
+        /// <summary> Initializes a new instance of FineTuning. </summary>
+        public virtual FineTuning GetFineTuningClient()
         {
-            return Volatile.Read(ref _cachedFineTunes) ?? Interlocked.CompareExchange(ref _cachedFineTunes, new FineTunes(ClientDiagnostics, _pipeline, _keyCredential, _endpoint), null) ?? _cachedFineTunes;
+            return Volatile.Read(ref _cachedFineTuning) ?? Interlocked.CompareExchange(ref _cachedFineTuning, new FineTuning(ClientDiagnostics, _pipeline, _keyCredential, _endpoint), null) ?? _cachedFineTuning;
         }
 
         /// <summary> Initializes a new instance of Images. </summary>

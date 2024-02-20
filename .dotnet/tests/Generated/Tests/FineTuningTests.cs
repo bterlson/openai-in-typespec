@@ -9,13 +9,13 @@ using OpenAI;
 
 namespace OpenAI.Tests
 {
-    public partial class FineTuningJobsTests
+    public partial class FineTuningTests
     {
         [Test]
         public void SmokeTest()
         {
             KeyCredential credential = new KeyCredential(Environment.GetEnvironmentVariable("OpenAIClient_KEY"));
-            FineTuningJobs client = new OpenAIClient(credential).GetFineTuningClient().GetFineTuningJobsClient();
+            FineTuning client = new OpenAIClient(credential).GetFineTuningClient();
             Assert.IsNotNull(client);
         }
     }

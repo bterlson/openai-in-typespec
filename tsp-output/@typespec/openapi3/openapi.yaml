@@ -4,13 +4,13 @@ info:
   version: 2.0.0
   description: The OpenAI REST API. Please see https://platform.openai.com/docs/api-reference for more details.
 tags:
-  - name: Fine-tuning
   - name: Audio
   - name: Assistants
   - name: Chat
   - name: Completions
   - name: Embeddings
   - name: Files
+  - name: Fine-tuning
   - name: Images
   - name: Models
   - name: Moderations
@@ -637,166 +637,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /fine-tunes:
-    post:
-      tags:
-        - Fine-tuning
-      operationId: createFineTune
-      summary: |-
-        Creates a job that fine-tunes a specified model from a given dataset.
-
-        Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.
-
-        [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
-      parameters: []
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FineTune'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateFineTuneRequest'
-      deprecated: true
-    get:
-      tags:
-        - Fine-tuning
-      operationId: listFineTunes
-      summary: List your organization's fine-tuning jobs
-      parameters: []
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListFineTunesResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      deprecated: true
-  /fine-tunes/{fine_tune_id}:
-    get:
-      tags:
-        - Fine-tuning
-      operationId: retrieveFineTune
-      summary: |-
-        Gets info about the fine-tune job.
-
-        [Learn more about fine-tuning](/docs/guides/legacy-fine-tuning)
-      parameters:
-        - name: fine_tune_id
-          in: path
-          required: true
-          description: The ID of the fine-tune job
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FineTune'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      deprecated: true
-  /fine-tunes/{fine_tune_id}/cancel:
-    post:
-      tags:
-        - Fine-tuning
-      operationId: cancelFineTune
-      summary: Immediately cancel a fine-tune job.
-      parameters:
-        - name: fine_tune_id
-          in: path
-          required: true
-          description: The ID of the fine-tune job to cancel
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FineTune'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      deprecated: true
-  /fine-tunes/{fine_tune_id}/events:
-    get:
-      tags:
-        - Fine-tuning
-      operationId: listFineTuneEvents
-      summary: Get fine-grained status updates for a fine-tune job.
-      parameters:
-        - name: fine_tune_id
-          in: path
-          required: true
-          description: The ID of the fine-tune job to get events for.
-          schema:
-            type: string
-        - name: stream
-          in: query
-          required: false
-          description: |-
-            Whether to stream events for the fine-tune job. If set to true, events will be sent as
-            data-only
-            [server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
-            as they become available. The stream will terminate with a `data: [DONE]` message when the
-            job is finished (succeeded, cancelled, or failed).
-
-            If set to false, only events generated so far will be returned.
-          schema:
-            type: boolean
-            default: false
-      responses:
-        '200':
-          description: The request has succeeded.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ListFineTuneEventsResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      deprecated: true
   /fine_tuning/jobs:
     post:
       tags:
         - Fine-tuning
       operationId: createFineTuningJob
-      description: |-
-        Creates a job that fine-tunes a specified model from a given dataset.
+      summary: |-
+        Creates a fine-tuning job which begins the process of creating a new model from a given dataset.
 
-        Response includes details of the enqueued job including job status and the name of the
-        fine-tuned models once complete.
+        Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete.
 
         [Learn more about fine-tuning](/docs/guides/fine-tuning)
       parameters: []
@@ -823,6 +672,7 @@ paths:
       tags:
         - Fine-tuning
       operationId: listPaginatedFineTuningJobs
+      summary: List your organization's fine-tuning jobs
       parameters:
         - name: after
           in: query
@@ -4922,12 +4772,10 @@ components:
           items:
             $ref: '#/components/schemas/Model'
     ListOrder:
-      anyOf:
-        - type: string
-        - type: string
-          enum:
-            - asc
-            - desc
+      type: string
+      enum:
+        - asc
+        - desc
     ListPaginatedFineTuningJobsResponse:
       type: object
       required:

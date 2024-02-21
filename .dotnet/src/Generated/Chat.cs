@@ -47,7 +47,7 @@ namespace OpenAI
             if (createChatCompletionRequest is null) throw new ArgumentNullException(nameof(createChatCompletionRequest));
 
             using BinaryContent content = BinaryContent.Create(createChatCompletionRequest);
-            ClientResult result = await CreateChatCompletionAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateChatCompletionAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(CreateChatCompletionResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -59,7 +59,7 @@ namespace OpenAI
             if (createChatCompletionRequest is null) throw new ArgumentNullException(nameof(createChatCompletionRequest));
 
             using BinaryContent content = BinaryContent.Create(createChatCompletionRequest);
-            ClientResult result = CreateChatCompletion(content);
+            ClientResult result = CreateChatCompletion(content, DefaultRequestContext);
             return ClientResult.FromValue(CreateChatCompletionResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -152,6 +152,8 @@ namespace OpenAI
             message.Apply(options);
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

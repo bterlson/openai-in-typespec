@@ -89,10 +89,10 @@ function Update-Subclients {
         $content = $content -creplace "RequestOptions context = FromCancellationToken\(cancellationToken\);\s+", ""
         $content = $content -creplace "using RequestBody content = (?<var>\w+)\.ToRequestBody\(\);", "using BinaryContent content = BinaryContent.Create(`${var});"
         $content = $content -creplace "using RequestBody content0 = (?<var>\w+)\.ToRequestBody\(\);", "using BinaryContent content0 = BinaryContent.Create(`${var});"
-        $content = $content -creplace "Result result = await (?<method>\w+)\(context\)\.ConfigureAwait\(false\);", "ClientResult result = await `${method}().ConfigureAwait(false);"
-        $content = $content -creplace "Result result = (?<method>\w+)\(context\);", "ClientResult result = `${method}();"
-        $content = $content -creplace "Result result = await (?<method>\w+)\((?<params>[(\w+)(\?.ToString\(\)*)(,\s\w+)]*), context\)\.ConfigureAwait\(false\);", "ClientResult result = await `${method}(`${params}).ConfigureAwait(false);"
-        $content = $content -creplace "Result result = (?<method>\w+)\((?<params>[(\w+)(\?.ToString\(\)*)(,\s\w+)]*), context\);", "ClientResult result = `${method}(`${params});"
+        $content = $content -creplace "Result result = await (?<method>\w+)\(context\)\.ConfigureAwait\(false\);", "ClientResult result = await `${method}(DefaultRequestContext).ConfigureAwait(false);"
+        $content = $content -creplace "Result result = (?<method>\w+)\(context\);", "ClientResult result = `${method}(DefaultRequestContext);"
+        $content = $content -creplace "Result result = await (?<method>\w+)\((?<params>[(\w+)(\?.ToString\(\)*)(,\s\w+)]*), context\)\.ConfigureAwait\(false\);", "ClientResult result = await `${method}(`${params}, DefaultRequestContext).ConfigureAwait(false);"
+        $content = $content -creplace "Result result = (?<method>\w+)\((?<params>[(\w+)(\?.ToString\(\)*)(,\s\w+)]*), context\);", "ClientResult result = `${method}(`${params}, DefaultRequestContext);"
 
         # Modify protocol methods
         $content = $content -creplace "\/\/\/ Please try the simpler <see cref=`"(?<method>\w+)\((?<params>[(\w+)(\?*)(,\s\w+)]*),CancellationToken\)`"/> convenience overload with strongly typed models first.", "/// Please try the simpler <see cref=`"`${method}(`${params})`"/> convenience overload with strongly typed models first."
@@ -119,14 +119,14 @@ function Update-Subclients {
         $content = $content -creplace "request\.SetMethod\(`"(?<name>[\w\/]+)`"\);", "request.Method = `"`${name}`";"
         $content = $content -creplace "var uri = new RequestUri\(\);", "UriBuilder uriBuilder = new(_endpoint.ToString());"
         $content = $content -creplace "uri\.Reset\(_endpoint\);", "StringBuilder path = new();"
-        $content = $content -creplace "uri\.AppendPath\((?<path>`"?[\w\/]+`"?), (\w+)\);", "path.Append(`${path});`r`n            uriBuilder.Path += path.ToString();"
+        $content = $content -creplace "uri\.AppendPath\((?<path>`"?[\w\/]+`"?), (\w+)\);", "path.Append(`${path});"
         $content = $content -creplace "uri\.AppendQuery\(`"(?<key>\w+)`", (?<value>\w+(\.Value)?), (\w+)\);", "if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)`r`n                {`r`n                    uriBuilder.Query += $`"&`${key}={`${value}}`";`r`n                }`r`n                else`r`n                {`r`n                    uriBuilder.Query = $`"`${key}={`${value}}`";`r`n                }"
-        $content = $content -creplace "request\.Uri = uri\.ToUri\(\);", "request.Uri = uriBuilder.Uri;"
+        $content = $content -creplace "request\.Uri = uri\.ToUri\(\);", "uriBuilder.Path += path.ToString();`r`n            request.Uri = uriBuilder.Uri;"
         $content = $content -creplace "request\.SetHeaderValue", "request.Headers.Set"
         $content = $content -creplace "request\.Content = content;", "request.Content = content;`r`n            message.Apply(options);"
 
         # Delete DefaultRequestContext
-        $content = $content -creplace "\s+private static RequestOptions DefaultRequestContext = new RequestOptions\(\);", ""
+        # $content = $content -creplace "\s+private static RequestOptions DefaultRequestContext = new RequestOptions\(\);", ""
 
         # Delete FromCancellationToken
         $content = $content -creplace "(?s)\s+internal static RequestOptions FromCancellationToken\(CancellationToken cancellationToken = default\).*?return new RequestOptions\(\) \{ CancellationToken = cancellationToken \};.*?\}", ""

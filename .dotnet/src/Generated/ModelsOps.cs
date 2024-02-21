@@ -45,7 +45,7 @@ namespace OpenAI
         /// </summary>
         public virtual async Task<ClientResult<ListModelsResponse>> GetModelsAsync(CancellationToken cancellationToken = default)
         {
-            ClientResult result = await GetModelsAsync().ConfigureAwait(false);
+            ClientResult result = await GetModelsAsync(DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListModelsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -55,7 +55,7 @@ namespace OpenAI
         /// </summary>
         public virtual ClientResult<ListModelsResponse> GetModels(CancellationToken cancellationToken = default)
         {
-            ClientResult result = GetModels();
+            ClientResult result = GetModels(DefaultRequestContext);
             return ClientResult.FromValue(ListModelsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -139,7 +139,7 @@ namespace OpenAI
             if (model is null) throw new ArgumentNullException(nameof(model));
             if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
 
-            ClientResult result = await RetrieveAsync(model).ConfigureAwait(false);
+            ClientResult result = await RetrieveAsync(model, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(Model.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -155,7 +155,7 @@ namespace OpenAI
             if (model is null) throw new ArgumentNullException(nameof(model));
             if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
 
-            ClientResult result = Retrieve(model);
+            ClientResult result = Retrieve(model, DefaultRequestContext);
             return ClientResult.FromValue(Model.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -246,7 +246,7 @@ namespace OpenAI
             if (model is null) throw new ArgumentNullException(nameof(model));
             if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
 
-            ClientResult result = await DeleteAsync(model).ConfigureAwait(false);
+            ClientResult result = await DeleteAsync(model, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteModelResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -259,7 +259,7 @@ namespace OpenAI
             if (model is null) throw new ArgumentNullException(nameof(model));
             if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
 
-            ClientResult result = Delete(model);
+            ClientResult result = Delete(model, DefaultRequestContext);
             return ClientResult.FromValue(DeleteModelResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -363,7 +363,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/models/");
-            uriBuilder.Path += path.ToString();
             path.Append(model);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -380,13 +379,14 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/models/");
-            uriBuilder.Path += path.ToString();
             path.Append(model);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

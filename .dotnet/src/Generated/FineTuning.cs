@@ -53,7 +53,7 @@ namespace OpenAI
             if (job is null) throw new ArgumentNullException(nameof(job));
 
             using BinaryContent content = BinaryContent.Create(job);
-            ClientResult result = await CreateFineTuningJobAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateFineTuningJobAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(FineTuningJob.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -71,7 +71,7 @@ namespace OpenAI
             if (job is null) throw new ArgumentNullException(nameof(job));
 
             using BinaryContent content = BinaryContent.Create(job);
-            ClientResult result = CreateFineTuningJob(content);
+            ClientResult result = CreateFineTuningJob(content, DefaultRequestContext);
             return ClientResult.FromValue(FineTuningJob.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -160,7 +160,7 @@ namespace OpenAI
         /// <param name="limit"> Number of fine-tuning jobs to retrieve. </param>
         public virtual async Task<ClientResult<ListPaginatedFineTuningJobsResponse>> GetPaginatedFineTuningJobsAsync(string after = null, long? limit = null)
         {
-            ClientResult result = await GetPaginatedFineTuningJobsAsync(after, limit).ConfigureAwait(false);
+            ClientResult result = await GetPaginatedFineTuningJobsAsync(after, limit, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListPaginatedFineTuningJobsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -169,7 +169,7 @@ namespace OpenAI
         /// <param name="limit"> Number of fine-tuning jobs to retrieve. </param>
         public virtual ClientResult<ListPaginatedFineTuningJobsResponse> GetPaginatedFineTuningJobs(string after = null, long? limit = null)
         {
-            ClientResult result = GetPaginatedFineTuningJobs(after, limit);
+            ClientResult result = GetPaginatedFineTuningJobs(after, limit, DefaultRequestContext);
             return ClientResult.FromValue(ListPaginatedFineTuningJobsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -256,7 +256,7 @@ namespace OpenAI
             if (fineTuningJobId is null) throw new ArgumentNullException(nameof(fineTuningJobId));
             if (string.IsNullOrEmpty(fineTuningJobId)) throw new ArgumentException(nameof(fineTuningJobId));
 
-            ClientResult result = await RetrieveFineTuningJobAsync(fineTuningJobId).ConfigureAwait(false);
+            ClientResult result = await RetrieveFineTuningJobAsync(fineTuningJobId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(FineTuningJob.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -273,7 +273,7 @@ namespace OpenAI
             if (fineTuningJobId is null) throw new ArgumentNullException(nameof(fineTuningJobId));
             if (string.IsNullOrEmpty(fineTuningJobId)) throw new ArgumentException(nameof(fineTuningJobId));
 
-            ClientResult result = RetrieveFineTuningJob(fineTuningJobId);
+            ClientResult result = RetrieveFineTuningJob(fineTuningJobId, DefaultRequestContext);
             return ClientResult.FromValue(FineTuningJob.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -366,7 +366,7 @@ namespace OpenAI
             if (fineTuningJobId is null) throw new ArgumentNullException(nameof(fineTuningJobId));
             if (string.IsNullOrEmpty(fineTuningJobId)) throw new ArgumentException(nameof(fineTuningJobId));
 
-            ClientResult result = await CancelFineTuningJobAsync(fineTuningJobId).ConfigureAwait(false);
+            ClientResult result = await CancelFineTuningJobAsync(fineTuningJobId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(FineTuningJob.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -379,7 +379,7 @@ namespace OpenAI
             if (fineTuningJobId is null) throw new ArgumentNullException(nameof(fineTuningJobId));
             if (string.IsNullOrEmpty(fineTuningJobId)) throw new ArgumentException(nameof(fineTuningJobId));
 
-            ClientResult result = CancelFineTuningJob(fineTuningJobId);
+            ClientResult result = CancelFineTuningJob(fineTuningJobId, DefaultRequestContext);
             return ClientResult.FromValue(FineTuningJob.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -470,7 +470,7 @@ namespace OpenAI
             if (fineTuningJobId is null) throw new ArgumentNullException(nameof(fineTuningJobId));
             if (string.IsNullOrEmpty(fineTuningJobId)) throw new ArgumentException(nameof(fineTuningJobId));
 
-            ClientResult result = await GetFineTuningEventsAsync(fineTuningJobId, after, limit).ConfigureAwait(false);
+            ClientResult result = await GetFineTuningEventsAsync(fineTuningJobId, after, limit, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListFineTuningJobEventsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -485,7 +485,7 @@ namespace OpenAI
             if (fineTuningJobId is null) throw new ArgumentNullException(nameof(fineTuningJobId));
             if (string.IsNullOrEmpty(fineTuningJobId)) throw new ArgumentException(nameof(fineTuningJobId));
 
-            ClientResult result = GetFineTuningEvents(fineTuningJobId, after, limit);
+            ClientResult result = GetFineTuningEvents(fineTuningJobId, after, limit, DefaultRequestContext);
             return ClientResult.FromValue(ListFineTuningJobEventsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -596,7 +596,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/fine_tuning/jobs");
-            uriBuilder.Path += path.ToString();
             if (after != null)
             {
                 if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
@@ -619,6 +618,7 @@ namespace OpenAI
                     uriBuilder.Query = $"limit={limit.Value}";
                 }
             }
+            uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
@@ -633,7 +633,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/fine_tuning/jobs/");
-            uriBuilder.Path += path.ToString();
             path.Append(fineTuningJobId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -650,9 +649,7 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/fine_tuning/jobs/");
-            uriBuilder.Path += path.ToString();
             path.Append(fineTuningJobId);
-            uriBuilder.Path += path.ToString();
             path.Append("/cancel");
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -669,11 +666,8 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/fine_tuning/jobs/");
-            uriBuilder.Path += path.ToString();
             path.Append(fineTuningJobId);
-            uriBuilder.Path += path.ToString();
             path.Append("/events");
-            uriBuilder.Path += path.ToString();
             if (after != null)
             {
                 if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
@@ -696,10 +690,13 @@ namespace OpenAI
                     uriBuilder.Query = $"limit={limit.Value}";
                 }
             }
+            uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

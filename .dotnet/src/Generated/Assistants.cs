@@ -47,7 +47,7 @@ namespace OpenAI
             if (assistant is null) throw new ArgumentNullException(nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
-            ClientResult result = await CreateAssistantAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateAssistantAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -59,7 +59,7 @@ namespace OpenAI
             if (assistant is null) throw new ArgumentNullException(nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
-            ClientResult result = CreateAssistant(content);
+            ClientResult result = CreateAssistant(content, DefaultRequestContext);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -156,7 +156,7 @@ namespace OpenAI
         /// </param>
         public virtual async Task<ClientResult<ListAssistantsResponse>> GetAssistantsAsync(int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            ClientResult result = await GetAssistantsAsync(limit, order?.ToString(), after, before).ConfigureAwait(false);
+            ClientResult result = await GetAssistantsAsync(limit, order?.ToString(), after, before, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListAssistantsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -181,7 +181,7 @@ namespace OpenAI
         /// </param>
         public virtual ClientResult<ListAssistantsResponse> GetAssistants(int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            ClientResult result = GetAssistants(limit, order?.ToString(), after, before);
+            ClientResult result = GetAssistants(limit, order?.ToString(), after, before, DefaultRequestContext);
             return ClientResult.FromValue(ListAssistantsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -296,7 +296,7 @@ namespace OpenAI
             if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
             if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
 
-            ClientResult result = await GetAssistantAsync(assistantId).ConfigureAwait(false);
+            ClientResult result = await GetAssistantAsync(assistantId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -309,7 +309,7 @@ namespace OpenAI
             if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
             if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
 
-            ClientResult result = GetAssistant(assistantId);
+            ClientResult result = GetAssistant(assistantId, DefaultRequestContext);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -401,7 +401,7 @@ namespace OpenAI
             if (assistant is null) throw new ArgumentNullException(nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
-            ClientResult result = await ModifyAssistantAsync(assistantId, content).ConfigureAwait(false);
+            ClientResult result = await ModifyAssistantAsync(assistantId, content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -417,7 +417,7 @@ namespace OpenAI
             if (assistant is null) throw new ArgumentNullException(nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
-            ClientResult result = ModifyAssistant(assistantId, content);
+            ClientResult result = ModifyAssistant(assistantId, content, DefaultRequestContext);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -510,7 +510,7 @@ namespace OpenAI
             if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
             if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
 
-            ClientResult result = await DeleteAssistantAsync(assistantId).ConfigureAwait(false);
+            ClientResult result = await DeleteAssistantAsync(assistantId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteAssistantResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -523,7 +523,7 @@ namespace OpenAI
             if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
             if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
 
-            ClientResult result = DeleteAssistant(assistantId);
+            ClientResult result = DeleteAssistant(assistantId, DefaultRequestContext);
             return ClientResult.FromValue(DeleteAssistantResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -618,7 +618,7 @@ namespace OpenAI
             if (file is null) throw new ArgumentNullException(nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
-            ClientResult result = await CreateAssistantFileAsync(assistantId, content).ConfigureAwait(false);
+            ClientResult result = await CreateAssistantFileAsync(assistantId, content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(AssistantFileObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -637,7 +637,7 @@ namespace OpenAI
             if (file is null) throw new ArgumentNullException(nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
-            ClientResult result = CreateAssistantFile(assistantId, content);
+            ClientResult result = CreateAssistantFile(assistantId, content, DefaultRequestContext);
             return ClientResult.FromValue(AssistantFileObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -750,7 +750,7 @@ namespace OpenAI
             if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
             if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
 
-            ClientResult result = await GetAssistantFilesAsync(assistantId, limit, order?.ToString(), after, before).ConfigureAwait(false);
+            ClientResult result = await GetAssistantFilesAsync(assistantId, limit, order?.ToString(), after, before, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListAssistantFilesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -781,7 +781,7 @@ namespace OpenAI
             if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
             if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
 
-            ClientResult result = GetAssistantFiles(assistantId, limit, order?.ToString(), after, before);
+            ClientResult result = GetAssistantFiles(assistantId, limit, order?.ToString(), after, before, DefaultRequestContext);
             return ClientResult.FromValue(ListAssistantFilesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -909,7 +909,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = await GetAssistantFileAsync(assistantId, fileId).ConfigureAwait(false);
+            ClientResult result = await GetAssistantFileAsync(assistantId, fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(AssistantFileObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -925,7 +925,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = GetAssistantFile(assistantId, fileId);
+            ClientResult result = GetAssistantFile(assistantId, fileId, DefaultRequestContext);
             return ClientResult.FromValue(AssistantFileObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -1023,7 +1023,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = await DeleteAssistantFileAsync(assistantId, fileId).ConfigureAwait(false);
+            ClientResult result = await DeleteAssistantFileAsync(assistantId, fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteAssistantFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -1039,7 +1039,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = DeleteAssistantFile(assistantId, fileId);
+            ClientResult result = DeleteAssistantFile(assistantId, fileId, DefaultRequestContext);
             return ClientResult.FromValue(DeleteAssistantFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -1152,7 +1152,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants");
-            uriBuilder.Path += path.ToString();
             if (limit != null)
             {
                 if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
@@ -1197,6 +1196,7 @@ namespace OpenAI
                     uriBuilder.Query = $"before={before}";
                 }
             }
+            uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
@@ -1211,7 +1211,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants/");
-            uriBuilder.Path += path.ToString();
             path.Append(assistantId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1228,7 +1227,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants/");
-            uriBuilder.Path += path.ToString();
             path.Append(assistantId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1248,7 +1246,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants/");
-            uriBuilder.Path += path.ToString();
             path.Append(assistantId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1265,9 +1262,7 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants/");
-            uriBuilder.Path += path.ToString();
             path.Append(assistantId);
-            uriBuilder.Path += path.ToString();
             path.Append("/files");
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1287,11 +1282,8 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants/");
-            uriBuilder.Path += path.ToString();
             path.Append(assistantId);
-            uriBuilder.Path += path.ToString();
             path.Append("/files");
-            uriBuilder.Path += path.ToString();
             if (limit != null)
             {
                 if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
@@ -1336,6 +1328,7 @@ namespace OpenAI
                     uriBuilder.Query = $"before={before}";
                 }
             }
+            uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
@@ -1350,11 +1343,8 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants/");
-            uriBuilder.Path += path.ToString();
             path.Append(assistantId);
-            uriBuilder.Path += path.ToString();
             path.Append("/files/");
-            uriBuilder.Path += path.ToString();
             path.Append(fileId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1371,17 +1361,16 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/assistants/");
-            uriBuilder.Path += path.ToString();
             path.Append(assistantId);
-            uriBuilder.Path += path.ToString();
             path.Append("/files/");
-            uriBuilder.Path += path.ToString();
             path.Append(fileId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

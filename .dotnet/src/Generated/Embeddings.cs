@@ -47,7 +47,7 @@ namespace OpenAI
             if (embedding is null) throw new ArgumentNullException(nameof(embedding));
 
             using BinaryContent content = BinaryContent.Create(embedding);
-            ClientResult result = await CreateEmbeddingAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateEmbeddingAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(EmbeddingCollection.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -59,7 +59,7 @@ namespace OpenAI
             if (embedding is null) throw new ArgumentNullException(nameof(embedding));
 
             using BinaryContent content = BinaryContent.Create(embedding);
-            ClientResult result = CreateEmbedding(content);
+            ClientResult result = CreateEmbedding(content, DefaultRequestContext);
             return ClientResult.FromValue(EmbeddingCollection.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -152,6 +152,8 @@ namespace OpenAI
             message.Apply(options);
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

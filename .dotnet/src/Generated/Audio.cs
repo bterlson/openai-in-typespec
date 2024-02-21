@@ -47,7 +47,7 @@ namespace OpenAI
             if (speech is null) throw new ArgumentNullException(nameof(speech));
 
             using BinaryContent content = BinaryContent.Create(speech);
-            ClientResult result = await CreateSpeechAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateSpeechAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(result.GetRawResponse().Content, result.GetRawResponse());
         }
 
@@ -59,7 +59,7 @@ namespace OpenAI
             if (speech is null) throw new ArgumentNullException(nameof(speech));
 
             using BinaryContent content = BinaryContent.Create(speech);
-            ClientResult result = CreateSpeech(content);
+            ClientResult result = CreateSpeech(content, DefaultRequestContext);
             return ClientResult.FromValue(result.GetRawResponse().Content, result.GetRawResponse());
         }
 
@@ -143,7 +143,7 @@ namespace OpenAI
             if (audio is null) throw new ArgumentNullException(nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
-            ClientResult result = await CreateTranscriptionAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateTranscriptionAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(CreateTranscriptionResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -155,7 +155,7 @@ namespace OpenAI
             if (audio is null) throw new ArgumentNullException(nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
-            ClientResult result = CreateTranscription(content);
+            ClientResult result = CreateTranscription(content, DefaultRequestContext);
             return ClientResult.FromValue(CreateTranscriptionResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -239,7 +239,7 @@ namespace OpenAI
             if (audio is null) throw new ArgumentNullException(nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
-            ClientResult result = await CreateTranslationAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateTranslationAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(CreateTranslationResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -251,7 +251,7 @@ namespace OpenAI
             if (audio is null) throw new ArgumentNullException(nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
-            ClientResult result = CreateTranslation(content);
+            ClientResult result = CreateTranslation(content, DefaultRequestContext);
             return ClientResult.FromValue(CreateTranslationResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -380,6 +380,8 @@ namespace OpenAI
             message.Apply(options);
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

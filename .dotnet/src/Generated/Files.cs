@@ -56,7 +56,7 @@ namespace OpenAI
             if (file is null) throw new ArgumentNullException(nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
-            ClientResult result = await CreateFileAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateFileAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(OpenAIFile.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -77,7 +77,7 @@ namespace OpenAI
             if (file is null) throw new ArgumentNullException(nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
-            ClientResult result = CreateFile(content);
+            ClientResult result = CreateFile(content, DefaultRequestContext);
             return ClientResult.FromValue(OpenAIFile.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -171,7 +171,7 @@ namespace OpenAI
         /// <param name="purpose"> Only return files with the given purpose. </param>
         public virtual async Task<ClientResult<ListFilesResponse>> GetFilesAsync(string purpose = null)
         {
-            ClientResult result = await GetFilesAsync(purpose).ConfigureAwait(false);
+            ClientResult result = await GetFilesAsync(purpose, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListFilesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -179,7 +179,7 @@ namespace OpenAI
         /// <param name="purpose"> Only return files with the given purpose. </param>
         public virtual ClientResult<ListFilesResponse> GetFiles(string purpose = null)
         {
-            ClientResult result = GetFiles(purpose);
+            ClientResult result = GetFiles(purpose, DefaultRequestContext);
             return ClientResult.FromValue(ListFilesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -260,7 +260,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = await RetrieveFileAsync(fileId).ConfigureAwait(false);
+            ClientResult result = await RetrieveFileAsync(fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(OpenAIFile.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -273,7 +273,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = RetrieveFile(fileId);
+            ClientResult result = RetrieveFile(fileId, DefaultRequestContext);
             return ClientResult.FromValue(OpenAIFile.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -362,7 +362,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = await DeleteFileAsync(fileId).ConfigureAwait(false);
+            ClientResult result = await DeleteFileAsync(fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -375,7 +375,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = DeleteFile(fileId);
+            ClientResult result = DeleteFile(fileId, DefaultRequestContext);
             return ClientResult.FromValue(DeleteFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -464,7 +464,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = await DownloadFileAsync(fileId).ConfigureAwait(false);
+            ClientResult result = await DownloadFileAsync(fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(result.GetRawResponse().Content.ToObjectFromJson<string>(), result.GetRawResponse());
         }
 
@@ -477,7 +477,7 @@ namespace OpenAI
             if (fileId is null) throw new ArgumentNullException(nameof(fileId));
             if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
 
-            ClientResult result = DownloadFile(fileId);
+            ClientResult result = DownloadFile(fileId, DefaultRequestContext);
             return ClientResult.FromValue(result.GetRawResponse().Content.ToObjectFromJson<string>(), result.GetRawResponse());
         }
 
@@ -584,7 +584,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/files");
-            uriBuilder.Path += path.ToString();
             if (purpose != null)
             {
                 if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
@@ -596,6 +595,7 @@ namespace OpenAI
                     uriBuilder.Query = $"purpose={purpose}";
                 }
             }
+            uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
@@ -610,7 +610,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/files/");
-            uriBuilder.Path += path.ToString();
             path.Append(fileId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -627,7 +626,6 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/files/");
-            uriBuilder.Path += path.ToString();
             path.Append(fileId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -644,15 +642,15 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/files/");
-            uriBuilder.Path += path.ToString();
             path.Append(fileId);
-            uriBuilder.Path += path.ToString();
             path.Append("/content");
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

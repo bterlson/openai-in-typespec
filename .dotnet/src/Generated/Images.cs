@@ -47,7 +47,7 @@ namespace OpenAI
             if (image is null) throw new ArgumentNullException(nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
-            ClientResult result = await CreateImageAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateImageAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ImagesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -59,7 +59,7 @@ namespace OpenAI
             if (image is null) throw new ArgumentNullException(nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
-            ClientResult result = CreateImage(content);
+            ClientResult result = CreateImage(content, DefaultRequestContext);
             return ClientResult.FromValue(ImagesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -143,7 +143,7 @@ namespace OpenAI
             if (image is null) throw new ArgumentNullException(nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
-            ClientResult result = await CreateImageEditAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateImageEditAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ImagesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -155,7 +155,7 @@ namespace OpenAI
             if (image is null) throw new ArgumentNullException(nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
-            ClientResult result = CreateImageEdit(content);
+            ClientResult result = CreateImageEdit(content, DefaultRequestContext);
             return ClientResult.FromValue(ImagesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -239,7 +239,7 @@ namespace OpenAI
             if (image is null) throw new ArgumentNullException(nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
-            ClientResult result = await CreateImageVariationAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateImageVariationAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ImagesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -251,7 +251,7 @@ namespace OpenAI
             if (image is null) throw new ArgumentNullException(nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
-            ClientResult result = CreateImageVariation(content);
+            ClientResult result = CreateImageVariation(content, DefaultRequestContext);
             return ClientResult.FromValue(ImagesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -380,6 +380,8 @@ namespace OpenAI
             message.Apply(options);
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

@@ -47,7 +47,7 @@ namespace OpenAI
             if (threadAndRun is null) throw new ArgumentNullException(nameof(threadAndRun));
 
             using BinaryContent content = BinaryContent.Create(threadAndRun);
-            ClientResult result = await CreateThreadAndRunAsync(content).ConfigureAwait(false);
+            ClientResult result = await CreateThreadAndRunAsync(content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -59,7 +59,7 @@ namespace OpenAI
             if (threadAndRun is null) throw new ArgumentNullException(nameof(threadAndRun));
 
             using BinaryContent content = BinaryContent.Create(threadAndRun);
-            ClientResult result = CreateThreadAndRun(content);
+            ClientResult result = CreateThreadAndRun(content, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -147,7 +147,7 @@ namespace OpenAI
             if (run is null) throw new ArgumentNullException(nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
-            ClientResult result = await CreateRunAsync(threadId, content).ConfigureAwait(false);
+            ClientResult result = await CreateRunAsync(threadId, content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -163,7 +163,7 @@ namespace OpenAI
             if (run is null) throw new ArgumentNullException(nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
-            ClientResult result = CreateRun(threadId, content);
+            ClientResult result = CreateRun(threadId, content, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -274,7 +274,7 @@ namespace OpenAI
             if (threadId is null) throw new ArgumentNullException(nameof(threadId));
             if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
 
-            ClientResult result = await GetRunsAsync(threadId, limit, order?.ToString(), after, before).ConfigureAwait(false);
+            ClientResult result = await GetRunsAsync(threadId, limit, order?.ToString(), after, before, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListRunsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -305,7 +305,7 @@ namespace OpenAI
             if (threadId is null) throw new ArgumentNullException(nameof(threadId));
             if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
 
-            ClientResult result = GetRuns(threadId, limit, order?.ToString(), after, before);
+            ClientResult result = GetRuns(threadId, limit, order?.ToString(), after, before, DefaultRequestContext);
             return ClientResult.FromValue(ListRunsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -433,7 +433,7 @@ namespace OpenAI
             if (runId is null) throw new ArgumentNullException(nameof(runId));
             if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
 
-            ClientResult result = await GetRunAsync(threadId, runId).ConfigureAwait(false);
+            ClientResult result = await GetRunAsync(threadId, runId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -449,7 +449,7 @@ namespace OpenAI
             if (runId is null) throw new ArgumentNullException(nameof(runId));
             if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
 
-            ClientResult result = GetRun(threadId, runId);
+            ClientResult result = GetRun(threadId, runId, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -550,7 +550,7 @@ namespace OpenAI
             if (run is null) throw new ArgumentNullException(nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
-            ClientResult result = await ModifyRunAsync(threadId, runId, content).ConfigureAwait(false);
+            ClientResult result = await ModifyRunAsync(threadId, runId, content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -569,7 +569,7 @@ namespace OpenAI
             if (run is null) throw new ArgumentNullException(nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
-            ClientResult result = ModifyRun(threadId, runId, content);
+            ClientResult result = ModifyRun(threadId, runId, content, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -671,7 +671,7 @@ namespace OpenAI
             if (runId is null) throw new ArgumentNullException(nameof(runId));
             if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
 
-            ClientResult result = await CancelRunAsync(threadId, runId).ConfigureAwait(false);
+            ClientResult result = await CancelRunAsync(threadId, runId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -687,7 +687,7 @@ namespace OpenAI
             if (runId is null) throw new ArgumentNullException(nameof(runId));
             if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
 
-            ClientResult result = CancelRun(threadId, runId);
+            ClientResult result = CancelRun(threadId, runId, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -792,7 +792,7 @@ namespace OpenAI
             if (submitToolOutputsRun is null) throw new ArgumentNullException(nameof(submitToolOutputsRun));
 
             using BinaryContent content = BinaryContent.Create(submitToolOutputsRun);
-            ClientResult result = await SubmitToolOuputsToRunAsync(threadId, runId, content).ConfigureAwait(false);
+            ClientResult result = await SubmitToolOuputsToRunAsync(threadId, runId, content, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -815,7 +815,7 @@ namespace OpenAI
             if (submitToolOutputsRun is null) throw new ArgumentNullException(nameof(submitToolOutputsRun));
 
             using BinaryContent content = BinaryContent.Create(submitToolOutputsRun);
-            ClientResult result = SubmitToolOuputsToRun(threadId, runId, content);
+            ClientResult result = SubmitToolOuputsToRun(threadId, runId, content, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -939,7 +939,7 @@ namespace OpenAI
             if (runId is null) throw new ArgumentNullException(nameof(runId));
             if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
 
-            ClientResult result = await GetRunStepsAsync(threadId, runId, limit, order?.ToString(), after, before).ConfigureAwait(false);
+            ClientResult result = await GetRunStepsAsync(threadId, runId, limit, order?.ToString(), after, before, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListRunStepsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -973,7 +973,7 @@ namespace OpenAI
             if (runId is null) throw new ArgumentNullException(nameof(runId));
             if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
 
-            ClientResult result = GetRunSteps(threadId, runId, limit, order?.ToString(), after, before);
+            ClientResult result = GetRunSteps(threadId, runId, limit, order?.ToString(), after, before, DefaultRequestContext);
             return ClientResult.FromValue(ListRunStepsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -1110,7 +1110,7 @@ namespace OpenAI
             if (stepId is null) throw new ArgumentNullException(nameof(stepId));
             if (string.IsNullOrEmpty(stepId)) throw new ArgumentException(nameof(stepId));
 
-            ClientResult result = await GetRunStepAsync(threadId, runId, stepId).ConfigureAwait(false);
+            ClientResult result = await GetRunStepAsync(threadId, runId, stepId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunStepObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -1129,7 +1129,7 @@ namespace OpenAI
             if (stepId is null) throw new ArgumentNullException(nameof(stepId));
             if (string.IsNullOrEmpty(stepId)) throw new ArgumentException(nameof(stepId));
 
-            ClientResult result = GetRunStep(threadId, runId, stepId);
+            ClientResult result = GetRunStep(threadId, runId, stepId, DefaultRequestContext);
             return ClientResult.FromValue(RunStepObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -1248,9 +1248,7 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs");
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1270,11 +1268,8 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs");
-            uriBuilder.Path += path.ToString();
             if (limit != null)
             {
                 if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
@@ -1319,6 +1314,7 @@ namespace OpenAI
                     uriBuilder.Query = $"before={before}";
                 }
             }
+            uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
@@ -1333,11 +1329,8 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs/");
-            uriBuilder.Path += path.ToString();
             path.Append(runId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1354,11 +1347,8 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs/");
-            uriBuilder.Path += path.ToString();
             path.Append(runId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1378,13 +1368,9 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs/");
-            uriBuilder.Path += path.ToString();
             path.Append(runId);
-            uriBuilder.Path += path.ToString();
             path.Append("/cancel");
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1401,13 +1387,9 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs/");
-            uriBuilder.Path += path.ToString();
             path.Append(runId);
-            uriBuilder.Path += path.ToString();
             path.Append("/submit_tool_outputs");
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
@@ -1427,15 +1409,10 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs/");
-            uriBuilder.Path += path.ToString();
             path.Append(runId);
-            uriBuilder.Path += path.ToString();
             path.Append("/steps");
-            uriBuilder.Path += path.ToString();
             if (limit != null)
             {
                 if (uriBuilder.Query != null && uriBuilder.Query.Length > 1)
@@ -1480,6 +1457,7 @@ namespace OpenAI
                     uriBuilder.Query = $"before={before}";
                 }
             }
+            uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
@@ -1494,21 +1472,18 @@ namespace OpenAI
             UriBuilder uriBuilder = new(_endpoint.ToString());
             StringBuilder path = new();
             path.Append("/threads/");
-            uriBuilder.Path += path.ToString();
             path.Append(threadId);
-            uriBuilder.Path += path.ToString();
             path.Append("/runs/");
-            uriBuilder.Path += path.ToString();
             path.Append(runId);
-            uriBuilder.Path += path.ToString();
             path.Append("/steps/");
-            uriBuilder.Path += path.ToString();
             path.Append(stepId);
             uriBuilder.Path += path.ToString();
             request.Uri = uriBuilder.Uri;
             request.Headers.Set("Accept", "application/json");
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

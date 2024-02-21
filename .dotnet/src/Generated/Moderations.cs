@@ -47,7 +47,7 @@ namespace OpenAI
             if (content is null) throw new ArgumentNullException(nameof(content));
 
             using BinaryContent content0 = BinaryContent.Create(content);
-            ClientResult result = await CreateModerationAsync(content0).ConfigureAwait(false);
+            ClientResult result = await CreateModerationAsync(content0, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(CreateModerationResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -59,7 +59,7 @@ namespace OpenAI
             if (content is null) throw new ArgumentNullException(nameof(content));
 
             using BinaryContent content0 = BinaryContent.Create(content);
-            ClientResult result = CreateModeration(content0);
+            ClientResult result = CreateModeration(content0, DefaultRequestContext);
             return ClientResult.FromValue(CreateModerationResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
         }
 
@@ -152,6 +152,8 @@ namespace OpenAI
             message.Apply(options);
             return message;
         }
+
+        private static RequestOptions DefaultRequestContext = new RequestOptions();
 
         private static PipelineMessageClassifier _responseErrorClassifier200;
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });

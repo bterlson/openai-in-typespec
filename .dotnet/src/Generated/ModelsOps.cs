@@ -43,7 +43,7 @@ namespace OpenAI
         /// Lists the currently available models, and provides basic information about each one such as the
         /// owner and availability.
         /// </summary>
-        public virtual async Task<ClientResult<ListModelsResponse>> GetModelsAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<ClientResult<ListModelsResponse>> GetModelsAsync()
         {
             ClientResult result = await GetModelsAsync(DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListModelsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -53,7 +53,7 @@ namespace OpenAI
         /// Lists the currently available models, and provides basic information about each one such as the
         /// owner and availability.
         /// </summary>
-        public virtual ClientResult<ListModelsResponse> GetModels(CancellationToken cancellationToken = default)
+        public virtual ClientResult<ListModelsResponse> GetModels()
         {
             ClientResult result = GetModels(DefaultRequestContext);
             return ClientResult.FromValue(ListModelsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -70,7 +70,7 @@ namespace OpenAI
         /// </item>
         /// <item>
         /// <description>
-        /// Please try the simpler <see cref="GetModelsAsync(CancellationToken)"/> convenience overload with strongly typed models first.
+        /// Please try the simpler <see cref="GetModelsAsync()"/> convenience overload with strongly typed models first.
         /// </description>
         /// </item>
         /// </list>
@@ -104,7 +104,7 @@ namespace OpenAI
         /// </item>
         /// <item>
         /// <description>
-        /// Please try the simpler <see cref="GetModels(CancellationToken)"/> convenience overload with strongly typed models first.
+        /// Please try the simpler <see cref="GetModels()"/> convenience overload with strongly typed models first.
         /// </description>
         /// </item>
         /// </list>

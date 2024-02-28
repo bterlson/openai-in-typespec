@@ -83,6 +83,9 @@ function Update-Subclients {
         $content = $content -creplace "\s+\/\/\/ <summary> The ClientDiagnostics is used to provide tracing support for the client library. </summary>", ""
         $content = $content -creplace "\s+internal TelemetrySource ClientDiagnostics { get; }", ""
 
+        # Delete FromCancellationToken
+        $content = $content -creplace "(?s)\s+internal static RequestOptions FromCancellationToken\(CancellationToken cancellationToken = default\).*?return new RequestOptions\(\) \{ CancellationToken = cancellationToken \};.*?\}", ""
+
         # Modify constructor
         $content = $content -creplace "\s+\/\/\/ <param name=`"clientDiagnostics`"> The handler for diagnostic messaging in the client. </param>", ""
         $content = $content -creplace "<param name=`"keyCredential`">", "<param name=`"credential`">"
@@ -91,6 +94,7 @@ function Update-Subclients {
 
         # # Modify convenience methods
         $content = $content -creplace "\s+\/\/\/ <param name=`"cancellationToken`"> The cancellation token to use. </param>", ""
+        $content = $content -creplace "\(CancellationToken cancellationToken = default\)", "()"
         $content = $content -creplace ", CancellationToken cancellationToken = default\)", ")"
         $content = $content -creplace "RequestOptions context = FromCancellationToken\(cancellationToken\);\s+", ""
         $content = $content -creplace "using RequestBody content = (?<var>\w+)\.ToRequestBody\(\);", "using BinaryContent content = BinaryContent.Create(`${var});"
@@ -101,6 +105,7 @@ function Update-Subclients {
         $content = $content -creplace "Result result = (?<method>\w+)\((?<params>[(\w+)(\?.ToString\(\)*)(,\s\w+)]*), context\);", "ClientResult result = `${method}(`${params}, DefaultRequestContext);"
 
         # Modify protocol methods
+        $content = $content -creplace "\/\/\/ Please try the simpler <see cref=`"(?<method>\w+)\(CancellationToken\)`"/> convenience overload with strongly typed models first.", "/// Please try the simpler <see cref=`"`${method}()`"/> convenience overload with strongly typed models first."
         $content = $content -creplace "\/\/\/ Please try the simpler <see cref=`"(?<method>\w+)\((?<params>[(\w+)(\?*)(,\s\w+)]*),CancellationToken\)`"/> convenience overload with strongly typed models first.", "/// Please try the simpler <see cref=`"`${method}(`${params})`"/> convenience overload with strongly typed models first."
         $content = $content -creplace "\/\/\/ <param name=`"context`"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>", "/// <param name=`"options`"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>"
         $content = $content -creplace "\/\/\/ <exception cref=`"MessageFailedException`">", "/// <exception cref=`"ClientResultException`">"
@@ -133,9 +138,6 @@ function Update-Subclients {
 
         # Delete DefaultRequestContext
         # $content = $content -creplace "\s+private static RequestOptions DefaultRequestContext = new RequestOptions\(\);", ""
-
-        # Delete FromCancellationToken
-        $content = $content -creplace "(?s)\s+internal static RequestOptions FromCancellationToken\(CancellationToken cancellationToken = default\).*?return new RequestOptions\(\) \{ CancellationToken = cancellationToken \};.*?\}", ""
 
         # Clean up ApiKeyCredential
         $content = $content -creplace " KeyCredential", " ApiKeyCredential"

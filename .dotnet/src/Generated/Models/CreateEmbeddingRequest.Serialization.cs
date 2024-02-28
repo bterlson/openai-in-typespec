@@ -8,14 +8,14 @@ using System.Text.Json;
 
 namespace OpenAI.Models
 {
-    public partial class GenerateEmbeddingsOptions : IJsonModel<GenerateEmbeddingsOptions>
+    public partial class CreateEmbeddingRequest : IJsonModel<CreateEmbeddingRequest>
     {
-        void IJsonModel<GenerateEmbeddingsOptions>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
+        void IJsonModel<CreateEmbeddingRequest>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<GenerateEmbeddingsOptions>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingRequest>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
-                throw new FormatException($"The model {nameof(GenerateEmbeddingsOptions)} does not support '{format}' format.");
+                throw new FormatException($"The model {nameof(CreateEmbeddingRequest)} does not support '{format}' format.");
             }
 
             writer.WriteStartObject();
@@ -63,19 +63,19 @@ namespace OpenAI.Models
             writer.WriteEndObject();
         }
 
-        GenerateEmbeddingsOptions IJsonModel<GenerateEmbeddingsOptions>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
+        CreateEmbeddingRequest IJsonModel<CreateEmbeddingRequest>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<GenerateEmbeddingsOptions>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingRequest>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
-                throw new FormatException($"The model {nameof(GenerateEmbeddingsOptions)} does not support '{format}' format.");
+                throw new FormatException($"The model {nameof(CreateEmbeddingRequest)} does not support '{format}' format.");
             }
 
             using JsonDocument document = JsonDocument.ParseValue(ref reader);
-            return DeserializeGenerateEmbeddingsOptions(document.RootElement, options);
+            return DeserializeCreateEmbeddingRequest(document.RootElement, options);
         }
 
-        internal static GenerateEmbeddingsOptions DeserializeGenerateEmbeddingsOptions(JsonElement element, ModelReaderWriterOptions options = null)
+        internal static CreateEmbeddingRequest DeserializeCreateEmbeddingRequest(JsonElement element, ModelReaderWriterOptions options = null)
         {
             options ??= new ModelReaderWriterOptions("W");
 
@@ -84,8 +84,8 @@ namespace OpenAI.Models
                 return null;
             }
             BinaryData input = default;
-            GenerateEmbeddingsOptionsModel model = default;
-            OptionalProperty<GenerateEmbeddingsOptionsEncodingFormat> encodingFormat = default;
+            CreateEmbeddingRequestModel model = default;
+            OptionalProperty<CreateEmbeddingRequestEncodingFormat> encodingFormat = default;
             OptionalProperty<long> dimensions = default;
             OptionalProperty<string> user = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
@@ -99,7 +99,7 @@ namespace OpenAI.Models
                 }
                 if (property.NameEquals("model"u8))
                 {
-                    model = new GenerateEmbeddingsOptionsModel(property.Value.GetString());
+                    model = new CreateEmbeddingRequestModel(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("encoding_format"u8))
@@ -108,7 +108,7 @@ namespace OpenAI.Models
                     {
                         continue;
                     }
-                    encodingFormat = new GenerateEmbeddingsOptionsEncodingFormat(property.Value.GetString());
+                    encodingFormat = new CreateEmbeddingRequestEncodingFormat(property.Value.GetString());
                     continue;
                 }
                 if (property.NameEquals("dimensions"u8))
@@ -131,46 +131,46 @@ namespace OpenAI.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new GenerateEmbeddingsOptions(input, model, OptionalProperty.ToNullable(encodingFormat), OptionalProperty.ToNullable(dimensions), user.Value, serializedAdditionalRawData);
+            return new CreateEmbeddingRequest(input, model, OptionalProperty.ToNullable(encodingFormat), OptionalProperty.ToNullable(dimensions), user.Value, serializedAdditionalRawData);
         }
 
-        BinaryData IPersistableModel<GenerateEmbeddingsOptions>.Write(ModelReaderWriterOptions options)
+        BinaryData IPersistableModel<CreateEmbeddingRequest>.Write(ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<GenerateEmbeddingsOptions>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingRequest>)this).GetFormatFromOptions(options) : options.Format;
 
             switch (format)
             {
                 case "J":
                     return ModelReaderWriter.Write(this, options);
                 default:
-                    throw new FormatException($"The model {nameof(GenerateEmbeddingsOptions)} does not support '{options.Format}' format.");
+                    throw new FormatException($"The model {nameof(CreateEmbeddingRequest)} does not support '{options.Format}' format.");
             }
         }
 
-        GenerateEmbeddingsOptions IPersistableModel<GenerateEmbeddingsOptions>.Create(BinaryData data, ModelReaderWriterOptions options)
+        CreateEmbeddingRequest IPersistableModel<CreateEmbeddingRequest>.Create(BinaryData data, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<GenerateEmbeddingsOptions>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<CreateEmbeddingRequest>)this).GetFormatFromOptions(options) : options.Format;
 
             switch (format)
             {
                 case "J":
                     {
                         using JsonDocument document = JsonDocument.Parse(data);
-                        return DeserializeGenerateEmbeddingsOptions(document.RootElement, options);
+                        return DeserializeCreateEmbeddingRequest(document.RootElement, options);
                     }
                 default:
-                    throw new FormatException($"The model {nameof(GenerateEmbeddingsOptions)} does not support '{options.Format}' format.");
+                    throw new FormatException($"The model {nameof(CreateEmbeddingRequest)} does not support '{options.Format}' format.");
             }
         }
 
-        string IPersistableModel<GenerateEmbeddingsOptions>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
+        string IPersistableModel<CreateEmbeddingRequest>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
 
         /// <summary> Deserializes the model from a raw response. </summary>
         /// <param name="response"> The result to deserialize the model from. </param>
-        internal static GenerateEmbeddingsOptions FromResponse(PipelineResponse response)
+        internal static CreateEmbeddingRequest FromResponse(PipelineResponse response)
         {
             using var document = JsonDocument.Parse(response.Content);
-            return DeserializeGenerateEmbeddingsOptions(document.RootElement);
+            return DeserializeCreateEmbeddingRequest(document.RootElement);
         }
     }
 }

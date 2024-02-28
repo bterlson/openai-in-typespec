@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 namespace OpenAI.Models
 {
-    /// <summary> The SubmitToolOutputsRunRequestToolOutputs. </summary>
-    public partial class SubmitToolOutputsRunRequestToolOutputs
+    /// <summary> The SubmitToolOutputsRunRequestToolOutput. </summary>
+    public partial class SubmitToolOutputsRunRequestToolOutput
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -40,19 +40,19 @@ namespace OpenAI.Models
         /// </summary>
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
-        /// <summary> Initializes a new instance of <see cref="SubmitToolOutputsRunRequestToolOutputs"/>. </summary>
-        public SubmitToolOutputsRunRequestToolOutputs()
+        /// <summary> Initializes a new instance of <see cref="SubmitToolOutputsRunRequestToolOutput"/>. </summary>
+        public SubmitToolOutputsRunRequestToolOutput()
         {
         }
 
-        /// <summary> Initializes a new instance of <see cref="SubmitToolOutputsRunRequestToolOutputs"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="SubmitToolOutputsRunRequestToolOutput"/>. </summary>
         /// <param name="toolCallId">
         /// The ID of the tool call in the `required_action` object within the run object the output is
         /// being submitted for.
         /// </param>
         /// <param name="output"> The output of the tool call to be submitted to continue the run. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal SubmitToolOutputsRunRequestToolOutputs(string toolCallId, string output, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal SubmitToolOutputsRunRequestToolOutput(string toolCallId, string output, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             ToolCallId = toolCallId;
             Output = output;

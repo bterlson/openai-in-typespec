@@ -3,6 +3,7 @@
 using System;
 using OpenAI.ClientShared.Internal;
 using System.ClientModel.Primitives;
+using System.Collections.Generic;
 using System.Text.Json;
 
 namespace OpenAI.Models
@@ -59,6 +60,45 @@ namespace OpenAI.Models
 
             using JsonDocument document = JsonDocument.ParseValue(ref reader);
             return DeserializeEmbedding(document.RootElement, options);
+        }
+
+        internal static Embedding DeserializeEmbedding(JsonElement element, ModelReaderWriterOptions options = null)
+        {
+            options ??= new ModelReaderWriterOptions("W");
+
+            if (element.ValueKind == JsonValueKind.Null)
+            {
+                return null;
+            }
+            long index = default;
+            BinaryData embedding = default;
+            EmbeddingObject @object = default;
+            IDictionary<string, BinaryData> serializedAdditionalRawData = default;
+            Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
+            foreach (var property in element.EnumerateObject())
+            {
+                if (property.NameEquals("index"u8))
+                {
+                    index = property.Value.GetInt64();
+                    continue;
+                }
+                if (property.NameEquals("embedding"u8))
+                {
+                    embedding = BinaryData.FromString(property.Value.GetRawText());
+                    continue;
+                }
+                if (property.NameEquals("object"u8))
+                {
+                    @object = new EmbeddingObject(property.Value.GetString());
+                    continue;
+                }
+                if (options.Format != "W")
+                {
+                    additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
+                }
+            }
+            serializedAdditionalRawData = additionalPropertiesDictionary;
+            return new Embedding(index, embedding, @object, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<Embedding>.Write(ModelReaderWriterOptions options)

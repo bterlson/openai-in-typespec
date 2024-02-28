@@ -8,14 +8,14 @@ using System.Text.Json;
 
 namespace OpenAI.Models
 {
-    public partial class SubmitToolOutputsRunRequestToolOutputs : IJsonModel<SubmitToolOutputsRunRequestToolOutputs>
+    public partial class SubmitToolOutputsRunRequestToolOutput : IJsonModel<SubmitToolOutputsRunRequestToolOutput>
     {
-        void IJsonModel<SubmitToolOutputsRunRequestToolOutputs>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
+        void IJsonModel<SubmitToolOutputsRunRequestToolOutput>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutputs>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutput>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
-                throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutputs)} does not support '{format}' format.");
+                throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutput)} does not support '{format}' format.");
             }
 
             writer.WriteStartObject();
@@ -47,19 +47,19 @@ namespace OpenAI.Models
             writer.WriteEndObject();
         }
 
-        SubmitToolOutputsRunRequestToolOutputs IJsonModel<SubmitToolOutputsRunRequestToolOutputs>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
+        SubmitToolOutputsRunRequestToolOutput IJsonModel<SubmitToolOutputsRunRequestToolOutput>.Create(ref Utf8JsonReader reader, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutputs>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutput>)this).GetFormatFromOptions(options) : options.Format;
             if (format != "J")
             {
-                throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutputs)} does not support '{format}' format.");
+                throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutput)} does not support '{format}' format.");
             }
 
             using JsonDocument document = JsonDocument.ParseValue(ref reader);
-            return DeserializeSubmitToolOutputsRunRequestToolOutputs(document.RootElement, options);
+            return DeserializeSubmitToolOutputsRunRequestToolOutput(document.RootElement, options);
         }
 
-        internal static SubmitToolOutputsRunRequestToolOutputs DeserializeSubmitToolOutputsRunRequestToolOutputs(JsonElement element, ModelReaderWriterOptions options = null)
+        internal static SubmitToolOutputsRunRequestToolOutput DeserializeSubmitToolOutputsRunRequestToolOutput(JsonElement element, ModelReaderWriterOptions options = null)
         {
             options ??= new ModelReaderWriterOptions("W");
 
@@ -89,46 +89,46 @@ namespace OpenAI.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new SubmitToolOutputsRunRequestToolOutputs(toolCallId.Value, output.Value, serializedAdditionalRawData);
+            return new SubmitToolOutputsRunRequestToolOutput(toolCallId.Value, output.Value, serializedAdditionalRawData);
         }
 
-        BinaryData IPersistableModel<SubmitToolOutputsRunRequestToolOutputs>.Write(ModelReaderWriterOptions options)
+        BinaryData IPersistableModel<SubmitToolOutputsRunRequestToolOutput>.Write(ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutputs>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutput>)this).GetFormatFromOptions(options) : options.Format;
 
             switch (format)
             {
                 case "J":
                     return ModelReaderWriter.Write(this, options);
                 default:
-                    throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutputs)} does not support '{options.Format}' format.");
+                    throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutput)} does not support '{options.Format}' format.");
             }
         }
 
-        SubmitToolOutputsRunRequestToolOutputs IPersistableModel<SubmitToolOutputsRunRequestToolOutputs>.Create(BinaryData data, ModelReaderWriterOptions options)
+        SubmitToolOutputsRunRequestToolOutput IPersistableModel<SubmitToolOutputsRunRequestToolOutput>.Create(BinaryData data, ModelReaderWriterOptions options)
         {
-            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutputs>)this).GetFormatFromOptions(options) : options.Format;
+            var format = options.Format == "W" ? ((IPersistableModel<SubmitToolOutputsRunRequestToolOutput>)this).GetFormatFromOptions(options) : options.Format;
 
             switch (format)
             {
                 case "J":
                     {
                         using JsonDocument document = JsonDocument.Parse(data);
-                        return DeserializeSubmitToolOutputsRunRequestToolOutputs(document.RootElement, options);
+                        return DeserializeSubmitToolOutputsRunRequestToolOutput(document.RootElement, options);
                     }
                 default:
-                    throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutputs)} does not support '{options.Format}' format.");
+                    throw new FormatException($"The model {nameof(SubmitToolOutputsRunRequestToolOutput)} does not support '{options.Format}' format.");
             }
         }
 
-        string IPersistableModel<SubmitToolOutputsRunRequestToolOutputs>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
+        string IPersistableModel<SubmitToolOutputsRunRequestToolOutput>.GetFormatFromOptions(ModelReaderWriterOptions options) => "J";
 
         /// <summary> Deserializes the model from a raw response. </summary>
         /// <param name="response"> The result to deserialize the model from. </param>
-        internal static SubmitToolOutputsRunRequestToolOutputs FromResponse(PipelineResponse response)
+        internal static SubmitToolOutputsRunRequestToolOutput FromResponse(PipelineResponse response)
         {
             using var document = JsonDocument.Parse(response.Content);
-            return DeserializeSubmitToolOutputsRunRequestToolOutputs(document.RootElement);
+            return DeserializeSubmitToolOutputsRunRequestToolOutput(document.RootElement);
         }
     }
 }

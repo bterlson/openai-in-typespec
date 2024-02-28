@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 namespace OpenAI.Models
 {
-    /// <summary> The EmbeddingTokenUsage. </summary>
-    public partial class EmbeddingTokenUsage
+    /// <summary> The EmbeddingUsage. </summary>
+    public partial class EmbeddingUsage
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -40,28 +40,28 @@ namespace OpenAI.Models
         /// </summary>
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
-        /// <summary> Initializes a new instance of <see cref="EmbeddingTokenUsage"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="EmbeddingUsage"/>. </summary>
         /// <param name="promptTokens"> The number of tokens used by the prompt. </param>
         /// <param name="totalTokens"> The total number of tokens used by the request. </param>
-        internal EmbeddingTokenUsage(long promptTokens, long totalTokens)
+        internal EmbeddingUsage(long promptTokens, long totalTokens)
         {
             PromptTokens = promptTokens;
             TotalTokens = totalTokens;
         }
 
-        /// <summary> Initializes a new instance of <see cref="EmbeddingTokenUsage"/>. </summary>
+        /// <summary> Initializes a new instance of <see cref="EmbeddingUsage"/>. </summary>
         /// <param name="promptTokens"> The number of tokens used by the prompt. </param>
         /// <param name="totalTokens"> The total number of tokens used by the request. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal EmbeddingTokenUsage(long promptTokens, long totalTokens, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal EmbeddingUsage(long promptTokens, long totalTokens, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             PromptTokens = promptTokens;
             TotalTokens = totalTokens;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
-        /// <summary> Initializes a new instance of <see cref="EmbeddingTokenUsage"/> for deserialization. </summary>
-        internal EmbeddingTokenUsage()
+        /// <summary> Initializes a new instance of <see cref="EmbeddingUsage"/> for deserialization. </summary>
+        internal EmbeddingUsage()
         {
         }
 

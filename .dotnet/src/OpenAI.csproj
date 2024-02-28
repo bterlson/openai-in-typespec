@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.ClientModel" Version="1.1.0-alpha.20240215.1" />
+    <PackageReference Include="System.ClientModel" Version="1.1.0-alpha.20240227.1" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
   </ItemGroup>
 </Project>

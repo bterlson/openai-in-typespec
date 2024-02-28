@@ -1,12 +1,18 @@
 function Update-ClientModelPackage {
-    $root = Split-Path $PSScriptRoot -Parent
-    $directory = Join-Path -Path $root -ChildPath "src"
-
     $current = Get-Location
+    $root = Split-Path $PSScriptRoot -Parent
+
+    $directory = Join-Path -Path $root -ChildPath "src"
     Set-Location -Path $directory
 
     dotnet remove "OpenAI.csproj" package "System.ClientModel"
-    dotnet add "OpenAI.csproj" package "System.ClientModel" --version "1.1.0-alpha.20240215.1" --source "https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json"
+    dotnet add "OpenAI.csproj" package "System.ClientModel" --version "1.1.0-alpha.20240227.1" --source "https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json"
+
+    $directory = Join-Path -Path $root -ChildPath "tests"
+    Set-Location -Path $directory
+
+    dotnet remove "OpenAI.Tests.csproj" package "System.ClientModel"
+    dotnet add "OpenAI.Tests.csproj" package "System.ClientModel" --version "1.1.0-alpha.20240227.1" --source "https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-net/nuget/v3/index.json"
 
     Set-Location -Path $current
 }

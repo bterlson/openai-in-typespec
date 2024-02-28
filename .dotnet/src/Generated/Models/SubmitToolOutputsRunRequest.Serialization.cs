@@ -20,7 +20,12 @@ namespace OpenAI.Models
 
             writer.WriteStartObject();
             writer.WritePropertyName("tool_outputs"u8);
-            writer.WriteObjectValue(ToolOutputs);
+            writer.WriteStartArray();
+            foreach (var item in ToolOutputs)
+            {
+                writer.WriteObjectValue(item);
+            }
+            writer.WriteEndArray();
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
                 foreach (var item in _serializedAdditionalRawData)
@@ -59,14 +64,19 @@ namespace OpenAI.Models
             {
                 return null;
             }
-            SubmitToolOutputsRunRequestToolOutputs toolOutputs = default;
+            IList<SubmitToolOutputsRunRequestToolOutput> toolOutputs = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("tool_outputs"u8))
                 {
-                    toolOutputs = SubmitToolOutputsRunRequestToolOutputs.DeserializeSubmitToolOutputsRunRequestToolOutputs(property.Value);
+                    List<SubmitToolOutputsRunRequestToolOutput> array = new List<SubmitToolOutputsRunRequestToolOutput>();
+                    foreach (var item in property.Value.EnumerateArray())
+                    {
+                        array.Add(SubmitToolOutputsRunRequestToolOutput.DeserializeSubmitToolOutputsRunRequestToolOutput(item));
+                    }
+                    toolOutputs = array;
                     continue;
                 }
                 if (options.Format != "W")

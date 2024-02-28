@@ -3,6 +3,7 @@
 using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenAI.Models
 {
@@ -44,17 +45,17 @@ namespace OpenAI.Models
         /// <summary> Initializes a new instance of <see cref="SubmitToolOutputsRunRequest"/>. </summary>
         /// <param name="toolOutputs"> A list of tools for which the outputs are being submitted. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="toolOutputs"/> is null. </exception>
-        public SubmitToolOutputsRunRequest(SubmitToolOutputsRunRequestToolOutputs toolOutputs)
+        public SubmitToolOutputsRunRequest(IEnumerable<SubmitToolOutputsRunRequestToolOutput> toolOutputs)
         {
             if (toolOutputs is null) throw new ArgumentNullException(nameof(toolOutputs));
 
-            ToolOutputs = toolOutputs;
+            ToolOutputs = toolOutputs.ToList();
         }
 
         /// <summary> Initializes a new instance of <see cref="SubmitToolOutputsRunRequest"/>. </summary>
         /// <param name="toolOutputs"> A list of tools for which the outputs are being submitted. </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal SubmitToolOutputsRunRequest(SubmitToolOutputsRunRequestToolOutputs toolOutputs, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal SubmitToolOutputsRunRequest(IList<SubmitToolOutputsRunRequestToolOutput> toolOutputs, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             ToolOutputs = toolOutputs;
             _serializedAdditionalRawData = serializedAdditionalRawData;
@@ -66,7 +67,7 @@ namespace OpenAI.Models
         }
 
         /// <summary> A list of tools for which the outputs are being submitted. </summary>
-        public SubmitToolOutputsRunRequestToolOutputs ToolOutputs { get; }
+        public IList<SubmitToolOutputsRunRequestToolOutput> ToolOutputs { get; }
     }
 }
 

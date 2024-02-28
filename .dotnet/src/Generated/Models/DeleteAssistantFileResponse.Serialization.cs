@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class DeleteAssistantFileResponse : IJsonModel<DeleteAssistantFileResponse>
+    internal partial class DeleteAssistantFileResponse : IJsonModel<DeleteAssistantFileResponse>
     {
         void IJsonModel<DeleteAssistantFileResponse>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -134,4 +134,3 @@ namespace OpenAI.Models
         }
     }
 }
-

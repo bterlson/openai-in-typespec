@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class EmbeddingUsage : IJsonModel<EmbeddingUsage>
+    internal partial class EmbeddingUsage : IJsonModel<EmbeddingUsage>
     {
         void IJsonModel<EmbeddingUsage>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -126,4 +126,3 @@ namespace OpenAI.Models
         }
     }
 }
-

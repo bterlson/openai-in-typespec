@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> A list of [Files](/docs/api-reference/files) attached to an `assistant`. </summary>
-    public partial class AssistantFileObject
+    internal partial class AssistantFileObject
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -87,4 +87,3 @@ namespace OpenAI.Models
         public string AssistantId { get; }
     }
 }
-

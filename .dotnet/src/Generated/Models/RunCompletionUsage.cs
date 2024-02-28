@@ -3,13 +3,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary>
     /// Usage statistics related to the run. This value will be `null` if the run is not in a terminal
     /// state (i.e. `in_progress`, `queued`, etc.).
     /// </summary>
-    public partial class RunCompletionUsage
+    internal partial class RunCompletionUsage
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -80,4 +80,3 @@ namespace OpenAI.Models
         public long TotalTokens { get; }
     }
 }
-

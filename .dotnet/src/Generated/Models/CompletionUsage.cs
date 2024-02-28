@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Usage statistics for the completion request. </summary>
-    public partial class CompletionUsage
+    internal partial class CompletionUsage
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -77,4 +77,3 @@ namespace OpenAI.Models
         public long TotalTokens { get; }
     }
 }
-

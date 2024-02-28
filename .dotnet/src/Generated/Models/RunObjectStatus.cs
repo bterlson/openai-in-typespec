@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for status in RunObject. </summary>
-    public readonly partial struct RunObjectStatus : IEquatable<RunObjectStatus>
+    internal readonly partial struct RunObjectStatus : IEquatable<RunObjectStatus>
     {
         private readonly string _value;
 
@@ -62,4 +62,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

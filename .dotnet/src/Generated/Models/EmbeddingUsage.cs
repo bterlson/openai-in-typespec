@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The EmbeddingUsage. </summary>
-    public partial class EmbeddingUsage
+    internal partial class EmbeddingUsage
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -71,4 +71,3 @@ namespace OpenAI.Models
         public long TotalTokens { get; }
     }
 }
-

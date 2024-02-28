@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CreateFineTuningJobRequest : IJsonModel<CreateFineTuningJobRequest>
+    internal partial class CreateFineTuningJobRequest : IJsonModel<CreateFineTuningJobRequest>
     {
         void IJsonModel<CreateFineTuningJobRequest>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -187,4 +187,3 @@ namespace OpenAI.Models
         }
     }
 }
-

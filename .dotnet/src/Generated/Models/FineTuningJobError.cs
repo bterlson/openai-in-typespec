@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The FineTuningJobError. </summary>
-    public partial class FineTuningJobError
+    internal partial class FineTuningJobError
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -72,4 +72,3 @@ namespace OpenAI.Models
         public string Param { get; }
     }
 }
-

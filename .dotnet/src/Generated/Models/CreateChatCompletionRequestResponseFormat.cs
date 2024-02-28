@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateChatCompletionRequestResponseFormat. </summary>
-    public partial class CreateChatCompletionRequestResponseFormat
+    internal partial class CreateChatCompletionRequestResponseFormat
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -58,4 +58,3 @@ namespace OpenAI.Models
         public CreateChatCompletionRequestResponseFormatType? Type { get; set; }
     }
 }
-

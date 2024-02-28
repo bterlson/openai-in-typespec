@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for type in CreateChatCompletionRequestResponseFormat. </summary>
-    public readonly partial struct CreateChatCompletionRequestResponseFormatType : IEquatable<CreateChatCompletionRequestResponseFormatType>
+    internal readonly partial struct CreateChatCompletionRequestResponseFormatType : IEquatable<CreateChatCompletionRequestResponseFormatType>
     {
         private readonly string _value;
 
@@ -44,4 +44,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

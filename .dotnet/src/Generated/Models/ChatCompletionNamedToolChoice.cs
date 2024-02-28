@@ -4,7 +4,7 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Specifies a tool the model should use. Use to force the model to call a specific function. </summary>
     internal partial class ChatCompletionNamedToolChoice
@@ -74,4 +74,3 @@ namespace OpenAI.Models
         public ChatCompletionNamedToolChoiceFunction Function { get; }
     }
 }
-

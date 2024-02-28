@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateThreadRequest. </summary>
-    public partial class CreateThreadRequest
+    internal partial class CreateThreadRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -73,4 +73,3 @@ namespace OpenAI.Models
         public IDictionary<string, string> Metadata { get; set; }
     }
 }
-

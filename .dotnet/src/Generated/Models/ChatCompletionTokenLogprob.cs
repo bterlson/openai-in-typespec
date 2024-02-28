@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ChatCompletionTokenLogprob. </summary>
-    public partial class ChatCompletionTokenLogprob
+    internal partial class ChatCompletionTokenLogprob
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -113,4 +113,3 @@ namespace OpenAI.Models
         public IReadOnlyList<ChatCompletionTokenLogprobTopLogprob> TopLogprobs { get; }
     }
 }
-

@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CreateImageVariationRequest : IJsonModel<CreateImageVariationRequest>
+    internal partial class CreateImageVariationRequest : IJsonModel<CreateImageVariationRequest>
     {
         void IJsonModel<CreateImageVariationRequest>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -197,4 +197,3 @@ namespace OpenAI.Models
         }
     }
 }
-

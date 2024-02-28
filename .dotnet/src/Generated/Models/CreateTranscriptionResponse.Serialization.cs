@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CreateTranscriptionResponse : IJsonModel<CreateTranscriptionResponse>
+    internal partial class CreateTranscriptionResponse : IJsonModel<CreateTranscriptionResponse>
     {
         void IJsonModel<CreateTranscriptionResponse>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -184,4 +184,3 @@ namespace OpenAI.Models
         }
     }
 }
-

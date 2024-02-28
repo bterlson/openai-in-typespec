@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateFineTuningJobRequestHyperparameters. </summary>
-    public partial class CreateFineTuningJobRequestHyperparameters
+    internal partial class CreateFineTuningJobRequestHyperparameters
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -102,4 +102,3 @@ namespace OpenAI.Models
         public BinaryData NEpochs { get; set; }
     }
 }
-

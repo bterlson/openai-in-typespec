@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateCompletionResponse_object. </summary>
-    public readonly partial struct CreateCompletionResponseObject : IEquatable<CreateCompletionResponseObject>
+    internal readonly partial struct CreateCompletionResponseObject : IEquatable<CreateCompletionResponseObject>
     {
         private readonly string _value;
 
@@ -41,4 +41,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

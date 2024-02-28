@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for code in RunObjectLastError. </summary>
-    public readonly partial struct RunObjectLastErrorCode : IEquatable<RunObjectLastErrorCode>
+    internal readonly partial struct RunObjectLastErrorCode : IEquatable<RunObjectLastErrorCode>
     {
         private readonly string _value;
 
@@ -44,4 +44,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

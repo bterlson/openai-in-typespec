@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The DeleteAssistantResponse. </summary>
-    public partial class DeleteAssistantResponse
+    internal partial class DeleteAssistantResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -79,4 +79,3 @@ namespace OpenAI.Models
         public DeleteAssistantResponseObject Object { get; } = DeleteAssistantResponseObject.AssistantDeleted;
     }
 }
-

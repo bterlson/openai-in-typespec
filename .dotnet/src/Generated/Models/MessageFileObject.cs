@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> A list of files attached to a `message`. </summary>
-    public partial class MessageFileObject
+    internal partial class MessageFileObject
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -87,4 +87,3 @@ namespace OpenAI.Models
         public string MessageId { get; }
     }
 }
-

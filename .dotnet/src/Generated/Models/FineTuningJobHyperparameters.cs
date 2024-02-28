@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The FineTuningJobHyperparameters. </summary>
-    public partial class FineTuningJobHyperparameters
+    internal partial class FineTuningJobHyperparameters
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -108,4 +108,3 @@ namespace OpenAI.Models
         public BinaryData NEpochs { get; }
     }
 }
-

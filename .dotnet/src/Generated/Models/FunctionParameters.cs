@@ -4,7 +4,7 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary>
     /// The parameters the functions accepts, described as a JSON Schema object. See the
@@ -13,7 +13,7 @@ namespace OpenAI.Models
     /// about the format.\n\nTo describe a function that accepts no parameters, provide the value
     /// `{\"type\": \"object\", \"properties\": {}}`.
     /// </summary>
-    public partial class FunctionParameters
+    internal partial class FunctionParameters
     {
         /// <summary> Initializes a new instance of <see cref="FunctionParameters"/>. </summary>
         public FunctionParameters()
@@ -61,4 +61,3 @@ namespace OpenAI.Models
         public IDictionary<string, BinaryData> AdditionalProperties { get; }
     }
 }
-

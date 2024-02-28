@@ -6,13 +6,13 @@ using System.ClientModel.Primitives;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenAI.Models;
+using OpenAI.Internal.Models;
 
-namespace OpenAI
+namespace OpenAI.Internal
 {
     // Data plane generated sub-client.
     /// <summary> The Chat sub-client. </summary>
-    public partial class Chat
+    internal partial class Chat
     {
         private const string AuthorizationHeader = "Authorization";
         private readonly ApiKeyCredential _credential;
@@ -159,4 +159,3 @@ namespace OpenAI
         private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });
     }
 }
-

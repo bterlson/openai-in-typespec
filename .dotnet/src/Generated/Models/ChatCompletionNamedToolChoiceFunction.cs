@@ -4,7 +4,7 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ChatCompletionNamedToolChoiceFunction. </summary>
     internal partial class ChatCompletionNamedToolChoiceFunction
@@ -69,4 +69,3 @@ namespace OpenAI.Models
         public string Name { get; }
     }
 }
-

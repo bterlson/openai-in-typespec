@@ -4,13 +4,13 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary>
     /// Deletes the association between the assistant and the file, but does not delete the
     /// [File](/docs/api-reference/files) object itself.
     /// </summary>
-    public partial class DeleteAssistantFileResponse
+    internal partial class DeleteAssistantFileResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -82,4 +82,3 @@ namespace OpenAI.Models
         public DeleteAssistantFileResponseObject Object { get; } = DeleteAssistantFileResponseObject.AssistantFileDeleted;
     }
 }
-

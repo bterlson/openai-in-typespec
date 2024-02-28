@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateChatCompletionRequest. </summary>
-    public partial class CreateChatCompletionRequest
+    internal partial class CreateChatCompletionRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -508,4 +508,3 @@ namespace OpenAI.Models
         public IList<ChatCompletionFunctions> Functions { get; }
     }
 }
-

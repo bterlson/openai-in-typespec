@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ChatCompletionMessageToolCall_type. </summary>
-    public readonly partial struct ChatCompletionMessageToolCallType : IEquatable<ChatCompletionMessageToolCallType>
+    internal readonly partial struct ChatCompletionMessageToolCallType : IEquatable<ChatCompletionMessageToolCallType>
     {
         private readonly string _value;
 
@@ -41,4 +41,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

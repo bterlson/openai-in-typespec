@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateMessageRequest. </summary>
-    public partial class CreateMessageRequest
+    internal partial class CreateMessageRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -100,4 +100,3 @@ namespace OpenAI.Models
         public IDictionary<string, string> Metadata { get; set; }
     }
 }
-

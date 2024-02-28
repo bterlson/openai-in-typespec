@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ListFineTuningJobEventsResponse. </summary>
-    public partial class ListFineTuningJobEventsResponse
+    internal partial class ListFineTuningJobEventsResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -77,4 +77,3 @@ namespace OpenAI.Models
         public IReadOnlyList<FineTuningJobEvent> Data { get; }
     }
 }
-

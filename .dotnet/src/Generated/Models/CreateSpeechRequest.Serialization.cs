@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CreateSpeechRequest : IJsonModel<CreateSpeechRequest>
+    internal partial class CreateSpeechRequest : IJsonModel<CreateSpeechRequest>
     {
         void IJsonModel<CreateSpeechRequest>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -164,4 +164,3 @@ namespace OpenAI.Models
         }
     }
 }
-

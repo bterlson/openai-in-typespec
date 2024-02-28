@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The MessageObject_object. </summary>
-    public readonly partial struct MessageObjectObject : IEquatable<MessageObjectObject>
+    internal readonly partial struct MessageObjectObject : IEquatable<MessageObjectObject>
     {
         private readonly string _value;
 
@@ -41,4 +41,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

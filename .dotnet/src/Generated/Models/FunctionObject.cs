@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The FunctionObject. </summary>
-    public partial class FunctionObject
+    internal partial class FunctionObject
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -92,4 +92,3 @@ namespace OpenAI.Models
         public FunctionParameters Parameters { get; set; }
     }
 }
-

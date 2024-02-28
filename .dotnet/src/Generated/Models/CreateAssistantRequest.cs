@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateAssistantRequest. </summary>
-    public partial class CreateAssistantRequest
+    internal partial class CreateAssistantRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -157,4 +157,3 @@ namespace OpenAI.Models
         public IDictionary<string, string> Metadata { get; set; }
     }
 }
-

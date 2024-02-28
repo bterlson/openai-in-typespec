@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateModerationResponseResultCategories. </summary>
-    public partial class CreateModerationResponseResultCategories
+    internal partial class CreateModerationResponseResultCategories
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -185,4 +185,3 @@ namespace OpenAI.Models
         public bool ViolenceGraphic { get; }
     }
 }
-

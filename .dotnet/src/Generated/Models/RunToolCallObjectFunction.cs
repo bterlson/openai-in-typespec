@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The RunToolCallObjectFunction. </summary>
-    public partial class RunToolCallObjectFunction
+    internal partial class RunToolCallObjectFunction
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -76,4 +76,3 @@ namespace OpenAI.Models
         public string Arguments { get; }
     }
 }
-

@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for encoding_format in CreateEmbeddingRequest. </summary>
-    public readonly partial struct CreateEmbeddingRequestEncodingFormat : IEquatable<CreateEmbeddingRequestEncodingFormat>
+    internal readonly partial struct CreateEmbeddingRequestEncodingFormat : IEquatable<CreateEmbeddingRequestEncodingFormat>
     {
         private readonly string _value;
 
@@ -44,4 +44,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

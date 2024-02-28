@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The RunObjectLastError. </summary>
-    public partial class RunObjectLastError
+    internal partial class RunObjectLastError
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -75,4 +75,3 @@ namespace OpenAI.Models
         public string Message { get; }
     }
 }
-

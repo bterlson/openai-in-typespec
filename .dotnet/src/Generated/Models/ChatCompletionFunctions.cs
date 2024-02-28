@@ -4,11 +4,11 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ChatCompletionFunctions. </summary>
     [Obsolete("deprecated")]
-    public partial class ChatCompletionFunctions
+    internal partial class ChatCompletionFunctions
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -93,4 +93,3 @@ namespace OpenAI.Models
         public FunctionParameters Parameters { get; set; }
     }
 }
-

@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Represents an embedding vector returned by embedding endpoint. </summary>
-    public partial class Embedding
+    internal partial class Embedding
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -126,4 +126,3 @@ namespace OpenAI.Models
         public EmbeddingObject Object { get; } = EmbeddingObject.Embedding;
     }
 }
-

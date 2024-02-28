@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Represents a chat completion response returned by model, based on the provided input. </summary>
-    public partial class CreateChatCompletionResponse
+    internal partial class CreateChatCompletionResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -113,4 +113,3 @@ namespace OpenAI.Models
         public CompletionUsage Usage { get; }
     }
 }
-

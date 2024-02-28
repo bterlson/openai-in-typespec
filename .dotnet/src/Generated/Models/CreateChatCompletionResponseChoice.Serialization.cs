@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CreateChatCompletionResponseChoice : IJsonModel<CreateChatCompletionResponseChoice>
+    internal partial class CreateChatCompletionResponseChoice : IJsonModel<CreateChatCompletionResponseChoice>
     {
         void IJsonModel<CreateChatCompletionResponseChoice>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -154,4 +154,3 @@ namespace OpenAI.Models
         }
     }
 }
-

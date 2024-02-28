@@ -4,7 +4,7 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Details of the message creation by the run step. </summary>
     internal partial class RunStepDetailsMessageCreationObject
@@ -74,4 +74,3 @@ namespace OpenAI.Models
         public RunStepDetailsMessageCreationObjectMessageCreation MessageCreation { get; }
     }
 }
-

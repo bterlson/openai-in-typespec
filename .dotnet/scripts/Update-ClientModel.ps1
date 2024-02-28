@@ -39,7 +39,7 @@ function Update-OpenAIClient {
     $content = $content -creplace "_pipeline = MessagePipeline\.Create\(options, new IPipelinePolicy<PipelineMessage>\[\] \{ new KeyCredentialPolicy\(_keyCredential, AuthorizationHeader, AuthorizationApiKeyPrefix\) \}, Array\.Empty<IPipelinePolicy<PipelineMessage>>\(\)\);", "var authenticationPolicy = ApiKeyAuthenticationPolicy.CreateBearerAuthorizationPolicy(_credential);`r`n            _pipeline = ClientPipeline.Create(options,`r`n                perCallPolicies: ReadOnlySpan<PipelinePolicy>.Empty,`r`n                perTryPolicies: new PipelinePolicy[] { authenticationPolicy },`r`n                beforeTransportPolicies: ReadOnlySpan<PipelinePolicy>.Empty);"
     $content = $content -creplace "\(ClientDiagnostics, ", "("
 
-    $content | Set-Content -Path $file.FullName
+    $content | Set-Content -Path $file.FullName -NoNewline
 }
 
 function Update-OpenAIClientOptions {
@@ -54,7 +54,7 @@ function Update-OpenAIClientOptions {
     $content = $content -creplace "using System\.ClientModel;", "using System.ClientModel.Primitives;"
     $content = $content -creplace ": RequestOptions", ": ClientPipelineOptions"
 
-    $content | Set-Content -Path $file.FullName
+    $content | Set-Content -Path $file.FullName -NoNewline
 }
 
 function Update-Subclients {
@@ -155,7 +155,7 @@ function Update-Subclients {
         $content = $content -creplace "private static ResponseErrorClassifier _responseErrorClassifier200;", "private static PipelineMessageClassifier _responseErrorClassifier200;"
         $content = $content -creplace "private static ResponseErrorClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 \?\?= new StatusResponseClassifier\(stackalloc ushort\[\] \{ 200 \}\);", "private static PipelineMessageClassifier ResponseErrorClassifier200 => _responseErrorClassifier200 ??= PipelineMessageClassifier.Create(stackalloc ushort[] { 200 });"
 
-        $content | Set-Content -Path $file.FullName
+        $content | Set-Content -Path $file.FullName -NoNewline
     }
 }
 
@@ -176,7 +176,7 @@ function Update-Models {
         $content = $content -creplace "\s+void IUtf8JsonWriteable\.Write\(Utf8JsonWriter writer\) => \(\(IJsonModel<(\w+)>\)this\)\.Write\(writer, new ModelReaderWriterOptions\(`"W`"\)\);`r`n", ""
         $content = $content -creplace "(?s)\s+\/\/\/ <summary> Convert into a Utf8JsonRequestBody\. </summary>.*?return content;.*?\}", ""
 
-        $content | Set-Content -Path $file.FullName
+        $content | Set-Content -Path $file.FullName -NoNewline
     }
 }
 
@@ -192,7 +192,7 @@ function Update-Tests {
 
         $content = $content -creplace " KeyCredential", " ApiKeyCredential"
 
-        $content | Set-Content -Path $file.FullName
+        $content | Set-Content -Path $file.FullName -NoNewline
     }
 }
 

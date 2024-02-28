@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateModerationResponseResultCategoryScores. </summary>
-    public partial class CreateModerationResponseResultCategoryScores
+    internal partial class CreateModerationResponseResultCategoryScores
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -125,4 +125,3 @@ namespace OpenAI.Models
         public double ViolenceGraphic { get; }
     }
 }
-

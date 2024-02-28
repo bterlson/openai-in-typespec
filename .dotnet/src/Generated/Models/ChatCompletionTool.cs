@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ChatCompletionTool. </summary>
-    public partial class ChatCompletionTool
+    internal partial class ChatCompletionTool
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -74,4 +74,3 @@ namespace OpenAI.Models
         public FunctionObject Function { get; }
     }
 }
-

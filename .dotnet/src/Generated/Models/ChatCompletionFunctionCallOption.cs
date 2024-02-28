@@ -4,7 +4,7 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary>
     /// Specifying a particular function via `{"name": "my_function"}` forces the model to call that
@@ -72,4 +72,3 @@ namespace OpenAI.Models
         public string Name { get; }
     }
 }
-

@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateTranslationResponse. </summary>
-    public partial class CreateTranslationResponse
+    internal partial class CreateTranslationResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -92,4 +92,3 @@ namespace OpenAI.Models
         public IReadOnlyList<AudioSegment> Segments { get; }
     }
 }
-

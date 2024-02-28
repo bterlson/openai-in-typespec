@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CreateCompletionRequest : IJsonModel<CreateCompletionRequest>
+    internal partial class CreateCompletionRequest : IJsonModel<CreateCompletionRequest>
     {
         void IJsonModel<CreateCompletionRequest>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -495,4 +495,3 @@ namespace OpenAI.Models
         }
     }
 }
-

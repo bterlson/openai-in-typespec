@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Represents an execution run on a [thread](/docs/api-reference/threads). </summary>
-    public partial class RunObject
+    internal partial class RunObject
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -260,4 +260,3 @@ namespace OpenAI.Models
         public RunCompletionUsage Usage { get; }
     }
 }
-

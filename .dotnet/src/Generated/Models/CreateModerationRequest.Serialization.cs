@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CreateModerationRequest : IJsonModel<CreateModerationRequest>
+    internal partial class CreateModerationRequest : IJsonModel<CreateModerationRequest>
     {
         void IJsonModel<CreateModerationRequest>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -140,4 +140,3 @@ namespace OpenAI.Models
         }
     }
 }
-

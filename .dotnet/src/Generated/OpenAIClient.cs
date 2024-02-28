@@ -5,11 +5,11 @@ using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Threading;
 
-namespace OpenAI
+namespace OpenAI.Internal
 {
     // Data plane generated client.
     /// <summary> The OpenAI service client. </summary>
-    public partial class OpenAIClient
+    internal partial class OpenAIClient
     {
         private const string AuthorizationHeader = "Authorization";
         private readonly ApiKeyCredential _credential;
@@ -144,4 +144,3 @@ namespace OpenAI
         }
     }
 }
-

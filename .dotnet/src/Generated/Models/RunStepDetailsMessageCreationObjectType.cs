@@ -3,7 +3,7 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The RunStepDetailsMessageCreationObject_type. </summary>
     internal readonly partial struct RunStepDetailsMessageCreationObjectType : IEquatable<RunStepDetailsMessageCreationObjectType>
@@ -41,4 +41,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

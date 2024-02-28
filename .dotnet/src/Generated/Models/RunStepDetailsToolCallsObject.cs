@@ -5,7 +5,7 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Details of the tool call. </summary>
     internal partial class RunStepDetailsToolCallsObject
@@ -111,4 +111,3 @@ namespace OpenAI.Models
         public IReadOnlyList<BinaryData> ToolCalls { get; }
     }
 }
-

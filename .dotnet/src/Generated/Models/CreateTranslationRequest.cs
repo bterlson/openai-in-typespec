@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateTranslationRequest. </summary>
-    public partial class CreateTranslationRequest
+    internal partial class CreateTranslationRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -131,4 +131,3 @@ namespace OpenAI.Models
         public double? Temperature { get; set; }
     }
 }
-

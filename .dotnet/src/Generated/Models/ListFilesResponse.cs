@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ListFilesResponse. </summary>
-    public partial class ListFilesResponse
+    internal partial class ListFilesResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -74,4 +74,3 @@ namespace OpenAI.Models
         public ListFilesResponseObject Object { get; } = ListFilesResponseObject.List;
     }
 }
-

@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateEmbeddingRequest. </summary>
-    public partial class CreateEmbeddingRequest
+    internal partial class CreateEmbeddingRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -182,4 +182,3 @@ namespace OpenAI.Models
         public string User { get; set; }
     }
 }
-

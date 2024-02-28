@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Represents an `assistant` that can call the model and use tools. </summary>
-    public partial class AssistantObject
+    internal partial class AssistantObject
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -198,4 +198,3 @@ namespace OpenAI.Models
         public IReadOnlyDictionary<string, string> Metadata { get; }
     }
 }
-

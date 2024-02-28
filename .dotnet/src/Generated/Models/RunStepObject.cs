@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Represents a step in execution of a run. </summary>
-    public partial class RunStepObject
+    internal partial class RunStepObject
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -232,4 +232,3 @@ namespace OpenAI.Models
         public RunCompletionUsage Usage { get; }
     }
 }
-

@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for finish_reason in CreateChatCompletionResponseChoice. </summary>
-    public readonly partial struct CreateChatCompletionResponseChoiceFinishReason : IEquatable<CreateChatCompletionResponseChoiceFinishReason>
+    internal readonly partial struct CreateChatCompletionResponseChoiceFinishReason : IEquatable<CreateChatCompletionResponseChoiceFinishReason>
     {
         private readonly string _value;
 
@@ -53,4 +53,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

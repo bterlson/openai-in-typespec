@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The DeleteFileResponse. </summary>
-    public partial class DeleteFileResponse
+    internal partial class DeleteFileResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -80,4 +80,3 @@ namespace OpenAI.Models
         public bool Deleted { get; }
     }
 }
-

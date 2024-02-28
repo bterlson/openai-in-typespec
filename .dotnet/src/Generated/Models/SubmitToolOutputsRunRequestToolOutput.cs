@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The SubmitToolOutputsRunRequestToolOutput. </summary>
-    public partial class SubmitToolOutputsRunRequestToolOutput
+    internal partial class SubmitToolOutputsRunRequestToolOutput
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -68,4 +68,3 @@ namespace OpenAI.Models
         public string Output { get; set; }
     }
 }
-

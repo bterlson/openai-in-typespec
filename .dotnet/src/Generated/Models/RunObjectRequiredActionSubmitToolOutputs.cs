@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The RunObjectRequiredActionSubmitToolOutputs. </summary>
-    public partial class RunObjectRequiredActionSubmitToolOutputs
+    internal partial class RunObjectRequiredActionSubmitToolOutputs
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -70,4 +70,3 @@ namespace OpenAI.Models
         public IReadOnlyList<RunToolCallObject> ToolCalls { get; }
     }
 }
-

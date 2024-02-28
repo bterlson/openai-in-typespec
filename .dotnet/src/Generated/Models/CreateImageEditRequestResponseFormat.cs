@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for response_format in CreateImageEditRequest. </summary>
-    public readonly partial struct CreateImageEditRequestResponseFormat : IEquatable<CreateImageEditRequestResponseFormat>
+    internal readonly partial struct CreateImageEditRequestResponseFormat : IEquatable<CreateImageEditRequestResponseFormat>
     {
         private readonly string _value;
 
@@ -44,4 +44,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

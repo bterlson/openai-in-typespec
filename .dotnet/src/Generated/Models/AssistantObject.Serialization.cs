@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class AssistantObject : IJsonModel<AssistantObject>
+    internal partial class AssistantObject : IJsonModel<AssistantObject>
     {
         void IJsonModel<AssistantObject>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -288,4 +288,3 @@ namespace OpenAI.Models
         }
     }
 }
-

@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateCompletionResponseChoiceLogprobs. </summary>
-    public partial class CreateCompletionResponseChoiceLogprobs
+    internal partial class CreateCompletionResponseChoiceLogprobs
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -91,4 +91,3 @@ namespace OpenAI.Models
         public IReadOnlyList<long> TextOffset { get; }
     }
 }
-

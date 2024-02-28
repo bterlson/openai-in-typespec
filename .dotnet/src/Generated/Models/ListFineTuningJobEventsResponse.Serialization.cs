@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class ListFineTuningJobEventsResponse : IJsonModel<ListFineTuningJobEventsResponse>
+    internal partial class ListFineTuningJobEventsResponse : IJsonModel<ListFineTuningJobEventsResponse>
     {
         void IJsonModel<ListFineTuningJobEventsResponse>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -136,4 +136,3 @@ namespace OpenAI.Models
         }
     }
 }
-

@@ -2,11 +2,10 @@
 
 using System.ClientModel.Primitives;
 
-namespace OpenAI
+namespace OpenAI.Internal
 {
     /// <summary> Client options for OpenAIClient. </summary>
-    public partial class OpenAIClientOptions : ClientPipelineOptions
+    internal partial class OpenAIClientOptions : ClientPipelineOptions
     {
     }
 }
-

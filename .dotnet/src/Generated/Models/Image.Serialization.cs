@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class Image : IJsonModel<Image>
+    internal partial class Image : IJsonModel<Image>
     {
         void IJsonModel<Image>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -151,4 +151,3 @@ namespace OpenAI.Models
         }
     }
 }
-

@@ -5,10 +5,10 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ImagesResponse. </summary>
-    public partial class ImagesResponse
+    internal partial class ImagesResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -76,4 +76,3 @@ namespace OpenAI.Models
         public IReadOnlyList<Image> Data { get; }
     }
 }
-

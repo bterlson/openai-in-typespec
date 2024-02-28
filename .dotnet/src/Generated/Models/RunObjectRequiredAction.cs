@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The RunObjectRequiredAction. </summary>
-    public partial class RunObjectRequiredAction
+    internal partial class RunObjectRequiredAction
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -74,4 +74,3 @@ namespace OpenAI.Models
         public RunObjectRequiredActionSubmitToolOutputs SubmitToolOutputs { get; }
     }
 }
-

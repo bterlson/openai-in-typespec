@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The DeleteThreadResponse. </summary>
-    public partial class DeleteThreadResponse
+    internal partial class DeleteThreadResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -79,4 +79,3 @@ namespace OpenAI.Models
         public DeleteThreadResponseObject Object { get; } = DeleteThreadResponseObject.ThreadDeleted;
     }
 }
-

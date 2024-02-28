@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for model in CreateTranscriptionRequest. </summary>
-    public readonly partial struct CreateTranscriptionRequestModel : IEquatable<CreateTranscriptionRequestModel>
+    internal readonly partial struct CreateTranscriptionRequestModel : IEquatable<CreateTranscriptionRequestModel>
     {
         private readonly string _value;
 
@@ -41,4 +41,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

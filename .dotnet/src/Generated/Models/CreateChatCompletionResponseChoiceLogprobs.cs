@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateChatCompletionResponseChoiceLogprobs. </summary>
-    public partial class CreateChatCompletionResponseChoiceLogprobs
+    internal partial class CreateChatCompletionResponseChoiceLogprobs
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -66,4 +66,3 @@ namespace OpenAI.Models
         public IReadOnlyList<ChatCompletionTokenLogprob> Content { get; }
     }
 }
-

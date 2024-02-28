@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class ChatCompletionTokenLogprobTopLogprob : IJsonModel<ChatCompletionTokenLogprobTopLogprob>
+    internal partial class ChatCompletionTokenLogprobTopLogprob : IJsonModel<ChatCompletionTokenLogprobTopLogprob>
     {
         void IJsonModel<ChatCompletionTokenLogprobTopLogprob>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -156,4 +156,3 @@ namespace OpenAI.Models
         }
     }
 }
-

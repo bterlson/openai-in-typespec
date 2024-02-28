@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Represents a thread that contains [messages](/docs/api-reference/messages). </summary>
-    public partial class ThreadObject
+    internal partial class ThreadObject
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -98,4 +98,3 @@ namespace OpenAI.Models
         public IReadOnlyDictionary<string, string> Metadata { get; }
     }
 }
-

@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for type in RunStepObject. </summary>
-    public readonly partial struct RunStepObjectType : IEquatable<RunStepObjectType>
+    internal readonly partial struct RunStepObjectType : IEquatable<RunStepObjectType>
     {
         private readonly string _value;
 
@@ -44,4 +44,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

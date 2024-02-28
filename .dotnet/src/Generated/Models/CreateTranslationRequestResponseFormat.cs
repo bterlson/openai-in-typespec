@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for response_format in CreateTranslationRequest. </summary>
-    public readonly partial struct CreateTranslationRequestResponseFormat : IEquatable<CreateTranslationRequestResponseFormat>
+    internal readonly partial struct CreateTranslationRequestResponseFormat : IEquatable<CreateTranslationRequestResponseFormat>
     {
         private readonly string _value;
 
@@ -53,4 +53,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

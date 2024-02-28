@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The ModifyMessageRequest. </summary>
-    public partial class ModifyMessageRequest
+    internal partial class ModifyMessageRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -68,4 +68,3 @@ namespace OpenAI.Models
         public IDictionary<string, string> Metadata { get; set; }
     }
 }
-

@@ -6,7 +6,7 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     internal partial class ChatCompletionNamedToolChoiceFunction : IJsonModel<ChatCompletionNamedToolChoiceFunction>
     {
@@ -118,4 +118,3 @@ namespace OpenAI.Models
         }
     }
 }
-

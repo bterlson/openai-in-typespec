@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class CompletionUsage : IJsonModel<CompletionUsage>
+    internal partial class CompletionUsage : IJsonModel<CompletionUsage>
     {
         void IJsonModel<CompletionUsage>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -134,4 +134,3 @@ namespace OpenAI.Models
         }
     }
 }
-

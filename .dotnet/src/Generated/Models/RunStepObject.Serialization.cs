@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class RunStepObject : IJsonModel<RunStepObject>
+    internal partial class RunStepObject : IJsonModel<RunStepObject>
     {
         void IJsonModel<RunStepObject>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -340,4 +340,3 @@ namespace OpenAI.Models
         }
     }
 }
-

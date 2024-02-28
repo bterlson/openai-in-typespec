@@ -6,9 +6,9 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
-    public partial class ThreadObject : IJsonModel<ThreadObject>
+    internal partial class ThreadObject : IJsonModel<ThreadObject>
     {
         void IJsonModel<ThreadObject>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
         {
@@ -165,4 +165,3 @@ namespace OpenAI.Models
         }
     }
 }
-

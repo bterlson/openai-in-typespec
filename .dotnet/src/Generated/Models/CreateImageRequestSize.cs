@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for size in CreateImageRequest. </summary>
-    public readonly partial struct CreateImageRequestSize : IEquatable<CreateImageRequestSize>
+    internal readonly partial struct CreateImageRequestSize : IEquatable<CreateImageRequestSize>
     {
         private readonly string _value;
 
@@ -53,4 +53,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

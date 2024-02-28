@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Model factory for models. </summary>
-    public static partial class OpenAIModelFactory
+    internal static partial class OpenAIModelFactory
     {
         /// <summary> Initializes a new instance of <see cref="Models.CreateSpeechRequest"/>. </summary>
         /// <param name="model"> One of the available [TTS models](/docs/models/tts): `tts-1` or `tts-1-hd`. </param>
@@ -1577,4 +1577,3 @@ namespace OpenAI.Models
         }
     }
 }
-

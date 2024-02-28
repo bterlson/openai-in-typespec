@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateFileRequest. </summary>
-    public partial class CreateFileRequest
+    internal partial class CreateFileRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -105,4 +105,3 @@ namespace OpenAI.Models
         public CreateFileRequestPurpose Purpose { get; }
     }
 }
-

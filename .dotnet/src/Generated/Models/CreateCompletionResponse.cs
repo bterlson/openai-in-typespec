@@ -5,13 +5,13 @@ using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary>
     /// Represents a completion response from the API. Note: both the streamed and non-streamed response
     /// objects share the same shape (unlike the chat endpoint).
     /// </summary>
-    public partial class CreateCompletionResponse
+    internal partial class CreateCompletionResponse
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -116,4 +116,3 @@ namespace OpenAI.Models
         public CompletionUsage Usage { get; }
     }
 }
-

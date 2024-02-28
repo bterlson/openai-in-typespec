@@ -4,10 +4,10 @@ using System;
 using OpenAI.ClientShared.Internal;
 using System.Collections.Generic;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> The CreateCompletionRequest. </summary>
-    public partial class CreateCompletionRequest
+    internal partial class CreateCompletionRequest
     {
         /// <summary>
         /// Keeps track of any properties unknown to the library.
@@ -397,4 +397,3 @@ namespace OpenAI.Models
         public string User { get; set; }
     }
 }
-

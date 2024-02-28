@@ -3,10 +3,10 @@
 using System;
 using System.ComponentModel;
 
-namespace OpenAI.Models
+namespace OpenAI.Internal.Models
 {
     /// <summary> Enum for status in FineTuningJob. </summary>
-    public readonly partial struct FineTuningJobStatus : IEquatable<FineTuningJobStatus>
+    internal readonly partial struct FineTuningJobStatus : IEquatable<FineTuningJobStatus>
     {
         private readonly string _value;
 
@@ -56,4 +56,3 @@ namespace OpenAI.Models
         public override string ToString() => _value;
     }
 }
-

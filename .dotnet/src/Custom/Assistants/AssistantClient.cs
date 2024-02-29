@@ -1,15 +1,9 @@
+using OpenAI.ClientShared.Internal;
 using System;
-using System.ClientModel;
-using System.ClientModel.Internal;
-
 using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using OpenAI.Internal;
-using System.Text.Json;
-using OpenAI.ClientShared.Internal;
 
 namespace OpenAI.Assistants;
 
@@ -530,13 +524,13 @@ public partial class AssistantClient
         return ClientResult.FromValue(new ThreadRun(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual ClientResult<ThreadRun> GetRun(string threadId, string runId)
+    public virtual ClientResult<ThreadRun> GetRun(string threadId, string runId)
     {
         ClientResult<Internal.Models.RunObject> internalResult = RunShim.GetRun(threadId, runId);
         return ClientResult.FromValue(new ThreadRun(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual async Task<ClientResult<ThreadRun>> GetRunAsync(string threadId, string runId)
+    public virtual async Task<ClientResult<ThreadRun>> GetRunAsync(string threadId, string runId)
     {
         ClientResult<Internal.Models.RunObject> internalResult
             = await RunShim.GetRunAsync(threadId, runId).ConfigureAwait(false);
@@ -575,14 +569,14 @@ public partial class AssistantClient
         return GetListQueryPageAsync<ThreadRun, Internal.Models.ListRunsResponse>(internalFunc);
     }
 
-     public virtual ClientResult<ThreadRun> ModifyRun(string threadId, string runId, RunModificationOptions options)
+    public virtual ClientResult<ThreadRun> ModifyRun(string threadId, string runId, RunModificationOptions options)
     {
         Internal.Models.ModifyRunRequest request = new(options.Metadata, serializedAdditionalRawData: null);
         ClientResult<Internal.Models.RunObject> internalResult = RunShim.ModifyRun(threadId, runId, request);
         return ClientResult.FromValue(new ThreadRun(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual async Task<ClientResult<ThreadRun>> ModifyRunAsync(string threadId, string runId, RunModificationOptions options)
+    public virtual async Task<ClientResult<ThreadRun>> ModifyRunAsync(string threadId, string runId, RunModificationOptions options)
     {
         Internal.Models.ModifyRunRequest request = new(options.Metadata, serializedAdditionalRawData: null);
         ClientResult<Internal.Models.RunObject> internalResult
@@ -590,45 +584,45 @@ public partial class AssistantClient
         return ClientResult.FromValue(new ThreadRun(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual ClientResult<bool> CancelRun(string threadId, string runId)
+    public virtual ClientResult<bool> CancelRun(string threadId, string runId)
     {
         ClientResult<Internal.Models.RunObject> internalResult = RunShim.CancelRun(threadId, runId);
         return ClientResult.FromValue(true, internalResult.GetRawResponse());
     }
 
-     public virtual async Task<ClientResult<bool>> CancelRunAsync(string threadId, string runId)
+    public virtual async Task<ClientResult<bool>> CancelRunAsync(string threadId, string runId)
     {
         ClientResult<Internal.Models.RunObject> internalResult
             = await RunShim.CancelRunAsync(threadId, runId);
         return ClientResult.FromValue(true, internalResult.GetRawResponse());
     }
 
-     public virtual ClientResult<bool> SubmitToolOutputs(string threadId, string runId, IEnumerable<ToolOutput> toolOutputs)
+    public virtual ClientResult<ThreadRun> SubmitToolOutputs(string threadId, string runId, IEnumerable<ToolOutput> toolOutputs)
     {
-        BinaryContent content = BinaryContent.Create(BinaryData.FromObjectAsJson(new
-            {
-                tool_outputs = toolOutputs
-            },
-            new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            }));
-        ClientResult internalResult = RunShim.SubmitToolOuputsToRun(threadId, runId, content, default);
-        return ClientResult.FromValue(true, internalResult.GetRawResponse());
+        List<Internal.Models.SubmitToolOutputsRunRequestToolOutput> requestToolOutputs = [];
+
+        foreach (ToolOutput toolOutput in toolOutputs)
+        {
+            requestToolOutputs.Add(new(toolOutput.Id, toolOutput.Output, null));
+        }
+
+        Internal.Models.SubmitToolOutputsRunRequest request = new(requestToolOutputs, null);
+        ClientResult<Internal.Models.RunObject> internalResult = RunShim.SubmitToolOuputsToRun(threadId, runId, request);
+        return ClientResult.FromValue(new ThreadRun(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual async Task<ClientResult<bool>> SubmitToolOutputsAsync(string threadId, string runId, IEnumerable<ToolOutput> toolOutputs)
+    public virtual async Task<ClientResult<bool>> SubmitToolOutputsAsync(string threadId, string runId, IEnumerable<ToolOutput> toolOutputs)
     {
-        BinaryContent content = BinaryContent.Create(BinaryData.FromObjectAsJson(new
-            {
-                tool_outputs = toolOutputs
-            },
-            new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower
-            }));
-        ClientResult internalResult
-            = await RunShim.SubmitToolOuputsToRunAsync(threadId, runId, content, default).ConfigureAwait(false);
+        List<Internal.Models.SubmitToolOutputsRunRequestToolOutput> requestToolOutputs = [];
+
+        foreach (ToolOutput toolOutput in toolOutputs)
+        {
+            requestToolOutputs.Add(new(toolOutput.Id, toolOutput.Output, null));
+        }
+
+        Internal.Models.SubmitToolOutputsRunRequest request = new(requestToolOutputs, null);
+        ClientResult<Internal.Models.RunObject> internalResult
+            = await RunShim.SubmitToolOuputsToRunAsync(threadId, runId, request).ConfigureAwait(false);
         return ClientResult.FromValue(true, internalResult.GetRawResponse());
     }
 

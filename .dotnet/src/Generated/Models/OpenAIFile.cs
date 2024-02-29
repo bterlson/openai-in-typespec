@@ -55,7 +55,7 @@ namespace OpenAI.Internal.Models
         /// `error`.
         /// </param>
         /// <exception cref="ArgumentNullException"> <paramref name="id"/> or <paramref name="filename"/> is null. </exception>
-        internal OpenAIFile(string id, long bytes, DateTimeOffset createdAt, string filename, OpenAIFilePurpose purpose, OpenAIFileStatus status)
+        internal OpenAIFile(string id, long? bytes, DateTimeOffset createdAt, string filename, OpenAIFilePurpose purpose, OpenAIFileStatus status)
         {
             if (id is null) throw new ArgumentNullException(nameof(id));
             if (filename is null) throw new ArgumentNullException(nameof(filename));
@@ -87,7 +87,7 @@ namespace OpenAI.Internal.Models
         /// field on `fine_tuning.job`.
         /// </param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal OpenAIFile(string id, long bytes, DateTimeOffset createdAt, string filename, OpenAIFileObject @object, OpenAIFilePurpose purpose, OpenAIFileStatus status, string statusDetails, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal OpenAIFile(string id, long? bytes, DateTimeOffset createdAt, string filename, OpenAIFileObject @object, OpenAIFilePurpose purpose, OpenAIFileStatus status, string statusDetails, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             Id = id;
             Bytes = bytes;
@@ -108,7 +108,7 @@ namespace OpenAI.Internal.Models
         /// <summary> The file identifier, which can be referenced in the API endpoints. </summary>
         public string Id { get; }
         /// <summary> The size of the file, in bytes. </summary>
-        public long Bytes { get; }
+        public long? Bytes { get; }
         /// <summary> The Unix timestamp (in seconds) for when the file was created. </summary>
         public DateTimeOffset CreatedAt { get; }
         /// <summary> The name of the file. </summary>

@@ -49,8 +49,15 @@ namespace OpenAI.Internal.Models
             {
                 writer.WriteNull("last_error");
             }
-            writer.WritePropertyName("expires_at"u8);
-            writer.WriteNumberValue(ExpiresAt, "U");
+            if (ExpiresAt != null)
+            {
+                writer.WritePropertyName("expires_at"u8);
+                writer.WriteStringValue(ExpiresAt.Value, "O");
+            }
+            else
+            {
+                writer.WriteNull("expires_at");
+            }
             if (StartedAt != null)
             {
                 writer.WritePropertyName("started_at"u8);
@@ -187,7 +194,7 @@ namespace OpenAI.Internal.Models
             RunObjectStatus status = default;
             RunObjectRequiredAction requiredAction = default;
             RunObjectLastError lastError = default;
-            DateTimeOffset expiresAt = default;
+            DateTimeOffset? expiresAt = default;
             DateTimeOffset? startedAt = default;
             DateTimeOffset? cancelledAt = default;
             DateTimeOffset? failedAt = default;
@@ -254,6 +261,13 @@ namespace OpenAI.Internal.Models
                 }
                 if (property.NameEquals("expires_at"u8))
                 {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        expiresAt = null;
+                        continue;
+                    }
+                    // BUG: https://github.com/Azure/autorest.csharp/issues/4296
+                    // expiresAt = property.Value.GetDateTimeOffset("O");
                     expiresAt = DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64());
                     continue;
                 }
@@ -264,7 +278,9 @@ namespace OpenAI.Internal.Models
                         startedAt = null;
                         continue;
                     }
-                    startedAt = property.Value.GetDateTimeOffset("O");
+                    // BUG: https://github.com/Azure/autorest.csharp/issues/4296
+                    // startedAt = property.Value.GetDateTimeOffset("O");
+                    startedAt = DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64());
                     continue;
                 }
                 if (property.NameEquals("cancelled_at"u8))
@@ -274,7 +290,9 @@ namespace OpenAI.Internal.Models
                         cancelledAt = null;
                         continue;
                     }
-                    cancelledAt = property.Value.GetDateTimeOffset("O");
+                    // BUG: https://github.com/Azure/autorest.csharp/issues/4296
+                    // cancelledAt = property.Value.GetDateTimeOffset("O");
+                    cancelledAt = DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64());
                     continue;
                 }
                 if (property.NameEquals("failed_at"u8))
@@ -284,7 +302,9 @@ namespace OpenAI.Internal.Models
                         failedAt = null;
                         continue;
                     }
-                    failedAt = property.Value.GetDateTimeOffset("O");
+                    // BUG: https://github.com/Azure/autorest.csharp/issues/4296
+                    // failedAt = property.Value.GetDateTimeOffset("O");
+                    failedAt = DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64());
                     continue;
                 }
                 if (property.NameEquals("completed_at"u8))
@@ -294,7 +314,9 @@ namespace OpenAI.Internal.Models
                         completedAt = null;
                         continue;
                     }
-                    completedAt = property.Value.GetDateTimeOffset("O");
+                    // BUG: https://github.com/Azure/autorest.csharp/issues/4296
+                    // completedAt = property.Value.GetDateTimeOffset("O");
+                    completedAt = DateTimeOffset.FromUnixTimeSeconds(property.Value.GetInt64());
                     continue;
                 }
                 if (property.NameEquals("model"u8))

@@ -531,7 +531,7 @@ namespace OpenAI.Internal.Models
         /// </param>
         /// <param name="usage"></param>
         /// <returns> A new <see cref="Models.RunObject"/> instance for mocking. </returns>
-        public static RunObject RunObject(string id = null, RunObjectObject @object = default, DateTimeOffset createdAt = default, string threadId = null, string assistantId = null, RunObjectStatus status = default, RunObjectRequiredAction requiredAction = null, RunObjectLastError lastError = null, DateTimeOffset expiresAt = default, DateTimeOffset? startedAt = null, DateTimeOffset? cancelledAt = null, DateTimeOffset? failedAt = null, DateTimeOffset? completedAt = null, string model = null, string instructions = null, IEnumerable<BinaryData> tools = null, IEnumerable<string> fileIds = null, IReadOnlyDictionary<string, string> metadata = null, RunCompletionUsage usage = null)
+        public static RunObject RunObject(string id = null, RunObjectObject @object = default, DateTimeOffset createdAt = default, string threadId = null, string assistantId = null, RunObjectStatus status = default, RunObjectRequiredAction requiredAction = null, RunObjectLastError lastError = null, DateTimeOffset? expiresAt = null, DateTimeOffset? startedAt = null, DateTimeOffset? cancelledAt = null, DateTimeOffset? failedAt = null, DateTimeOffset? completedAt = null, string model = null, string instructions = null, IEnumerable<BinaryData> tools = null, IEnumerable<string> fileIds = null, IReadOnlyDictionary<string, string> metadata = null, RunCompletionUsage usage = null)
         {
             tools ??= new List<BinaryData>();
             fileIds ??= new List<string>();

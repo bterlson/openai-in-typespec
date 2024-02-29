@@ -3,20 +3,13 @@ using OpenAI.Images;
 using System;
 using System.IO;
 
-namespace OpenAI.Tests.Examples
+namespace OpenAI.Samples
 {
     public partial class ImageSamples
     {
         [Test]
         [Ignore("Compilation validation only")]
-        public void CreateImageClient()
-        {
-            ImageClient client = new("dall-e-3", "<insert your OpenAI API key here>");
-        }
-
-        [Test]
-        [Ignore("Compilation validation only")]
-        public void SimpleImage()
+        public void Sample01_SimpleImage()
         {
             ImageClient client = new("dall-e-3", Environment.GetEnvironmentVariable("OpenAIClient_KEY"));
 
@@ -39,7 +32,7 @@ namespace OpenAI.Tests.Examples
             GeneratedImage image = client.GenerateImage(prompt, options);
             BinaryData bytes = image.ImageBytes;
 
-            using FileStream stream = File.OpenWrite($"{ Guid.NewGuid() }.png");
+            using FileStream stream = File.OpenWrite($"{Guid.NewGuid()}.png");
             bytes.ToStream().CopyTo(stream);
         }
     }

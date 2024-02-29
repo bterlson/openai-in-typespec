@@ -348,7 +348,7 @@ model RunObject {
 
   /** The Unix timestamp (in seconds) for when the run will expire. */
   @encode("unixTimestamp", int32)
-  expires_at: utcDateTime;
+  expires_at: utcDateTime | null; // TODO: This is not nullable in the OpenAPI spec, but it is in practice.
 
   /** The Unix timestamp (in seconds) for when the run was started. */
   @encode("unixTimestamp", int32)

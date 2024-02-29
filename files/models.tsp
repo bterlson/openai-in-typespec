@@ -41,7 +41,7 @@ model OpenAIFile {
   id: string;
 
   /** The size of the file, in bytes. */
-  bytes: safeint;
+  bytes: safeint | null; // TODO: This is not nullable in the OpenAPI spec, but it is in practice.
 
   /** The Unix timestamp (in seconds) for when the file was created. */
   @encode("unixTimestamp", int32)

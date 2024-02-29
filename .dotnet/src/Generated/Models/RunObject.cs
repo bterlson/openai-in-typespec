@@ -78,7 +78,7 @@ namespace OpenAI.Internal.Models
         /// </param>
         /// <param name="usage"></param>
         /// <exception cref="ArgumentNullException"> <paramref name="id"/>, <paramref name="threadId"/>, <paramref name="assistantId"/>, <paramref name="model"/>, <paramref name="instructions"/>, <paramref name="tools"/> or <paramref name="fileIds"/> is null. </exception>
-        internal RunObject(string id, DateTimeOffset createdAt, string threadId, string assistantId, RunObjectStatus status, RunObjectRequiredAction requiredAction, RunObjectLastError lastError, DateTimeOffset expiresAt, DateTimeOffset? startedAt, DateTimeOffset? cancelledAt, DateTimeOffset? failedAt, DateTimeOffset? completedAt, string model, string instructions, IEnumerable<BinaryData> tools, IEnumerable<string> fileIds, IReadOnlyDictionary<string, string> metadata, RunCompletionUsage usage)
+        internal RunObject(string id, DateTimeOffset createdAt, string threadId, string assistantId, RunObjectStatus status, RunObjectRequiredAction requiredAction, RunObjectLastError lastError, DateTimeOffset? expiresAt, DateTimeOffset? startedAt, DateTimeOffset? cancelledAt, DateTimeOffset? failedAt, DateTimeOffset? completedAt, string model, string instructions, IEnumerable<BinaryData> tools, IEnumerable<string> fileIds, IReadOnlyDictionary<string, string> metadata, RunCompletionUsage usage)
         {
             if (id is null) throw new ArgumentNullException(nameof(id));
             if (threadId is null) throw new ArgumentNullException(nameof(threadId));
@@ -145,7 +145,7 @@ namespace OpenAI.Internal.Models
         /// </param>
         /// <param name="usage"></param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal RunObject(string id, RunObjectObject @object, DateTimeOffset createdAt, string threadId, string assistantId, RunObjectStatus status, RunObjectRequiredAction requiredAction, RunObjectLastError lastError, DateTimeOffset expiresAt, DateTimeOffset? startedAt, DateTimeOffset? cancelledAt, DateTimeOffset? failedAt, DateTimeOffset? completedAt, string model, string instructions, IReadOnlyList<BinaryData> tools, IReadOnlyList<string> fileIds, IReadOnlyDictionary<string, string> metadata, RunCompletionUsage usage, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal RunObject(string id, RunObjectObject @object, DateTimeOffset createdAt, string threadId, string assistantId, RunObjectStatus status, RunObjectRequiredAction requiredAction, RunObjectLastError lastError, DateTimeOffset? expiresAt, DateTimeOffset? startedAt, DateTimeOffset? cancelledAt, DateTimeOffset? failedAt, DateTimeOffset? completedAt, string model, string instructions, IReadOnlyList<BinaryData> tools, IReadOnlyList<string> fileIds, IReadOnlyDictionary<string, string> metadata, RunCompletionUsage usage, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             Id = id;
             Object = @object;
@@ -201,7 +201,7 @@ namespace OpenAI.Internal.Models
         /// <summary> The last error associated with this run. Will be `null` if there are no errors. </summary>
         public RunObjectLastError LastError { get; }
         /// <summary> The Unix timestamp (in seconds) for when the run will expire. </summary>
-        public DateTimeOffset ExpiresAt { get; }
+        public DateTimeOffset? ExpiresAt { get; }
         /// <summary> The Unix timestamp (in seconds) for when the run was started. </summary>
         public DateTimeOffset? StartedAt { get; }
         /// <summary> The Unix timestamp (in seconds) for when the run was cancelled. </summary>

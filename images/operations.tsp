@@ -14,14 +14,16 @@ interface Images {
   @route("generations")
   @post
   @operationId("createImage")
-  @tag("OpenAI")
+  @tag("Images")
   @summary("Creates an image given a prompt")
-  createImage(@body image: CreateImageRequest): ImagesResponse | ErrorResponse;
+  createImage(
+    @body image: CreateImageRequest
+  ): ImagesResponse | ErrorResponse;
 
   @route("edits")
   @post
   @operationId("createImageEdit")
-  @tag("OpenAI")
+  @tag("Images")
   @summary("Creates an edited or extended image given an original image and a prompt.")
   createImageEdit(
     @header contentType: "multipart/form-data",
@@ -31,7 +33,7 @@ interface Images {
   @route("variations")
   @post
   @operationId("createImageVariation")
-  @tag("OpenAI")
+  @tag("Images")
   @summary("Creates an edited or extended image given an original image and a prompt.")
   createImageVariation(
     @header contentType: "multipart/form-data",

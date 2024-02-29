@@ -1,70 +1,75 @@
-namespace OpenAI;
 using TypeSpec.OpenAPI;
 
-model ListFilesResponse {
-  object: string; // presumably this is always some constant, but not defined.
-  data: OpenAIFile[];
-}
+namespace OpenAI;
 
 model CreateFileRequest {
   /**
-   * Name of the [JSON Lines](https://jsonlines.readthedocs.io/en/latest/) file to be uploaded.
-   *
-   * If the `purpose` is set to "fine-tune", the file will be used for fine-tuning.
+   * The file object (not file name) to be uploaded.
    */
   @encode("binary")
   file: bytes;
 
   /**
-   * The intended purpose of the uploaded documents. Use "fine-tune" for
-   * [fine-tuning](/docs/api-reference/fine-tuning). This allows us to validate the format of the
-   * uploaded file.
+   * The intended purpose of the uploaded file. Use "fine-tune" for 
+   * [Fine-tuning](/docs/api-reference/fine-tuning) and "assistants" for 
+   * [Assistants](/docs/api-reference/assistants) and [Messages](/docs/api-reference/messages). This
+   * allows us to validate the format of the uploaded file is correct for fine-tuning.
    */
-  purpose: string;
+  purpose: "fine-tune" | "assistants";
 }
+
+model ListFilesResponse {
+  data: OpenAIFile[];
+  object: "list";
+}
+
+model DeleteFileResponse {
+  id: string;
+  object: "file";
+  deleted: boolean;
+}
+
+alias FILE_PURPOSE =
+  | "fine-tune"
+  | "fine-tune-results"
+  | "assistants"
+  | "assistants_output";
 
 /** The `File` object represents a document that has been uploaded to OpenAI. */
 model OpenAIFile {
   /** The file identifier, which can be referenced in the API endpoints. */
   id: string;
 
-  /** The object type, which is always "file". */
-  object: "file";
-
-  /** The size of the file in bytes. */
+  /** The size of the file, in bytes. */
   bytes: safeint;
 
   /** The Unix timestamp (in seconds) for when the file was created. */
   @encode("unixTimestamp", int32)
-  createdAt: utcDateTime;
+  created_at: utcDateTime;
 
   /** The name of the file. */
   filename: string;
 
-  /** The intended purpose of the file. Currently, only "fine-tune" is supported. */
-  purpose: string;
+  /** The object type, which is always "file". */
+  object: "file";
+
+  /** 
+   * The intended purpose of the file. Supported values are `fine-tune`, `fine-tune-results`,
+   * `assistants`, and `assistants_output`.
+   */
+  purpose: FILE_PURPOSE;
 
   /**
-   * The current status of the file, which can be either `uploaded`, `processed`, `pending`,
-   * `error`, `deleting` or `deleted`.
+   * Deprecated. The current status of the file, which can be either `uploaded`, `processed`, or
+   * `error`.
    */
-  status:
-    | "uploaded"
-    | "processed"
-    | "pending"
-    | "error"
-    | "deleting"
-    | "deleted";
+  #deprecated "deprecated"
+  status: "uploaded" | "processed" | "error";
 
   /**
-   * Additional details about the status of the file. If the file is in the `error` state, this will
-   * include a message describing the error.
+   * Deprecated. For details on why a fine-tuning training file failed validation, see the `error`
+   * field on `fine_tuning.job`.
    */
-  status_details?: string | null;
-}
-
-model DeleteFileResponse {
-  id: string;
-  object: string;
-  deleted: boolean;
+  #deprecated "deprecated"
+  status_details?: string;
 }

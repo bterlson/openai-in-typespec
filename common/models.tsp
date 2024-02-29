@@ -1,34 +1,6 @@
-namespace OpenAI;
 using TypeSpec.OpenAPI;
 
-model ListModelsResponse {
-  object: string;
-  data: Model[];
-}
-
-/** Describes an OpenAI model offering that can be used with the API. */
-model Model {
-  /** The model identifier, which can be referenced in the API endpoints. */
-  id: string;
-
-  /** The object type, which is always "model". */
-  object: "model";
-
-  /** The Unix timestamp (in seconds) when the model was created. */
-  @encode("unixTimestamp", int32)
-  created: utcDateTime;
-
-  /** The organization that owns the model. */
-  owned_by: string;
-}
-
-model DeleteModelResponse {
-  id: string;
-  object: string;
-  deleted: boolean;
-}
-
-// this is using yaml refs instead of a def in the openapi, not sure if that's required?
+namespace OpenAI;
 
 scalar User extends string;
 
@@ -37,3 +9,35 @@ model TokenArray is safeint[];
 
 @minItems(1)
 model TokenArrayArray is TokenArray[];
+
+enum ListOrder {
+  asc: "asc",
+  desc: "desc",
+}
+
+model FunctionObject {
+  /**
+   * A description of what the function does, used by the model to choose when and how to call the
+   * function.
+   */
+  description?: string;
+
+  /**
+   * The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and
+   * dashes, with a maximum length of 64.
+   */
+  name: string;
+
+  parameters?: FunctionParameters;
+}
+
+/**
+ * The parameters the functions accepts, described as a JSON Schema object. See the
+ * [guide](/docs/guides/gpt/function-calling) for examples, and the
+ * [JSON Schema reference](https://json-schema.org/understanding-json-schema/) for documentation
+ * about the format.\n\nTo describe a function that accepts no parameters, provide the value
+ * `{\"type\": \"object\", \"properties\": {}}`.
+ */
+// TODO: The generated spec produces "additionalProperties: {}" for this instead of
+// "additionalProperties: true". Are they equivalent?
+model FunctionParameters is Record<unknown>;

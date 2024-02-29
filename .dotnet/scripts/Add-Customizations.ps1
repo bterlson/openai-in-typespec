@@ -24,5 +24,16 @@ function Update-MicrosoftBclAsyncInterfacesPackage {
     Set-Location -Path $current
 }
 
+function Set-LangVersionToLatest {
+    $root = Split-Path $PSScriptRoot -Parent
+    $filePath = Join-Path -Path $root -ChildPath "tests\OpenAI.Tests.csproj"
+    $xml = [xml](Get-Content -Path $filePath)
+    $element = $xml.CreateElement("LangVersion")
+    $element.InnerText = "latest"
+    $xml.Project.PropertyGroup.AppendChild($element) | Out-Null
+    $xml.Save($filePath)
+}
+
 Update-SystemTextJsonPackage
 Update-MicrosoftBclAsyncInterfacesPackage
+Set-LangVersionToLatest

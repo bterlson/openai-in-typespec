@@ -5204,6 +5204,7 @@ components:
         bytes:
           type: integer
           format: int64
+          nullable: true
           description: The size of the file, in bytes.
         created_at:
           type: integer
@@ -5375,8 +5376,9 @@ components:
           nullable: true
           description: The last error associated with this run. Will be `null` if there are no errors.
         expires_at:
-          type: integer
-          format: unixtime
+          type: string
+          format: date-time
+          nullable: true
           description: The Unix timestamp (in seconds) for when the run will expire.
         started_at:
           type: string

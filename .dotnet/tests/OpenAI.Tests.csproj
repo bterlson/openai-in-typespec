@@ -3,12 +3,11 @@
     <TargetFramework>net7.0</TargetFramework>
     <!--Ignore XML doc comments on test types and members-->
     <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\src\OpenAI.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageReference Include="NUnit" Version="3.13.2" />

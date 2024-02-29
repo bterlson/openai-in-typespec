@@ -11,6 +11,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.ClientModel" Version="1.1.0-alpha.20240227.1" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
+    <PackageReference Include="System.Text.Json" Version="8.0.2" />
   </ItemGroup>
 </Project>

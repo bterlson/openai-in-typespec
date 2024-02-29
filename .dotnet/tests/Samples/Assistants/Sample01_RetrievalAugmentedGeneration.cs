@@ -10,7 +10,7 @@ namespace OpenAI.Samples
     public partial class AssistantSamples
     {
         [Test]
-        // [Ignore("Compilation validation only")]
+        [Ignore("Compilation validation only")]
         public void Sample01_RetrievalAugmentedGeneration()
         {
             OpenAIClient openAIClient = new(Environment.GetEnvironmentVariable("OpenAIClient_KEY"));

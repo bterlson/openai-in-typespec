@@ -4,61 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenAI.Samples
 {
     public partial class AssistantSamples
     {
-        #region
-        private static string GetCurrentLocation()
-        {
-            // Call the location API here.
-            return "San Francisco";
-        }
-
-        private static string GetCurrentWeather(string location, string unit = "celsius")
-        {
-            // Call the weather API here.
-            return $"31 {unit}";
-        }
-
-        private const string GetCurrentLocationFunctionName = "get_current_location";
-
-        private const string GetCurrentWeatherFunctionName = "get_current_weather";
-
-        private static readonly FunctionToolDefinition getCurrentLocationFunction = new()
-        {
-            Name = GetCurrentLocationFunctionName,
-            Description = "Get the user's current location"
-        };
-
-        private static readonly FunctionToolDefinition getCurrentWeatherFunction = new()
-        {
-            Name = GetCurrentWeatherFunctionName,
-            Description = "Get the current weather in a given location",
-            Parameters = BinaryData.FromString("""
-                {
-                    "type": "object",
-                    "properties": {
-                        "location": {
-                            "type": "string",
-                            "description": "The city and state, e.g. Boston, MA"
-                        },
-                        "unit": {
-                            "type": "string",
-                            "enum": [ "celsius", "fahrenheit" ],
-                            "description": "The temperature unit to use. Infer this from the specified location."
-                        }
-                    },
-                    "required": [ "location" ]
-                }
-                """),
-        };
-        #endregion
-
         [Test]
         [Ignore("Compilation validation only")]
-        public void Sample03_FunctionCalling()
+        public async Task Sample03_FunctionCallingAsync()
         {
             AssistantClient client = new(Environment.GetEnvironmentVariable("OpenAIClient_KEY"));
 
@@ -74,7 +28,7 @@ namespace OpenAI.Samples
                 Metadata = { ["test_key_delete_me"] = "true" },
             };
 
-            Assistant assistant = client.CreateAssistant("gpt-4-1106-preview", assistantOptions);
+            Assistant assistant = await client.CreateAssistantAsync("gpt-4-1106-preview", assistantOptions);
             #endregion
 
             #region
@@ -84,7 +38,7 @@ namespace OpenAI.Samples
                 Messages = { new ThreadInitializationMessage(MessageRole.User, "What's the weather like today?"), }
             };
 
-            ThreadRun threadRun = client.CreateThreadAndRun(assistant.Id, threadOptions);
+            ThreadRun threadRun = await client.CreateThreadAndRunAsync(assistant.Id, threadOptions);
             #endregion
 
             #region
@@ -92,7 +46,7 @@ namespace OpenAI.Samples
             while (threadRun.Status == RunStatus.Queued || threadRun.Status == RunStatus.InProgress)
             {
                 Thread.Sleep(TimeSpan.FromSeconds(1));
-                threadRun = client.GetRun(threadRun.ThreadId, threadRun.Id);
+                threadRun = await client.GetRunAsync(threadRun.ThreadId, threadRun.Id);
 
                 // If the run requires action, resolve them.
                 if (threadRun.Status == RunStatus.RequiresAction)
@@ -143,7 +97,7 @@ namespace OpenAI.Samples
                     }
 
                     // Submit the tool outputs to the assistant, which returns the run to the queued state.
-                    threadRun = client.SubmitToolOutputs(threadRun.ThreadId, threadRun.Id, toolOutputs);
+                    threadRun = await client.SubmitToolOutputsAsync(threadRun.ThreadId, threadRun.Id, toolOutputs);
                 }
             }
             #endregion
@@ -153,7 +107,7 @@ namespace OpenAI.Samples
             {
                 case RunStatus.CompletedSuccessfully:
                     {
-                        ListQueryPage<ThreadMessage> messages = client.GetMessages(threadRun.ThreadId);
+                        ListQueryPage<ThreadMessage> messages = await client.GetMessagesAsync(threadRun.ThreadId);
 
                         for (int i = messages.Count - 1; i >= 0; i--)
                         {

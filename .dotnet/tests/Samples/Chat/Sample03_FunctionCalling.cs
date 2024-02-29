@@ -9,36 +9,50 @@ namespace OpenAI.Samples
     public partial class ChatSamples
     {
         #region
-        //private static string GetCurrentWeather(string location, string unit = "celsius")
-        //{
-        //    // Call the weather API here.
-        //    return "31 celsius";
-        //}
+        private static string GetCurrentLocation()
+        {
+            // Call the location API here.
+            return "San Francisco";
+        }
 
-        //private const string GetCurrentWeatherFunctionName = "get_current_weather";
+        private static string GetCurrentWeather(string location, string unit = "celsius")
+        {
+            // Call the weather API here.
+            return $"31 {unit}";
+        }
 
-        //private static readonly ChatFunctionToolDefinition getCurrentWeatherFunction = new()
-        //{
-        //    Name = GetCurrentWeatherFunctionName,
-        //    Description = "Get the current weather in a given location",
-        //    Parameters = BinaryData.FromString("""
-        //        {
-        //            "type": "object",
-        //            "properties": {
-        //                "location": {
-        //                    "type": "string",
-        //                    "description": "The city and state, e.g. Boston, MA"
-        //                },
-        //                "unit": {
-        //                    "type": "string",
-        //                    "enum": [ "celsius", "fahrenheit" ],
-        //                    "description": "The temperature unit to use. Infer this from the specified location."
-        //                }
-        //            },
-        //            "required": [ "location" ]
-        //        }
-        //        """),
-        //};
+        private const string GetCurrentLocationFunctionName = "get_current_location";
+
+        private const string GetCurrentWeatherFunctionName = "get_current_weather";
+
+        private static readonly ChatFunctionToolDefinition getCurrentLocationFunction = new()
+        {
+            Name = GetCurrentLocationFunctionName,
+            Description = "Get the user's current location"
+        };
+
+        private static readonly ChatFunctionToolDefinition getCurrentWeatherFunction = new()
+        {
+            Name = GetCurrentWeatherFunctionName,
+            Description = "Get the current weather in a given location",
+            Parameters = BinaryData.FromString("""
+                {
+                    "type": "object",
+                    "properties": {
+                        "location": {
+                            "type": "string",
+                            "description": "The city and state, e.g. Boston, MA"
+                        },
+                        "unit": {
+                            "type": "string",
+                            "enum": [ "celsius", "fahrenheit" ],
+                            "description": "The temperature unit to use. Infer this from the specified location."
+                        }
+                    },
+                    "required": [ "location" ]
+                }
+                """),
+        };
         #endregion
 
         [Test]
@@ -52,63 +66,98 @@ namespace OpenAI.Samples
                 new ChatRequestSystemMessage(
                    "Don't make assumptions about what values to plug into functions."
                    + " Ask for clarification if a user request is ambiguous."),
-                new ChatRequestUserMessage("What's the weather like in San Francisco?"),
+                new ChatRequestUserMessage("What's the weather like today?"),
             ];
 
             ChatCompletionOptions options = new()
             {
-                Tools = { getCurrentWeatherFunction },
+                Tools = { getCurrentLocationFunction, getCurrentWeatherFunction },
             };
-
-            ChatCompletion chatCompletion = client.CompleteChat(messages, options);
             #endregion
 
             #region
-            if (chatCompletion.FinishReason == ChatFinishReason.ToolCalls)
+            bool requiresAction;
+
+            do
             {
-                // First, add the assistant message with tool calls to the conversation history.
-                messages.Add(new ChatRequestAssistantMessage(chatCompletion));
+                requiresAction = false;
+                ChatCompletion chatCompletion = client.CompleteChat(messages, options);
 
-                // Then, add a new tool message for each tool call that is resolved.
-                foreach (ChatToolCall toolCall in chatCompletion.ToolCalls)
+                switch (chatCompletion.FinishReason)
                 {
-                    ChatFunctionToolCall functionToolCall = toolCall as ChatFunctionToolCall;
+                    case ChatFinishReason.Stopped:
+                        {
+                            ChatCompletion chatCompletionAfterToolMessages = client.CompleteChat(messages, options);
+                            messages.Add(new ChatRequestAssistantMessage(chatCompletionAfterToolMessages));
+                            break;
+                        }
 
-                    switch (functionToolCall?.Name)
-                    {
-                        case GetCurrentWeatherFunctionName:
+                    case ChatFinishReason.ToolCalls:
+                        {
+                            // First, add the assistant message with tool calls to the conversation history.
+                            messages.Add(new ChatRequestAssistantMessage(chatCompletion));
+
+                            // Then, add a new tool message for each tool call that is resolved.
+                            foreach (ChatToolCall toolCall in chatCompletion.ToolCalls)
                             {
-                                // The arguments that the model wants to use to call the function are specified as a
-                                // stringified JSON object based on the schema defined in the tool definition. Note that
-                                // the model may hallucinate arguments too. Consequently, it is important to do the
-                                // appropriate parsing and validation before calling the function.
-                                using JsonDocument argumentsJson = JsonDocument.Parse(functionToolCall.Arguments);
-                                bool hasLocation = argumentsJson.RootElement.TryGetProperty("location", out JsonElement location);
-                                bool hasUnit = argumentsJson.RootElement.TryGetProperty("unit", out JsonElement unit);
+                                ChatFunctionToolCall functionToolCall = toolCall as ChatFunctionToolCall;
 
-                                if (!hasLocation)
+                                switch (functionToolCall?.Name)
                                 {
-                                    throw new ArgumentNullException(nameof(location), "The location argument is required.");
+                                    case GetCurrentLocationFunctionName:
+                                        {
+                                            string toolResult = GetCurrentLocation();
+                                            messages.Add(new ChatRequestToolMessage(toolCall.Id, toolResult));
+                                            break;
+                                        }
+
+                                    case GetCurrentWeatherFunctionName:
+                                        {
+                                            // The arguments that the model wants to use to call the function are specified as a
+                                            // stringified JSON object based on the schema defined in the tool definition. Note that
+                                            // the model may hallucinate arguments too. Consequently, it is important to do the
+                                            // appropriate parsing and validation before calling the function.
+                                            using JsonDocument argumentsJson = JsonDocument.Parse(functionToolCall.Arguments);
+                                            bool hasLocation = argumentsJson.RootElement.TryGetProperty("location", out JsonElement location);
+                                            bool hasUnit = argumentsJson.RootElement.TryGetProperty("unit", out JsonElement unit);
+
+                                            if (!hasLocation)
+                                            {
+                                                throw new ArgumentNullException(nameof(location), "The location argument is required.");
+                                            }
+
+                                            string toolResult = hasUnit
+                                                ? GetCurrentWeather(location.GetString(), unit.GetString())
+                                                : GetCurrentWeather(location.GetString());
+                                            messages.Add(new ChatRequestToolMessage(toolCall.Id, toolResult));
+                                            break;
+                                        }
+
+                                    default:
+                                        {
+                                            // Handle other or unexpected calls.
+                                            throw new NotImplementedException();
+                                        }
                                 }
-
-                                string toolResult = GetCurrentWeather(location.GetString(), hasUnit ? unit.GetString() : null);
-                                messages.Add(new ChatRequestToolMessage(toolCall.Id, toolResult));
-                                break;
                             }
 
-                        default:
-                            {
-                                // Handle other or unexpected calls.
-                                throw new NotImplementedException();
-                            }
-                    }
+                            requiresAction = true;
+                            break;
+                        }
+
+                    case ChatFinishReason.Length:
+                        throw new NotImplementedException("Incomplete model output due to MaxTokens parameter or token limit exceeded.");
+
+                    case ChatFinishReason.ContentFilter:
+                        throw new NotImplementedException("Omitted content due to a content filter flag.");
+
+                    case ChatFinishReason.FunctionCall:
+                        throw new NotImplementedException("Deprecated in favor of tool calls.");
+
+                    default:
+                        throw new NotImplementedException(chatCompletion.FinishReason.ToString());
                 }
-
-                // Finally, make a new request to chat completions to let the assistant summarize the tool results
-                // and add the resulting message to the conversation history to keep it organized all in one place.
-                ChatCompletion chatCompletionAfterToolMessages = client.CompleteChat(messages, options);
-                messages.Add(new ChatRequestAssistantMessage(chatCompletionAfterToolMessages));
-            }
+            } while (requiresAction);
             #endregion
 
             #region

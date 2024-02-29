@@ -611,7 +611,7 @@ public partial class AssistantClient
         return ClientResult.FromValue(new ThreadRun(internalResult.Value), internalResult.GetRawResponse());
     }
 
-    public virtual async Task<ClientResult<bool>> SubmitToolOutputsAsync(string threadId, string runId, IEnumerable<ToolOutput> toolOutputs)
+    public virtual async Task<ClientResult<ThreadRun>> SubmitToolOutputsAsync(string threadId, string runId, IEnumerable<ToolOutput> toolOutputs)
     {
         List<Internal.Models.SubmitToolOutputsRunRequestToolOutput> requestToolOutputs = [];
 
@@ -621,9 +621,8 @@ public partial class AssistantClient
         }
 
         Internal.Models.SubmitToolOutputsRunRequest request = new(requestToolOutputs, null);
-        ClientResult<Internal.Models.RunObject> internalResult
-            = await RunShim.SubmitToolOuputsToRunAsync(threadId, runId, request).ConfigureAwait(false);
-        return ClientResult.FromValue(true, internalResult.GetRawResponse());
+        ClientResult<Internal.Models.RunObject> internalResult = await RunShim.SubmitToolOuputsToRunAsync(threadId, runId, request).ConfigureAwait(false);
+        return ClientResult.FromValue(new ThreadRun(internalResult.Value), internalResult.GetRawResponse());
     }
 
     internal static Internal.Models.CreateAssistantRequest CreateInternalCreateAssistantRequest(

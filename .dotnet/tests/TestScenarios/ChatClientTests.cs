@@ -2,6 +2,7 @@
 using OpenAI.Chat;
 using System;
 using System.ClientModel;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -70,6 +71,27 @@ public partial class ChatClientTests
     }
 
     [Test]
+    public void TwoTurnChat()
+    {
+        ChatClient client = GetTestClient();
+
+        List<ChatRequestMessage> messages =
+        [
+            ChatRequestMessage.CreateUserMessage("What are ten of the most common colors, including the brightest and darkest?"),
+        ];
+        ClientResult<ChatCompletion> firstResult = client.CompleteChat(messages);
+        Assert.That(firstResult?.Value, Is.Not.Null);
+        Assert.That(firstResult.Value.Content.ToString().ToLowerInvariant(), Contains.Substring("white"));
+        Assert.That(firstResult.Value.Content.ToString().ToLowerInvariant(), Contains.Substring("black"));
+        messages.Add(new ChatRequestAssistantMessage(firstResult.Value));
+        messages.Add(new ChatRequestUserMessage("Which of those are considered brightest, aligning with hexadecimal rgb notation?"));
+        ClientResult<ChatCompletion> secondResult = client.CompleteChat(messages);
+        Assert.That(secondResult?.Value, Is.Not.Null);
+        Assert.That(secondResult.Value.Content.ToString().ToLowerInvariant(), Contains.Substring("white"));
+        Assert.That(secondResult.Value.Content.ToString().ToLowerInvariant(), Does.Not.Contains("black"));
+    }
+
+    [Test]
     public void AuthFailure()
     {
         ChatClient client = new("gpt-3.5-turbo", new ApiKeyCredential("not-a-real-key"));
@@ -86,4 +108,6 @@ public partial class ChatClientTests
         Assert.That(clientResultException, Is.Not.Null);
         Assert.That(clientResultException.Status, Is.EqualTo((int)HttpStatusCode.Unauthorized));
     }
+
+    private static ChatClient GetTestClient(string overrideModel = null) => GetTestClient<ChatClient>(TestScenario.Chat, overrideModel);
 }

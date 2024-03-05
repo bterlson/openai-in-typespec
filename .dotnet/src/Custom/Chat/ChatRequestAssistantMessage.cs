@@ -1,11 +1,8 @@
+using OpenAI.ClientShared.Internal;
 using System;
-using System.ClientModel.Internal;
-
-using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
-using OpenAI.ClientShared.Internal;
 
 namespace OpenAI.Chat;
 
@@ -21,13 +18,15 @@ public class ChatRequestAssistantMessage : ChatRequestMessage
     /// message and is used to differentiate between multiple participants of the same role.
     /// </summary>
     public string Name { get; set; }
+
     /// <summary>
     /// The <c>tool_calls</c> furnished by the model that are needed to continue the logical conversation across chat
     /// completion requests. A <see cref="ChatToolCall"/> instance corresponds to a supplied
     /// <see cref="ChatToolDefinition"/> instance and is resolved by providing a <see cref="ChatRequestToolMessage"/>
     /// that correlates via <c>id</c> to the item in <c>tool_calls</c>.
     /// </summary>
-    public IReadOnlyList<ChatToolCall> ToolCalls { get; }
+    public IReadOnlyList<ChatToolCall> ToolCalls { get; } = new OptionalList<ChatToolCall>();
+
     /// <summary>
     /// <c>Deprecated in favor of tool_calls.</c>
     /// <para>

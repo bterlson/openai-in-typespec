@@ -19,27 +19,18 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(Message))
+            writer.WritePropertyName("code"u8);
+            writer.WriteStringValue(Code);
+            writer.WritePropertyName("message"u8);
+            writer.WriteStringValue(Message);
+            if (Param != null)
             {
-                writer.WritePropertyName("message"u8);
-                writer.WriteStringValue(Message);
+                writer.WritePropertyName("param"u8);
+                writer.WriteStringValue(Param);
             }
-            if (OptionalProperty.IsDefined(Code))
+            else
             {
-                writer.WritePropertyName("code"u8);
-                writer.WriteStringValue(Code);
-            }
-            if (OptionalProperty.IsDefined(Param))
-            {
-                if (Param != null)
-                {
-                    writer.WritePropertyName("param"u8);
-                    writer.WriteStringValue(Param);
-                }
-                else
-                {
-                    writer.WriteNull("param");
-                }
+                writer.WriteNull("param");
             }
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
@@ -79,21 +70,21 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<string> message = default;
-            OptionalProperty<string> code = default;
-            OptionalProperty<string> param = default;
+            string code = default;
+            string message = default;
+            string param = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("message"u8))
-                {
-                    message = property.Value.GetString();
-                    continue;
-                }
                 if (property.NameEquals("code"u8))
                 {
                     code = property.Value.GetString();
+                    continue;
+                }
+                if (property.NameEquals("message"u8))
+                {
+                    message = property.Value.GetString();
                     continue;
                 }
                 if (property.NameEquals("param"u8))
@@ -112,7 +103,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new FineTuningJobError(message.Value, code.Value, param.Value, serializedAdditionalRawData);
+            return new FineTuningJobError(code, message, param, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<FineTuningJobError>.Write(ModelReaderWriterOptions options)

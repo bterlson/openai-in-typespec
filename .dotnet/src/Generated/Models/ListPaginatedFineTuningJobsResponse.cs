@@ -43,30 +43,27 @@ namespace OpenAI.Internal.Models
         private IDictionary<string, BinaryData> _serializedAdditionalRawData;
 
         /// <summary> Initializes a new instance of <see cref="ListPaginatedFineTuningJobsResponse"/>. </summary>
-        /// <param name="object"></param>
         /// <param name="data"></param>
         /// <param name="hasMore"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="object"/> or <paramref name="data"/> is null. </exception>
-        internal ListPaginatedFineTuningJobsResponse(string @object, IEnumerable<FineTuningJob> data, bool hasMore)
+        /// <exception cref="ArgumentNullException"> <paramref name="data"/> is null. </exception>
+        internal ListPaginatedFineTuningJobsResponse(IEnumerable<FineTuningJob> data, bool hasMore)
         {
-            if (@object is null) throw new ArgumentNullException(nameof(@object));
             if (data is null) throw new ArgumentNullException(nameof(data));
 
-            Object = @object;
             Data = data.ToList();
             HasMore = hasMore;
         }
 
         /// <summary> Initializes a new instance of <see cref="ListPaginatedFineTuningJobsResponse"/>. </summary>
-        /// <param name="object"></param>
         /// <param name="data"></param>
         /// <param name="hasMore"></param>
+        /// <param name="object"></param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal ListPaginatedFineTuningJobsResponse(string @object, IReadOnlyList<FineTuningJob> data, bool hasMore, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal ListPaginatedFineTuningJobsResponse(IReadOnlyList<FineTuningJob> data, bool hasMore, ListPaginatedFineTuningJobsResponseObject @object, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
-            Object = @object;
             Data = data;
             HasMore = hasMore;
+            Object = @object;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
@@ -75,11 +72,11 @@ namespace OpenAI.Internal.Models
         {
         }
 
-        /// <summary> Gets the object. </summary>
-        public string Object { get; }
         /// <summary> Gets the data. </summary>
         public IReadOnlyList<FineTuningJob> Data { get; }
         /// <summary> Gets the has more. </summary>
         public bool HasMore { get; }
+        /// <summary> Gets the object. </summary>
+        public ListPaginatedFineTuningJobsResponseObject Object { get; } = ListPaginatedFineTuningJobsResponseObject.List;
     }
 }

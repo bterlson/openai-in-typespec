@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace OpenAI.Internal.Models
 {
-    /// <summary> The FineTuningJobEvent. </summary>
+    /// <summary> Fine-tuning job event object. </summary>
     internal partial class FineTuningJobEvent
     {
         /// <summary>
@@ -43,19 +43,16 @@ namespace OpenAI.Internal.Models
 
         /// <summary> Initializes a new instance of <see cref="FineTuningJobEvent"/>. </summary>
         /// <param name="id"></param>
-        /// <param name="object"></param>
         /// <param name="createdAt"></param>
         /// <param name="level"></param>
         /// <param name="message"></param>
-        /// <exception cref="ArgumentNullException"> <paramref name="id"/>, <paramref name="object"/> or <paramref name="message"/> is null. </exception>
-        internal FineTuningJobEvent(string id, string @object, DateTimeOffset createdAt, FineTuningJobEventLevel level, string message)
+        /// <exception cref="ArgumentNullException"> <paramref name="id"/> or <paramref name="message"/> is null. </exception>
+        internal FineTuningJobEvent(string id, DateTimeOffset createdAt, FineTuningJobEventLevel level, string message)
         {
             if (id is null) throw new ArgumentNullException(nameof(id));
-            if (@object is null) throw new ArgumentNullException(nameof(@object));
             if (message is null) throw new ArgumentNullException(nameof(message));
 
             Id = id;
-            Object = @object;
             CreatedAt = createdAt;
             Level = level;
             Message = message;
@@ -63,18 +60,18 @@ namespace OpenAI.Internal.Models
 
         /// <summary> Initializes a new instance of <see cref="FineTuningJobEvent"/>. </summary>
         /// <param name="id"></param>
-        /// <param name="object"></param>
         /// <param name="createdAt"></param>
         /// <param name="level"></param>
         /// <param name="message"></param>
+        /// <param name="object"></param>
         /// <param name="serializedAdditionalRawData"> Keeps track of any properties unknown to the library. </param>
-        internal FineTuningJobEvent(string id, string @object, DateTimeOffset createdAt, FineTuningJobEventLevel level, string message, IDictionary<string, BinaryData> serializedAdditionalRawData)
+        internal FineTuningJobEvent(string id, DateTimeOffset createdAt, FineTuningJobEventLevel level, string message, FineTuningJobEventObject @object, IDictionary<string, BinaryData> serializedAdditionalRawData)
         {
             Id = id;
-            Object = @object;
             CreatedAt = createdAt;
             Level = level;
             Message = message;
+            Object = @object;
             _serializedAdditionalRawData = serializedAdditionalRawData;
         }
 
@@ -85,13 +82,13 @@ namespace OpenAI.Internal.Models
 
         /// <summary> Gets the id. </summary>
         public string Id { get; }
-        /// <summary> Gets the object. </summary>
-        public string Object { get; }
         /// <summary> Gets the created at. </summary>
         public DateTimeOffset CreatedAt { get; }
         /// <summary> Gets the level. </summary>
         public FineTuningJobEventLevel Level { get; }
         /// <summary> Gets the message. </summary>
         public string Message { get; }
+        /// <summary> Gets the object. </summary>
+        public FineTuningJobEventObject Object { get; } = FineTuningJobEventObject.FineTuningJobEvent;
     }
 }

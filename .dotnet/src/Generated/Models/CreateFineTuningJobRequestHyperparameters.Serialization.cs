@@ -19,6 +19,30 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
+            if (OptionalProperty.IsDefined(BatchSize))
+            {
+                writer.WritePropertyName("batch_size"u8);
+#if NET6_0_OR_GREATER
+				writer.WriteRawValue(BatchSize);
+#else
+                using (JsonDocument document = JsonDocument.Parse(BatchSize))
+                {
+                    JsonSerializer.Serialize(writer, document.RootElement);
+                }
+#endif
+            }
+            if (OptionalProperty.IsDefined(LearningRateMultiplier))
+            {
+                writer.WritePropertyName("learning_rate_multiplier"u8);
+#if NET6_0_OR_GREATER
+				writer.WriteRawValue(LearningRateMultiplier);
+#else
+                using (JsonDocument document = JsonDocument.Parse(LearningRateMultiplier))
+                {
+                    JsonSerializer.Serialize(writer, document.RootElement);
+                }
+#endif
+            }
             if (OptionalProperty.IsDefined(NEpochs))
             {
                 writer.WritePropertyName("n_epochs"u8);
@@ -69,11 +93,31 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
+            OptionalProperty<BinaryData> batchSize = default;
+            OptionalProperty<BinaryData> learningRateMultiplier = default;
             OptionalProperty<BinaryData> nEpochs = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
+                if (property.NameEquals("batch_size"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    batchSize = BinaryData.FromString(property.Value.GetRawText());
+                    continue;
+                }
+                if (property.NameEquals("learning_rate_multiplier"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        continue;
+                    }
+                    learningRateMultiplier = BinaryData.FromString(property.Value.GetRawText());
+                    continue;
+                }
                 if (property.NameEquals("n_epochs"u8))
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
@@ -89,7 +133,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateFineTuningJobRequestHyperparameters(nEpochs.Value, serializedAdditionalRawData);
+            return new CreateFineTuningJobRequestHyperparameters(batchSize.Value, learningRateMultiplier.Value, nEpochs.Value, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateFineTuningJobRequestHyperparameters>.Write(ModelReaderWriterOptions options)

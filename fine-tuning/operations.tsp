@@ -49,6 +49,7 @@ interface FineTuning {
   [Learn more about fine-tuning](/docs/guides/fine-tuning)
   """)
   retrieveFineTuningJob(
+    /** The ID of the fine-tuning job. */
     @path fine_tuning_job_id: string,
   ): FineTuningJob | ErrorResponse;
 

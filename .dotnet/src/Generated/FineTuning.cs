@@ -248,7 +248,7 @@ namespace OpenAI.Internal
         ///
         /// [Learn more about fine-tuning](/docs/guides/fine-tuning)
         /// </summary>
-        /// <param name="fineTuningJobId"> The <see cref="string"/> to use. </param>
+        /// <param name="fineTuningJobId"> The ID of the fine-tuning job. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="fineTuningJobId"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="fineTuningJobId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<FineTuningJob>> RetrieveFineTuningJobAsync(string fineTuningJobId)
@@ -265,7 +265,7 @@ namespace OpenAI.Internal
         ///
         /// [Learn more about fine-tuning](/docs/guides/fine-tuning)
         /// </summary>
-        /// <param name="fineTuningJobId"> The <see cref="string"/> to use. </param>
+        /// <param name="fineTuningJobId"> The ID of the fine-tuning job. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="fineTuningJobId"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="fineTuningJobId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<FineTuningJob> RetrieveFineTuningJob(string fineTuningJobId)
@@ -294,7 +294,7 @@ namespace OpenAI.Internal
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="fineTuningJobId"> The <see cref="string"/> to use. </param>
+        /// <param name="fineTuningJobId"> The ID of the fine-tuning job. </param>
         /// <param name="options"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="fineTuningJobId"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="fineTuningJobId"/> is an empty string, and was expected to be non-empty. </exception>
@@ -334,7 +334,7 @@ namespace OpenAI.Internal
         /// </item>
         /// </list>
         /// </summary>
-        /// <param name="fineTuningJobId"> The <see cref="string"/> to use. </param>
+        /// <param name="fineTuningJobId"> The ID of the fine-tuning job. </param>
         /// <param name="options"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="ArgumentNullException"> <paramref name="fineTuningJobId"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="fineTuningJobId"/> is an empty string, and was expected to be non-empty. </exception>

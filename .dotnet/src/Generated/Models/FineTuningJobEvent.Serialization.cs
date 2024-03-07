@@ -21,14 +21,14 @@ namespace OpenAI.Internal.Models
             writer.WriteStartObject();
             writer.WritePropertyName("id"u8);
             writer.WriteStringValue(Id);
-            writer.WritePropertyName("object"u8);
-            writer.WriteStringValue(Object);
             writer.WritePropertyName("created_at"u8);
             writer.WriteNumberValue(CreatedAt, "U");
             writer.WritePropertyName("level"u8);
             writer.WriteStringValue(Level.ToString());
             writer.WritePropertyName("message"u8);
             writer.WriteStringValue(Message);
+            writer.WritePropertyName("object"u8);
+            writer.WriteStringValue(Object.ToString());
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
                 foreach (var item in _serializedAdditionalRawData)
@@ -68,10 +68,10 @@ namespace OpenAI.Internal.Models
                 return null;
             }
             string id = default;
-            string @object = default;
             DateTimeOffset createdAt = default;
             FineTuningJobEventLevel level = default;
             string message = default;
+            FineTuningJobEventObject @object = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -79,11 +79,6 @@ namespace OpenAI.Internal.Models
                 if (property.NameEquals("id"u8))
                 {
                     id = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("object"u8))
-                {
-                    @object = property.Value.GetString();
                     continue;
                 }
                 if (property.NameEquals("created_at"u8))
@@ -101,13 +96,18 @@ namespace OpenAI.Internal.Models
                     message = property.Value.GetString();
                     continue;
                 }
+                if (property.NameEquals("object"u8))
+                {
+                    @object = new FineTuningJobEventObject(property.Value.GetString());
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new FineTuningJobEvent(id, @object, createdAt, level, message, serializedAdditionalRawData);
+            return new FineTuningJobEvent(id, createdAt, level, message, @object, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<FineTuningJobEvent>.Write(ModelReaderWriterOptions options)

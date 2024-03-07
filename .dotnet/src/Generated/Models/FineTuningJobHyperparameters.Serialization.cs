@@ -19,18 +19,15 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(NEpochs))
-            {
-                writer.WritePropertyName("n_epochs"u8);
+            writer.WritePropertyName("n_epochs"u8);
 #if NET6_0_OR_GREATER
 				writer.WriteRawValue(NEpochs);
 #else
-                using (JsonDocument document = JsonDocument.Parse(NEpochs))
-                {
-                    JsonSerializer.Serialize(writer, document.RootElement);
-                }
-#endif
+            using (JsonDocument document = JsonDocument.Parse(NEpochs))
+            {
+                JsonSerializer.Serialize(writer, document.RootElement);
             }
+#endif
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
                 foreach (var item in _serializedAdditionalRawData)
@@ -69,17 +66,13 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<BinaryData> nEpochs = default;
+            BinaryData nEpochs = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
                 if (property.NameEquals("n_epochs"u8))
                 {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        continue;
-                    }
                     nEpochs = BinaryData.FromString(property.Value.GetRawText());
                     continue;
                 }
@@ -89,7 +82,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new FineTuningJobHyperparameters(nEpochs.Value, serializedAdditionalRawData);
+            return new FineTuningJobHyperparameters(nEpochs, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<FineTuningJobHyperparameters>.Write(ModelReaderWriterOptions options)

@@ -19,8 +19,6 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            writer.WritePropertyName("object"u8);
-            writer.WriteStringValue(Object);
             writer.WritePropertyName("data"u8);
             writer.WriteStartArray();
             foreach (var item in Data)
@@ -28,6 +26,8 @@ namespace OpenAI.Internal.Models
                 writer.WriteObjectValue(item);
             }
             writer.WriteEndArray();
+            writer.WritePropertyName("object"u8);
+            writer.WriteStringValue(Object.ToString());
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
                 foreach (var item in _serializedAdditionalRawData)
@@ -66,17 +66,12 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            string @object = default;
             IReadOnlyList<FineTuningJobEvent> data = default;
+            ListFineTuningJobEventsResponseObject @object = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("object"u8))
-                {
-                    @object = property.Value.GetString();
-                    continue;
-                }
                 if (property.NameEquals("data"u8))
                 {
                     List<FineTuningJobEvent> array = new List<FineTuningJobEvent>();
@@ -87,13 +82,18 @@ namespace OpenAI.Internal.Models
                     data = array;
                     continue;
                 }
+                if (property.NameEquals("object"u8))
+                {
+                    @object = new ListFineTuningJobEventsResponseObject(property.Value.GetString());
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new ListFineTuningJobEventsResponse(@object, data, serializedAdditionalRawData);
+            return new ListFineTuningJobEventsResponse(data, @object, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<ListFineTuningJobEventsResponse>.Write(ModelReaderWriterOptions options)

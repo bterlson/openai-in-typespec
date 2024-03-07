@@ -17,17 +17,17 @@ namespace OpenAI.Internal.Models
             _value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        private const string CreatedValue = "created";
-        private const string PendingValue = "pending";
+        private const string ValidatingFilesValue = "validating_files";
+        private const string QueuedValue = "queued";
         private const string RunningValue = "running";
         private const string SucceededValue = "succeeded";
         private const string FailedValue = "failed";
         private const string CancelledValue = "cancelled";
 
-        /// <summary> created. </summary>
-        public static FineTuningJobStatus Created { get; } = new FineTuningJobStatus(CreatedValue);
-        /// <summary> pending. </summary>
-        public static FineTuningJobStatus Pending { get; } = new FineTuningJobStatus(PendingValue);
+        /// <summary> validating_files. </summary>
+        public static FineTuningJobStatus ValidatingFiles { get; } = new FineTuningJobStatus(ValidatingFilesValue);
+        /// <summary> queued. </summary>
+        public static FineTuningJobStatus Queued { get; } = new FineTuningJobStatus(QueuedValue);
         /// <summary> running. </summary>
         public static FineTuningJobStatus Running { get; } = new FineTuningJobStatus(RunningValue);
         /// <summary> succeeded. </summary>

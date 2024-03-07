@@ -19,22 +19,10 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            writer.WritePropertyName("training_file"u8);
-            writer.WriteStringValue(TrainingFile);
-            if (OptionalProperty.IsDefined(ValidationFile))
-            {
-                if (ValidationFile != null)
-                {
-                    writer.WritePropertyName("validation_file"u8);
-                    writer.WriteStringValue(ValidationFile);
-                }
-                else
-                {
-                    writer.WriteNull("validation_file");
-                }
-            }
             writer.WritePropertyName("model"u8);
             writer.WriteStringValue(Model.ToString());
+            writer.WritePropertyName("training_file"u8);
+            writer.WriteStringValue(TrainingFile);
             if (OptionalProperty.IsDefined(Hyperparameters))
             {
                 writer.WritePropertyName("hyperparameters"u8);
@@ -50,6 +38,18 @@ namespace OpenAI.Internal.Models
                 else
                 {
                     writer.WriteNull("suffix");
+                }
+            }
+            if (OptionalProperty.IsDefined(ValidationFile))
+            {
+                if (ValidationFile != null)
+                {
+                    writer.WritePropertyName("validation_file"u8);
+                    writer.WriteStringValue(ValidationFile);
+                }
+                else
+                {
+                    writer.WriteNull("validation_file");
                 }
             }
             if (options.Format != "W" && _serializedAdditionalRawData != null)
@@ -90,33 +90,23 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            string trainingFile = default;
-            OptionalProperty<string> validationFile = default;
             CreateFineTuningJobRequestModel model = default;
+            string trainingFile = default;
             OptionalProperty<CreateFineTuningJobRequestHyperparameters> hyperparameters = default;
             OptionalProperty<string> suffix = default;
+            OptionalProperty<string> validationFile = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("training_file"u8))
-                {
-                    trainingFile = property.Value.GetString();
-                    continue;
-                }
-                if (property.NameEquals("validation_file"u8))
-                {
-                    if (property.Value.ValueKind == JsonValueKind.Null)
-                    {
-                        validationFile = null;
-                        continue;
-                    }
-                    validationFile = property.Value.GetString();
-                    continue;
-                }
                 if (property.NameEquals("model"u8))
                 {
                     model = new CreateFineTuningJobRequestModel(property.Value.GetString());
+                    continue;
+                }
+                if (property.NameEquals("training_file"u8))
+                {
+                    trainingFile = property.Value.GetString();
                     continue;
                 }
                 if (property.NameEquals("hyperparameters"u8))
@@ -138,13 +128,23 @@ namespace OpenAI.Internal.Models
                     suffix = property.Value.GetString();
                     continue;
                 }
+                if (property.NameEquals("validation_file"u8))
+                {
+                    if (property.Value.ValueKind == JsonValueKind.Null)
+                    {
+                        validationFile = null;
+                        continue;
+                    }
+                    validationFile = property.Value.GetString();
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateFineTuningJobRequest(trainingFile, validationFile.Value, model, hyperparameters.Value, suffix.Value, serializedAdditionalRawData);
+            return new CreateFineTuningJobRequest(model, trainingFile, hyperparameters.Value, suffix.Value, validationFile.Value, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateFineTuningJobRequest>.Write(ModelReaderWriterOptions options)

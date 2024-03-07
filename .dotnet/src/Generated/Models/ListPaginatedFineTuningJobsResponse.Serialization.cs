@@ -19,8 +19,6 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            writer.WritePropertyName("object"u8);
-            writer.WriteStringValue(Object);
             writer.WritePropertyName("data"u8);
             writer.WriteStartArray();
             foreach (var item in Data)
@@ -30,6 +28,8 @@ namespace OpenAI.Internal.Models
             writer.WriteEndArray();
             writer.WritePropertyName("has_more"u8);
             writer.WriteBooleanValue(HasMore);
+            writer.WritePropertyName("object"u8);
+            writer.WriteStringValue(Object.ToString());
             if (options.Format != "W" && _serializedAdditionalRawData != null)
             {
                 foreach (var item in _serializedAdditionalRawData)
@@ -68,18 +68,13 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            string @object = default;
             IReadOnlyList<FineTuningJob> data = default;
             bool hasMore = default;
+            ListPaginatedFineTuningJobsResponseObject @object = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
             {
-                if (property.NameEquals("object"u8))
-                {
-                    @object = property.Value.GetString();
-                    continue;
-                }
                 if (property.NameEquals("data"u8))
                 {
                     List<FineTuningJob> array = new List<FineTuningJob>();
@@ -95,13 +90,18 @@ namespace OpenAI.Internal.Models
                     hasMore = property.Value.GetBoolean();
                     continue;
                 }
+                if (property.NameEquals("object"u8))
+                {
+                    @object = new ListPaginatedFineTuningJobsResponseObject(property.Value.GetString());
+                    continue;
+                }
                 if (options.Format != "W")
                 {
                     additionalPropertiesDictionary.Add(property.Name, BinaryData.FromString(property.Value.GetRawText()));
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new ListPaginatedFineTuningJobsResponse(@object, data, hasMore, serializedAdditionalRawData);
+            return new ListPaginatedFineTuningJobsResponse(data, hasMore, @object, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<ListPaginatedFineTuningJobsResponse>.Write(ModelReaderWriterOptions options)

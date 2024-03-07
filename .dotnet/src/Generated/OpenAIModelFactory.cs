@@ -185,6 +185,10 @@ namespace OpenAI.Internal.Models
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.CreateFineTuningJobRequest"/>. </summary>
+        /// <param name="model">
+        /// The name of the model to fine-tune. You can select one of the
+        /// [supported models](/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
+        /// </param>
         /// <param name="trainingFile">
         /// The ID of an uploaded file that contains training data.
         ///
@@ -194,6 +198,13 @@ namespace OpenAI.Internal.Models
         /// the purpose `fine-tune`.
         ///
         /// See the [fine-tuning guide](/docs/guides/fine-tuning) for more details.
+        /// </param>
+        /// <param name="hyperparameters"> The hyperparameters used for the fine-tuning job. </param>
+        /// <param name="suffix">
+        /// A string of up to 18 characters that will be added to your fine-tuned model name.
+        ///
+        /// For example, a `suffix` of "custom-model-name" would produce a model name like
+        /// `ft:gpt-3.5-turbo:openai:custom-model-name:7p4lURel`.
         /// </param>
         /// <param name="validationFile">
         /// The ID of an uploaded file that contains validation data.
@@ -207,44 +218,45 @@ namespace OpenAI.Internal.Models
         ///
         /// See the [fine-tuning guide](/docs/guides/fine-tuning) for more details.
         /// </param>
-        /// <param name="model">
-        /// The name of the model to fine-tune. You can select one of the
-        /// [supported models](/docs/guides/fine-tuning/what-models-can-be-fine-tuned).
-        /// </param>
-        /// <param name="hyperparameters"> The hyperparameters used for the fine-tuning job. </param>
-        /// <param name="suffix">
-        /// A string of up to 18 characters that will be added to your fine-tuned model name.
-        ///
-        /// For example, a `suffix` of "custom-model-name" would produce a model name like
-        /// `ft:gpt-3.5-turbo:openai:custom-model-name:7p4lURel`.
-        /// </param>
         /// <returns> A new <see cref="Models.CreateFineTuningJobRequest"/> instance for mocking. </returns>
-        public static CreateFineTuningJobRequest CreateFineTuningJobRequest(string trainingFile = null, string validationFile = null, CreateFineTuningJobRequestModel model = default, CreateFineTuningJobRequestHyperparameters hyperparameters = null, string suffix = null)
+        public static CreateFineTuningJobRequest CreateFineTuningJobRequest(CreateFineTuningJobRequestModel model = default, string trainingFile = null, CreateFineTuningJobRequestHyperparameters hyperparameters = null, string suffix = null, string validationFile = null)
         {
-            return new CreateFineTuningJobRequest(trainingFile, validationFile, model, hyperparameters, suffix, serializedAdditionalRawData: null);
+            return new CreateFineTuningJobRequest(model, trainingFile, hyperparameters, suffix, validationFile, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.FineTuningJob"/>. </summary>
         /// <param name="id"> The object identifier, which can be referenced in the API endpoints. </param>
-        /// <param name="object"> The object type, which is always "fine_tuning.job". </param>
         /// <param name="createdAt"> The Unix timestamp (in seconds) for when the fine-tuning job was created. </param>
-        /// <param name="finishedAt">
-        /// The Unix timestamp (in seconds) for when the fine-tuning job was finished. The value will be
-        /// null if the fine-tuning job is still running.
+        /// <param name="error">
+        /// For fine-tuning jobs that have `failed`, this will contain more information on the cause of the
+        /// failure.
         /// </param>
-        /// <param name="model"> The base model that is being fine-tuned. </param>
         /// <param name="fineTunedModel">
         /// The name of the fine-tuned model that is being created. The value will be null if the
         /// fine-tuning job is still running.
         /// </param>
-        /// <param name="organizationId"> The organization that owns the fine-tuning job. </param>
-        /// <param name="status">
-        /// The current status of the fine-tuning job, which can be either `created`, `pending`, `running`,
-        /// `succeeded`, `failed`, or `cancelled`.
+        /// <param name="finishedAt">
+        /// The Unix timestamp (in seconds) for when the fine-tuning job was finished. The value will be
+        /// null if the fine-tuning job is still running.
         /// </param>
         /// <param name="hyperparameters">
         /// The hyperparameters used for the fine-tuning job. See the
         /// [fine-tuning guide](/docs/guides/fine-tuning) for more details.
+        /// </param>
+        /// <param name="model"> The base model that is being fine-tuned. </param>
+        /// <param name="object"> The object type, which is always "fine_tuning.job". </param>
+        /// <param name="organizationId"> The organization that owns the fine-tuning job. </param>
+        /// <param name="resultFiles">
+        /// The compiled results file ID(s) for the fine-tuning job. You can retrieve the results with the
+        /// [Files API](/docs/api-reference/files/retrieve-contents).
+        /// </param>
+        /// <param name="status">
+        /// The current status of the fine-tuning job, which can be either `validating_files`, `queued`,
+        /// `running`, `succeeded`, `failed`, or `cancelled`.
+        /// </param>
+        /// <param name="trainedTokens">
+        /// The total number of billable tokens processed by this fine-tuning job. The value will be null
+        /// if the fine-tuning job is still running.
         /// </param>
         /// <param name="trainingFile">
         /// The file ID used for training. You can retrieve the training data with the
@@ -254,24 +266,25 @@ namespace OpenAI.Internal.Models
         /// The file ID used for validation. You can retrieve the validation results with the
         /// [Files API](/docs/api-reference/files/retrieve-contents).
         /// </param>
-        /// <param name="resultFiles">
-        /// The compiled results file ID(s) for the fine-tuning job. You can retrieve the results with the
-        /// [Files API](/docs/api-reference/files/retrieve-contents).
-        /// </param>
-        /// <param name="trainedTokens">
-        /// The total number of billable tokens processed by this fine tuning job. The value will be null
-        /// if the fine-tuning job is still running.
-        /// </param>
-        /// <param name="error">
-        /// For fine-tuning jobs that have `failed`, this will contain more information on the cause of the
-        /// failure.
-        /// </param>
         /// <returns> A new <see cref="Models.FineTuningJob"/> instance for mocking. </returns>
-        public static FineTuningJob FineTuningJob(string id = null, FineTuningJobObject @object = default, DateTimeOffset createdAt = default, DateTimeOffset? finishedAt = null, string model = null, string fineTunedModel = null, string organizationId = null, FineTuningJobStatus status = default, FineTuningJobHyperparameters hyperparameters = null, string trainingFile = null, string validationFile = null, IEnumerable<string> resultFiles = null, long? trainedTokens = null, FineTuningJobError error = null)
+        public static FineTuningJob FineTuningJob(string id = null, DateTimeOffset createdAt = default, FineTuningJobError error = null, string fineTunedModel = null, DateTimeOffset? finishedAt = null, FineTuningJobHyperparameters hyperparameters = null, string model = null, FineTuningJobObject @object = default, string organizationId = null, IEnumerable<string> resultFiles = null, FineTuningJobStatus status = default, long? trainedTokens = null, string trainingFile = null, string validationFile = null)
         {
             resultFiles ??= new List<string>();
 
-            return new FineTuningJob(id, @object, createdAt, finishedAt, model, fineTunedModel, organizationId, status, hyperparameters, trainingFile, validationFile, resultFiles?.ToList(), trainedTokens, error, serializedAdditionalRawData: null);
+            return new FineTuningJob(id, createdAt, error, fineTunedModel, finishedAt, hyperparameters, model, @object, organizationId, resultFiles?.ToList(), status, trainedTokens, trainingFile, validationFile, serializedAdditionalRawData: null);
+        }
+
+        /// <summary> Initializes a new instance of <see cref="Models.FineTuningJobError"/>. </summary>
+        /// <param name="code"> A machine-readable error code. </param>
+        /// <param name="message"> A human-readable error message. </param>
+        /// <param name="param">
+        /// The parameter that was invalid, usually `training_file` or `validation_file`. This field will
+        /// be null if the failure was not parameter-specific.
+        /// </param>
+        /// <returns> A new <see cref="Models.FineTuningJobError"/> instance for mocking. </returns>
+        public static FineTuningJobError FineTuningJobError(string code = null, string message = null, string param = null)
+        {
+            return new FineTuningJobError(code, message, param, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.FineTuningJobHyperparameters"/>. </summary>
@@ -279,7 +292,7 @@ namespace OpenAI.Internal.Models
         /// The number of epochs to train the model for. An epoch refers to one full cycle through the
         /// training dataset.
         ///
-        /// "Auto" decides the optimal number of epochs based on the size of the dataset. If setting the
+        /// "auto" decides the optimal number of epochs based on the size of the dataset. If setting the
         /// number manually, we support any number between 1 and 50 epochs.
         /// </param>
         /// <returns> A new <see cref="Models.FineTuningJobHyperparameters"/> instance for mocking. </returns>
@@ -288,52 +301,39 @@ namespace OpenAI.Internal.Models
             return new FineTuningJobHyperparameters(nEpochs, serializedAdditionalRawData: null);
         }
 
-        /// <summary> Initializes a new instance of <see cref="Models.FineTuningJobError"/>. </summary>
-        /// <param name="message"> A human-readable error message. </param>
-        /// <param name="code"> A machine-readable error code. </param>
-        /// <param name="param">
-        /// The parameter that was invalid, usually `training_file` or `validation_file`. This field
-        /// will be null if the failure was not parameter-specific.
-        /// </param>
-        /// <returns> A new <see cref="Models.FineTuningJobError"/> instance for mocking. </returns>
-        public static FineTuningJobError FineTuningJobError(string message = null, string code = null, string param = null)
-        {
-            return new FineTuningJobError(message, code, param, serializedAdditionalRawData: null);
-        }
-
         /// <summary> Initializes a new instance of <see cref="Models.ListPaginatedFineTuningJobsResponse"/>. </summary>
-        /// <param name="object"></param>
         /// <param name="data"></param>
         /// <param name="hasMore"></param>
+        /// <param name="object"></param>
         /// <returns> A new <see cref="Models.ListPaginatedFineTuningJobsResponse"/> instance for mocking. </returns>
-        public static ListPaginatedFineTuningJobsResponse ListPaginatedFineTuningJobsResponse(string @object = null, IEnumerable<FineTuningJob> data = null, bool hasMore = default)
+        public static ListPaginatedFineTuningJobsResponse ListPaginatedFineTuningJobsResponse(IEnumerable<FineTuningJob> data = null, bool hasMore = default, ListPaginatedFineTuningJobsResponseObject @object = default)
         {
             data ??= new List<FineTuningJob>();
 
-            return new ListPaginatedFineTuningJobsResponse(@object, data?.ToList(), hasMore, serializedAdditionalRawData: null);
+            return new ListPaginatedFineTuningJobsResponse(data?.ToList(), hasMore, @object, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.ListFineTuningJobEventsResponse"/>. </summary>
-        /// <param name="object"></param>
         /// <param name="data"></param>
+        /// <param name="object"></param>
         /// <returns> A new <see cref="Models.ListFineTuningJobEventsResponse"/> instance for mocking. </returns>
-        public static ListFineTuningJobEventsResponse ListFineTuningJobEventsResponse(string @object = null, IEnumerable<FineTuningJobEvent> data = null)
+        public static ListFineTuningJobEventsResponse ListFineTuningJobEventsResponse(IEnumerable<FineTuningJobEvent> data = null, ListFineTuningJobEventsResponseObject @object = default)
         {
             data ??= new List<FineTuningJobEvent>();
 
-            return new ListFineTuningJobEventsResponse(@object, data?.ToList(), serializedAdditionalRawData: null);
+            return new ListFineTuningJobEventsResponse(data?.ToList(), @object, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.FineTuningJobEvent"/>. </summary>
         /// <param name="id"></param>
-        /// <param name="object"></param>
         /// <param name="createdAt"></param>
         /// <param name="level"></param>
         /// <param name="message"></param>
+        /// <param name="object"></param>
         /// <returns> A new <see cref="Models.FineTuningJobEvent"/> instance for mocking. </returns>
-        public static FineTuningJobEvent FineTuningJobEvent(string id = null, string @object = null, DateTimeOffset createdAt = default, FineTuningJobEventLevel level = default, string message = null)
+        public static FineTuningJobEvent FineTuningJobEvent(string id = null, DateTimeOffset createdAt = default, FineTuningJobEventLevel level = default, string message = null, FineTuningJobEventObject @object = default)
         {
-            return new FineTuningJobEvent(id, @object, createdAt, level, message, serializedAdditionalRawData: null);
+            return new FineTuningJobEvent(id, createdAt, level, message, @object, serializedAdditionalRawData: null);
         }
 
         /// <summary> Initializes a new instance of <see cref="Models.CreateMessageRequest"/>. </summary>

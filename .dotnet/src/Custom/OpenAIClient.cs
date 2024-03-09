@@ -3,6 +3,7 @@ using OpenAI.Audio;
 using OpenAI.Chat;
 using OpenAI.Embeddings;
 using OpenAI.Files;
+using OpenAI.FineTuning;
 using OpenAI.Images;
 using OpenAI.LegacyCompletions;
 using OpenAI.ModelManagement;
@@ -91,7 +92,7 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="AssistantClient"/>. </returns>
     public AssistantClient GetAssistantClient()
-        => new AssistantClient(_cachedEndpoint, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="AudioClient"/> that reuses the client configuration details provided to
@@ -103,7 +104,7 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="AudioClient"/>. </returns>
     public AudioClient GetAudioClient(string model)
-        => new AudioClient(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="ChatClient"/> that reuses the client configuration details provided to
@@ -115,7 +116,7 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="ChatClient"/>. </returns>
     public ChatClient GetChatClient(string model)
-        => new ChatClient(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="EmbeddingClient"/> that reuses the client configuration details provided to
@@ -127,7 +128,7 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="EmbeddingClient"/>. </returns>
     public EmbeddingClient GetEmbeddingClient(string model)
-        => new EmbeddingClient(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="FileClient"/> that reuses the client configuration details provided to
@@ -139,7 +140,19 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="FileClient"/>. </returns>
     public FileClient GetFileClient()
-        => new FileClient(_cachedEndpoint, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
+
+    /// <summary>
+    /// Gets a new instance of <see cref="FineTuningClient"/> that reuses the client configuration details provided to
+    /// the <see cref="OpenAIClient"/> instance.
+    /// </summary>
+    /// <remarks>
+    /// This method is functionally equivalent to using the <see cref="FineTuningClient"/> constructor directly with
+    /// the same configuration details.
+    /// </remarks>
+    /// <returns> A new <see cref="FineTuningClient"/>. </returns>
+    public FineTuningClient GetFineTuningClient()
+        => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="ImageClient"/> that reuses the client configuration details provided to
@@ -151,7 +164,7 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="ImageClient"/>. </returns>
     public ImageClient GetImageClient(string model)
-        => new ImageClient(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, model, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="LegacyCompletionClient"/> that reuses the client configuration details provided to
@@ -163,7 +176,7 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="LegacyCompletionClient"/>. </returns>
     public LegacyCompletionClient GetLegacyCompletionClient()
-        => new LegacyCompletionClient(_cachedEndpoint, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="ModelManagementClient"/> that reuses the client configuration details provided to
@@ -175,7 +188,7 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="ModelManagementClient"/>. </returns>
     public ModelManagementClient GetModelManagementClient()
-        => new ModelManagementClient(_cachedEndpoint, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
 
     /// <summary>
     /// Gets a new instance of <see cref="ModerationClient"/> that reuses the client configuration details provided to
@@ -187,5 +200,5 @@ public partial class OpenAIClient
     /// </remarks>
     /// <returns> A new <see cref="ModerationClient"/>. </returns>
     public ModerationClient GetModerationClient()
-        => new ModerationClient(_cachedEndpoint, _cachedCredential, _cachedOptions);
+        => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
 }

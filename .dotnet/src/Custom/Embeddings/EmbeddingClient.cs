@@ -1,11 +1,6 @@
-using OpenAI.Internal.Models;
 using System;
 using System.ClientModel;
-using System.ClientModel;
-using System.ClientModel.Primitives;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenAI.Embeddings;
@@ -13,7 +8,7 @@ namespace OpenAI.Embeddings;
 /// <summary> The service client for the OpenAI Embeddings endpoint. </summary>
 public partial class EmbeddingClient
 {
-    private OpenAIClientConnector _clientConnector;
+    private readonly OpenAIClientConnector _clientConnector;
     private Internal.Embeddings Shim => _clientConnector.InternalClient.GetEmbeddingsClient();
 
     public EmbeddingClient(Uri endpoint, string model, ApiKeyCredential credential, OpenAIClientOptions options = null)
@@ -96,16 +91,6 @@ public partial class EmbeddingClient
         EmbeddingCollection resultCollection = EmbeddingCollection.CreateFromInternalResponse(response.Value);
         return ClientResult.FromValue(resultCollection, response.GetRawResponse());
     }
-
-    /// <inheritdoc cref="Internal.Embeddings.CreateEmbedding(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult GenerateEmbeddings(BinaryContent content, RequestOptions context = null)
-        => Shim.CreateEmbedding(content, context);
-
-    /// <inheritdoc cref="Internal.Embeddings.CreateEmbeddingAsync(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual Task<ClientResult> GenerateEmbeddingsAsync(BinaryContent content, RequestOptions context = null)
-        => Shim.CreateEmbeddingAsync(content, context);
 
     private Internal.Models.CreateEmbeddingRequest CreateInternalRequest(object inputObject, EmbeddingOptions options)
     {

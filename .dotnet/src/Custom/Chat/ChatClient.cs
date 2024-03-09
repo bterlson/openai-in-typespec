@@ -2,7 +2,6 @@ using System;
 using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ namespace OpenAI.Chat;
 /// <summary> The service client for the OpenAI Chat Completions endpoint. </summary>
 public partial class ChatClient
 {
-    private OpenAIClientConnector _clientConnector;
+    private readonly OpenAIClientConnector _clientConnector;
     private Internal.Chat Shim => _clientConnector.InternalClient.GetChatClient();
 
     /// <summary>
@@ -314,16 +313,6 @@ public partial class ChatClient
                 responseForEnumeration.GetRawResponse().ContentStream,
                 e => StreamingChatUpdate.DeserializeStreamingChatUpdates(e)));   
     }
-
-    /// <inheritdoc cref="Internal.Chat.CreateChatCompletion(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult CompleteChat(BinaryContent content, RequestOptions context = null)
-        => Shim.CreateChatCompletion(content, context);
-
-    /// <inheritdoc cref="Internal.Chat.CreateChatCompletionAsync(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual Task<ClientResult> CompleteChatAsync(BinaryContent content, RequestOptions context = null)
-        => Shim.CreateChatCompletionAsync(content, context);
 
     private Internal.Models.CreateChatCompletionRequest CreateInternalRequest(
         IEnumerable<ChatRequestMessage> messages,

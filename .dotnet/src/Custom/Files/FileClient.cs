@@ -2,8 +2,6 @@ using System;
 using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +12,7 @@ namespace OpenAI.Files;
 /// </summary>
 public partial class FileClient
 {
-    private OpenAIClientConnector _clientConnector;
+    private readonly OpenAIClientConnector _clientConnector;
     private Internal.Files Shim => _clientConnector.InternalClient.GetFilesClient();
 
     /// <summary>
@@ -114,20 +112,6 @@ public partial class FileClient
         return GetUploadResultFromResponse(uploadMessage.Response);
     }
 
-    /// <inheritdoc cref="Internal.Files.CreateFile(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult UploadFile(BinaryContent requestBody, RequestOptions context)
-    {
-        return Shim.CreateFile(requestBody, context);
-    }
-
-    /// <inheritdoc cref="Internal.Files.CreateFileAsync(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual Task<ClientResult> UploadFileAsync(BinaryContent requestBody, RequestOptions context)
-    {
-        return Shim.CreateFileAsync(requestBody, context);
-    }
-
     public virtual ClientResult<OpenAIFileInfo> GetFileInfo(string fileId)
     {
         ClientResult<Internal.Models.OpenAIFile> internalResult = Shim.RetrieveFile(fileId);
@@ -138,20 +122,6 @@ public partial class FileClient
     {
         ClientResult<Internal.Models.OpenAIFile> internalResult = await Shim.RetrieveFileAsync(fileId);
         return ClientResult.FromValue(new OpenAIFileInfo(internalResult.Value), internalResult.GetRawResponse());
-    }
-
-    /// <inheritdoc cref="Internal.Files.RetrieveFile(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult GetFileInfo(string fileId, RequestOptions context)
-    {
-        return Shim.RetrieveFile(fileId, context);
-    }
-
-    /// <inheritdoc cref="Internal.Files.RetrieveFileAsync(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual Task<ClientResult> GetFileInfoAsync(string fileId, RequestOptions context)
-    {
-        return Shim.RetrieveFileAsync(fileId, context);
     }
 
     public virtual ClientResult<OpenAIFileInfoCollection> GetFileInfoList(OpenAIFilePurpose? purpose = null)
@@ -186,20 +156,6 @@ public partial class FileClient
             infoItems.Add(new(internalFile));
         }
         return ClientResult.FromValue(new OpenAIFileInfoCollection(infoItems), result.GetRawResponse());
-    }
-
-    /// <inheritdoc cref="Internal.Files.GetFiles(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult GetFileInfoList(string purpose, RequestOptions context)
-    {
-        return Shim.GetFiles(purpose, context);
-    }
-
-    /// <inheritdoc cref="Internal.Files.GetFilesAsync(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual Task<ClientResult> GetFileInfoListAsync(string purpose, RequestOptions context)
-    {
-        return Shim.GetFilesAsync(purpose, context);
     }
 
     public virtual ClientResult<BinaryData> DownloadFile(string fileId)
@@ -247,20 +203,6 @@ public partial class FileClient
         return ClientResult.FromValue(message.Response.Content, message.Response);
     }
 
-    /// <inheritdoc cref="Internal.Files.DownloadFile(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult DownloadFile(string fileId, RequestOptions context)
-    {
-        return Shim.DownloadFile(fileId, context);
-    }
-
-    /// <inheritdoc cref="Internal.Files.DownloadFileAsync(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual Task<ClientResult> DownloadFileAsync(string fileId, RequestOptions context)
-    {
-        return Shim.DownloadFileAsync(fileId, context);
-    }
-
     public virtual void DeleteFile(string fileId)
     {
         _ = Shim.DeleteFile(fileId);
@@ -269,20 +211,6 @@ public partial class FileClient
     public virtual async Task DeleteFileAsync(string fileId)
     {
         _ = Shim.DeleteFileAsync(fileId);
-    }
-
-    /// <inheritdoc cref="Internal.Files.DeleteFile(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult DeleteFile(string fileId, RequestOptions context)
-    {
-        return Shim.DeleteFile(fileId, context);
-    }
-
-    /// <inheritdoc cref="Internal.Files.DeleteFileAsync(string, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult DeleteFileAsync(string fileId, RequestOptions context)
-    {
-        return Shim.DeleteFile(fileId, context);
     }
 
     internal PipelineMessage CreateInternalUploadMessage(BinaryData fileData, string filename, OpenAIFilePurpose purpose)

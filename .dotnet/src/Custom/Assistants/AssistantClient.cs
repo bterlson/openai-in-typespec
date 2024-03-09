@@ -99,14 +99,18 @@ public partial class AssistantClient
         : this(endpoint: null, credential: null, options)
     { }
 
-    public virtual ClientResult<Assistant> CreateAssistant(string modelName, AssistantCreationOptions options = null)
+    public virtual ClientResult<Assistant> CreateAssistant(
+        string modelName,
+        AssistantCreationOptions options = null)
     {
         Internal.Models.CreateAssistantRequest request = CreateInternalCreateAssistantRequest(modelName, options);
         ClientResult<Internal.Models.AssistantObject> internalResult = Shim.CreateAssistant(request);
         return ClientResult.FromValue(new Assistant(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual async Task<ClientResult<Assistant>> CreateAssistantAsync(string modelName, AssistantCreationOptions options = null)
+    public virtual async Task<ClientResult<Assistant>> CreateAssistantAsync(
+        string modelName,
+        AssistantCreationOptions options = null)
     {
         Internal.Models.CreateAssistantRequest request = CreateInternalCreateAssistantRequest(modelName, options);
         ClientResult<Internal.Models.AssistantObject> internalResult
@@ -114,7 +118,7 @@ public partial class AssistantClient
         return ClientResult.FromValue(new Assistant(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual ClientResult<Assistant> GetAssistant(string assistantId)
+    public virtual ClientResult<Assistant> GetAssistant(string assistantId)
     {
         ClientResult<Internal.Models.AssistantObject> internalResult = Shim.GetAssistant(assistantId);
         return ClientResult.FromValue(new Assistant(internalResult.Value), internalResult.GetRawResponse());
@@ -175,7 +179,8 @@ public partial class AssistantClient
         return ClientResult.FromValue(new Assistant(internalResult.Value), internalResult.GetRawResponse());
     }
 
-     public virtual ClientResult<bool> DeleteAssistant(string assistantId)
+    public virtual ClientResult<bool> DeleteAssistant(
+        string assistantId)
     {
         ClientResult<Internal.Models.DeleteAssistantResponse> internalResponse = Shim.DeleteAssistant(assistantId);
         return ClientResult.FromValue(internalResponse.Value.Deleted, internalResponse.GetRawResponse());

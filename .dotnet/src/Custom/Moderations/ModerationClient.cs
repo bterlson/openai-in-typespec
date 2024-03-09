@@ -1,10 +1,5 @@
 using System;
 using System.ClientModel;
-using System.ClientModel;
-using System.ClientModel.Primitives;
-using System.ComponentModel;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OpenAI.Moderations;
 
@@ -13,7 +8,7 @@ namespace OpenAI.Moderations;
 /// </summary>
 public partial class ModerationClient
 {
-    private OpenAIClientConnector _clientConnector;
+    private readonly OpenAIClientConnector _clientConnector;
     private Internal.Moderations Shim => _clientConnector.InternalClient.GetModerationsClient();
 
     /// <summary>
@@ -92,15 +87,4 @@ public partial class ModerationClient
     public ModerationClient(OpenAIClientOptions options = null)
         : this(endpoint: null, credential: null, options)
     { }
-
-    public virtual ClientResult ClassifyText(BinaryContent content, RequestOptions context = null)
-    {
-        return Shim.CreateModeration(content, context);
-    }
-
-    public virtual Task<ClientResult> ClassifyTextAsync(BinaryContent content, RequestOptions context = null)
-    {
-        return Shim.CreateModerationAsync(content, context);
-    }
-
 }

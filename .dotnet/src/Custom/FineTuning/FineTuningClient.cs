@@ -1,22 +1,18 @@
-using System;
+﻿using System;
 using System.ClientModel;
 
-namespace OpenAI.LegacyCompletions;
+namespace OpenAI.FineTuning;
 
 /// <summary>
-///     The basic, protocol-level service client for OpenAI legacy completion operations.
-///     <para>
-///         <b>Note</b>: pre-chat completions are a legacy feature. New solutions should consider the use of chat
-///         completions or assistants, instead.
-///     </para>
+///     The service client for OpenAI fine-tuning operations.
 /// </summary>
-public partial class LegacyCompletionClient
+public partial class FineTuningClient
 {
     private readonly OpenAIClientConnector _clientConnector;
-    private Internal.Completions Shim => _clientConnector.InternalClient.GetCompletionsClient();
+    private Internal.FineTuning FineTuningShim => _clientConnector.InternalClient.GetFineTuningClient();
 
     /// <summary>
-    /// Initializes a new instance of <see cref="LegacyCompletionClient"/>, used for legacy completion requests. 
+    /// Initializes a new instance of <see cref="FineTuningClient"/>, used for fine-tuning operation requests. 
     /// </summary>
     /// <remarks>
     /// <para>
@@ -31,13 +27,13 @@ public partial class LegacyCompletionClient
     /// <param name="endpoint">The connection endpoint to use.</param>
     /// <param name="credential">The API key used to authenticate with the service endpoint.</param>
     /// <param name="options">Additional options to customize the client.</param>
-    public LegacyCompletionClient(Uri endpoint, ApiKeyCredential credential, OpenAIClientOptions options = null)
+    public FineTuningClient(Uri endpoint, ApiKeyCredential credential, OpenAIClientOptions options = null)
     {
-        _clientConnector = new("protocol", endpoint, credential, options);
+        _clientConnector = new("none", endpoint, credential, options);
     }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="LegacyCompletionClient"/>, used for legacy completion operation requests. 
+    /// Initializes a new instance of <see cref="FineTuningClient"/>, used for fine-tuning operation requests. 
     /// </summary>
     /// <remarks>
     /// <para>
@@ -51,12 +47,12 @@ public partial class LegacyCompletionClient
     /// </remarks>
     /// <param name="endpoint">The connection endpoint to use.</param>
     /// <param name="options">Additional options to customize the client.</param>
-    public LegacyCompletionClient(Uri endpoint, OpenAIClientOptions options = null)
+    public FineTuningClient(Uri endpoint, OpenAIClientOptions options = null)
         : this(endpoint, credential: null, options)
     { }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="LegacyCompletionClient"/>, used for legacy completion operation requests. 
+    /// Initializes a new instance of <see cref="FineTuningClient"/>, used for fine-tuning operation requests. 
     /// </summary>
     /// <remarks>
     /// <para>
@@ -70,12 +66,12 @@ public partial class LegacyCompletionClient
     /// </remarks>
     /// <param name="credential">The API key used to authenticate with the service endpoint.</param>
     /// <param name="options">Additional options to customize the client.</param>
-    public LegacyCompletionClient(ApiKeyCredential credential, OpenAIClientOptions options = null)
+    public FineTuningClient(ApiKeyCredential credential, OpenAIClientOptions options = null)
         : this(endpoint: null, credential, options)
     { }
 
     /// <summary>
-    /// Initializes a new instance of <see cref="LegacyCompletionClient"/>, used for legacy completion operation requests. 
+    /// Initializes a new instance of <see cref="FineTuningClient"/>, used for fine-tuning operation requests. 
     /// </summary>
     /// <remarks>
     /// <para>
@@ -88,7 +84,7 @@ public partial class LegacyCompletionClient
     /// </para>
     /// </remarks>
     /// <param name="options">Additional options to customize the client.</param>
-    public LegacyCompletionClient(OpenAIClientOptions options = null)
+    public FineTuningClient(OpenAIClientOptions options = null)
         : this(endpoint: null, credential: null, options)
     { }
 }

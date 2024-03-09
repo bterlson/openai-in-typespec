@@ -158,7 +158,7 @@ namespace OpenAI.Internal
         /// <summary> List your organization's fine-tuning jobs. </summary>
         /// <param name="after"> Identifier for the last job from the previous pagination request. </param>
         /// <param name="limit"> Number of fine-tuning jobs to retrieve. </param>
-        public virtual async Task<ClientResult<ListPaginatedFineTuningJobsResponse>> GetPaginatedFineTuningJobsAsync(string after = null, long? limit = null)
+        public virtual async Task<ClientResult<ListPaginatedFineTuningJobsResponse>> GetPaginatedFineTuningJobsAsync(string after = null, int? limit = null)
         {
             ClientResult result = await GetPaginatedFineTuningJobsAsync(after, limit, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListPaginatedFineTuningJobsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -167,7 +167,7 @@ namespace OpenAI.Internal
         /// <summary> List your organization's fine-tuning jobs. </summary>
         /// <param name="after"> Identifier for the last job from the previous pagination request. </param>
         /// <param name="limit"> Number of fine-tuning jobs to retrieve. </param>
-        public virtual ClientResult<ListPaginatedFineTuningJobsResponse> GetPaginatedFineTuningJobs(string after = null, long? limit = null)
+        public virtual ClientResult<ListPaginatedFineTuningJobsResponse> GetPaginatedFineTuningJobs(string after = null, int? limit = null)
         {
             ClientResult result = GetPaginatedFineTuningJobs(after, limit, DefaultRequestContext);
             return ClientResult.FromValue(ListPaginatedFineTuningJobsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -183,7 +183,7 @@ namespace OpenAI.Internal
         /// </item>
         /// <item>
         /// <description>
-        /// Please try the simpler <see cref="GetPaginatedFineTuningJobsAsync(string,long?)"/> convenience overload with strongly typed models first.
+        /// Please try the simpler <see cref="GetPaginatedFineTuningJobsAsync(string,int?)"/> convenience overload with strongly typed models first.
         /// </description>
         /// </item>
         /// </list>
@@ -193,7 +193,7 @@ namespace OpenAI.Internal
         /// <param name="options"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="ClientResultException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        public virtual async Task<ClientResult> GetPaginatedFineTuningJobsAsync(string after, long? limit, RequestOptions options)
+        public virtual async Task<ClientResult> GetPaginatedFineTuningJobsAsync(string after, int? limit, RequestOptions options)
         {
             options ??= new RequestOptions();
             using PipelineMessage message = CreateGetPaginatedFineTuningJobsRequest(after, limit, options);
@@ -218,7 +218,7 @@ namespace OpenAI.Internal
         /// </item>
         /// <item>
         /// <description>
-        /// Please try the simpler <see cref="GetPaginatedFineTuningJobs(string,long?)"/> convenience overload with strongly typed models first.
+        /// Please try the simpler <see cref="GetPaginatedFineTuningJobs(string,int?)"/> convenience overload with strongly typed models first.
         /// </description>
         /// </item>
         /// </list>
@@ -228,7 +228,7 @@ namespace OpenAI.Internal
         /// <param name="options"> The request options, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <exception cref="ClientResultException"> Service returned a non-success status code. </exception>
         /// <returns> The response returned from the service. </returns>
-        public virtual ClientResult GetPaginatedFineTuningJobs(string after, long? limit, RequestOptions options)
+        public virtual ClientResult GetPaginatedFineTuningJobs(string after, int? limit, RequestOptions options)
         {
             options ??= new RequestOptions();
             using PipelineMessage message = CreateGetPaginatedFineTuningJobsRequest(after, limit, options);
@@ -587,7 +587,7 @@ namespace OpenAI.Internal
             return message;
         }
 
-        internal PipelineMessage CreateGetPaginatedFineTuningJobsRequest(string after, long? limit, RequestOptions options)
+        internal PipelineMessage CreateGetPaginatedFineTuningJobsRequest(string after, int? limit, RequestOptions options)
         {
             PipelineMessage message = _pipeline.CreateMessage();
             message.ResponseClassifier = ResponseErrorClassifier200;

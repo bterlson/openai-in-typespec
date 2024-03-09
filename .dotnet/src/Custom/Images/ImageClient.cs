@@ -1,10 +1,6 @@
 using System;
 using System.ClientModel;
-using System.ClientModel;
-using System.ClientModel.Primitives;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenAI.Images;
@@ -12,7 +8,7 @@ namespace OpenAI.Images;
 /// <summary> The service client for OpenAI image operations. </summary>
 public partial class ImageClient
 {
-    private OpenAIClientConnector _clientConnector;
+    private readonly OpenAIClientConnector _clientConnector;
     private Internal.Images Shim => _clientConnector.InternalClient.GetImagesClient();
 
     /// <summary>
@@ -171,16 +167,6 @@ public partial class ImageClient
         }
         return ClientResult.FromValue(new ImageGenerationCollection(ImageGenerations), response.GetRawResponse());
     }
-
-    /// <inheritdoc cref="Internal.Models.Images.CreateImage(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult GenerateImage(BinaryContent content, RequestOptions context = null)
-        => Shim.CreateImage(content, context);
-
-    /// <inheritdoc cref="Internal.Models.Images.CreateImageAsync(BinaryContent, RequestOptions)"/>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual Task<ClientResult> GenerateImageAsync(BinaryContent content, RequestOptions context = null)
-        => Shim.CreateImageAsync(content, context);
 
     private Internal.Models.CreateImageRequest CreateInternalRequest(
         string prompt,

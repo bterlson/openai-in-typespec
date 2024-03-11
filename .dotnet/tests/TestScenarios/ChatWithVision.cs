@@ -13,7 +13,7 @@ public partial class ChatWithVision
     [Test]
     public void DescribeAnImage()
     {
-        var stopSignPath = Path.Combine("data", "stop_sign.png");
+        var stopSignPath = Path.Combine("Assets", "stop_sign.png");
         var stopSignData = BinaryData.FromBytes(File.ReadAllBytes(stopSignPath));
 
         ChatClient client = GetTestClient<ChatClient>(TestScenario.VisionChat);

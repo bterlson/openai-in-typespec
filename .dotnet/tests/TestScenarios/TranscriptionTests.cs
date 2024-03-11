@@ -13,7 +13,7 @@ public partial class TranscriptionTests
     public void BasicTranscriptionWorks()
     {
         AudioClient client = GetTestClient();
-        using FileStream inputStream = File.OpenRead(Path.Combine("data", "hello_world.m4a"));
+        using FileStream inputStream = File.OpenRead(Path.Combine("Assets", "hello_world.m4a"));
         BinaryData inputData = BinaryData.FromStream(inputStream);
         ClientResult<AudioTranscription> transcriptionResult = client.TranscribeAudio(inputData, "hello_world.m4a");
         Assert.That(transcriptionResult.Value, Is.Not.Null);
@@ -24,7 +24,7 @@ public partial class TranscriptionTests
     public void WordTimestampsWork()
     {
         AudioClient client = GetTestClient();
-        using FileStream inputStream = File.OpenRead(Path.Combine("data", "hello_world.m4a"));
+        using FileStream inputStream = File.OpenRead(Path.Combine("Assets", "hello_world.m4a"));
         BinaryData inputData = BinaryData.FromStream(inputStream);
         ClientResult<AudioTranscription> transcriptionResult = client.TranscribeAudio(inputData, "hello_world.m4a", new AudioTranscriptionOptions()
         {

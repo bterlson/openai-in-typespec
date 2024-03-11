@@ -298,7 +298,7 @@ public partial class ChatClient
     {
         PipelineMessage requestMessage = CreateCustomRequestMessage(messages, choiceCount, options);
         requestMessage.BufferResponse = false;
-        await Shim.Pipeline.SendAsync(requestMessage);
+        await Shim.Pipeline.SendAsync(requestMessage).ConfigureAwait(false);
         PipelineResponse response = requestMessage.ExtractResponse();
 
         if (response.IsError)

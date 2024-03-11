@@ -6,6 +6,20 @@ namespace OpenAI.Images;
 public enum ImageSize
 {
     /// <summary>
+    /// A small, square image with 256 pixels of both width and height.
+    /// <para>
+    /// Supported <b>only</b> for the older <c>dall-e-2</c> model.
+    /// </para>
+    /// </summary>
+    Size256x256,
+    /// <summary>
+    /// A medium-small, square image with 512 pixels of both width and height.
+    /// <para>
+    /// Supported <b>only</b> for the older <c>dall-e-2</c> model.
+    /// </para>
+    /// </summary>
+    Size512x512,
+    /// <summary>
     /// A square image with 1024 pixels of both width and height.
     /// <para>
     /// <b>Supported</b> and <b>default</b> for both <c>dall-e-2</c> and <c>dall-e-3</c> models.
@@ -26,18 +40,4 @@ public enum ImageSize
     /// </para>
     /// </summary>
     Size1792x1024,
-    /// <summary>
-    /// A small, square image with 256 pixels of both width and height.
-    /// <para>
-    /// Supported <b>only</b> for the older <c>dall-e-2</c> model.
-    /// </para>
-    /// </summary>
-    Size256x256,
-    /// <summary>
-    /// A medium-small, square image with 512 pixels of both width and height.
-    /// <para>
-    /// Supported <b>only</b> for the older <c>dall-e-2</c> model.
-    /// </para>
-    /// </summary>
-    Size512x512,
 }

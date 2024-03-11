@@ -108,7 +108,7 @@ public partial class FileClient
         if (string.IsNullOrWhiteSpace(filename)) throw new ArgumentException(nameof(filename));
 
         PipelineMessage uploadMessage = CreateInternalUploadMessage(file, filename, purpose);
-        await Shim.Pipeline.SendAsync(uploadMessage);
+        await Shim.Pipeline.SendAsync(uploadMessage).ConfigureAwait(false);
         return GetUploadResultFromResponse(uploadMessage.Response);
     }
 
@@ -193,7 +193,7 @@ public partial class FileClient
         request.Uri = uriBuilder.Uri;
         request.Headers.Set("content-type", "multipart/form-data");
 
-        await Shim.Pipeline.SendAsync(message);
+        await Shim.Pipeline.SendAsync(message).ConfigureAwait(false);
 
         if (message.Response.IsError)
         {

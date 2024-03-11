@@ -154,7 +154,7 @@ public partial class AudioClient
     public virtual async Task<ClientResult<AudioTranscription>> TranscribeAudioAsync(BinaryData audioBytes, string filename, AudioTranscriptionOptions options = null)
     {
         PipelineMessage message = CreateInternalTranscriptionRequestMessage(audioBytes, filename, options);
-        await Shim.Pipeline.SendAsync(message);
+        await Shim.Pipeline.SendAsync(message).ConfigureAwait(false);
         return GetTranscriptionResultFromResponse(message.Response);
     }
 
@@ -168,7 +168,7 @@ public partial class AudioClient
     public virtual async Task<ClientResult<AudioTranslation>> TranslateAudioAsync(BinaryData audioBytes, string filename, AudioTranslationOptions options = null)
     {
         PipelineMessage message = CreateInternalTranslationRequestMessage(audioBytes, filename, options);
-        await Shim.Pipeline.SendAsync(message);
+        await Shim.Pipeline.SendAsync(message).ConfigureAwait(false);
         return GetTranslationResultFromResponse(message.Response);
     }
 

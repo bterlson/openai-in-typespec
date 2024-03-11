@@ -13,7 +13,7 @@ public partial class TranslationTests
     public void BasicTranslationWorks()
     {
         AudioClient client = GetTestClient();
-        using FileStream inputStream = File.OpenRead(Path.Combine("data", "hola_mundo.m4a"));
+        using FileStream inputStream = File.OpenRead(Path.Combine("Assets", "hola_mundo.m4a"));
         BinaryData inputData = BinaryData.FromStream(inputStream);
         ClientResult<AudioTranslation> translationResult = client.TranslateAudio(inputData, "hola_mundo.m4a");
         Assert.That(translationResult.Value, Is.Not.Null);

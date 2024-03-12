@@ -110,7 +110,6 @@ Notice that the returned value is a `StreamingClientResult<StreamingChatUpdate>`
 
 ```csharp
 Console.WriteLine("[ASSISTANT]: ");
-
 await foreach (StreamingChatUpdate chatUpdate in result)
 {
     Console.Write(chatUpdate.ContentUpdate);
@@ -119,114 +118,160 @@ await foreach (StreamingChatUpdate chatUpdate in result)
 
 ## How to use chat completions with function calling
 
-In this sample, you have a function that lets you query the weather in a given location (e.g., by making an API call to some third-party weather service or similar). For illustrative purposes, consider a function like this one:
+In this sample, you have two functions. The first function can retrieve a user's current geographic location (e.g., by polling the location service APIs of the user's device), while the second function can query the weather in a given location (e.g., by making an API call to some third-party weather service). You want chat completions to be able to call these functions if the model deems it necessary to have this information in order to respond to a user request. For illustrative purposes, consider the following:
 
 ```csharp
+private static string GetCurrentLocation()
+{
+    // Call the location API here.
+    return "San Francisco";
+}
+
 private static string GetCurrentWeather(string location, string unit = "celsius")
 {
     // Call the weather API here.
-    return "31 celsius";
+    return $"31 {unit}";
 }
 ```
 
-You want chat completions to be able to call this function if the model deems it necessary to have this information in order to respond to a user request.
-
-Start by creating a `ChatFunctionToolDefinition` that describes your function:
+Start by creating two instances of the `ChatFunctionToolDefinition` class to describe each function:
 
 ```csharp
+private const string GetCurrentLocationFunctionName = "get_current_location";
+
 private const string GetCurrentWeatherFunctionName = "get_current_weather";
+
+private static readonly ChatFunctionToolDefinition getCurrentLocationFunction = new()
+{
+    Name = GetCurrentLocationFunctionName,
+    Description = "Get the user's current location"
+};
 
 private static readonly ChatFunctionToolDefinition getCurrentWeatherFunction = new()
 {
     Name = GetCurrentWeatherFunctionName,
     Description = "Get the current weather in a given location",
     Parameters = BinaryData.FromString("""
-       {
-           "type": "object",
-           "properties": {
-               "location": {
-                   "type": "string",
-                   "description": "The city and state, e.g. Boston, MA"
-               },
-               "unit": {
-                   "type": "string",
-                   "enum": [ "celsius", "fahrenheit" ],
-                   "description": "The temperature unit to use. Infer this from the specified location."
-               }
-           },
-           "required": [ "location" ]
-       }
-       """),
+        {
+            "type": "object",
+            "properties": {
+                "location": {
+                    "type": "string",
+                    "description": "The city and state, e.g. Boston, MA"
+                },
+                "unit": {
+                    "type": "string",
+                    "enum": [ "celsius", "fahrenheit" ],
+                    "description": "The temperature unit to use. Infer this from the specified location."
+                }
+            },
+            "required": [ "location" ]
+        }
+        """),
 };
 ```
 
-As part of calling the `ChatClient`'s `CompleteChat` method, create a `ChatCompletionsOptions` instance, set its `Tools` property to include your `ChatFunctionToolDefinition`, and pass it as a parameter along with the request messages:
+Next, create a `ChatCompletionsOptions` instance and add both function definitions to its `Tools` property. You will pass this instance as an argument in your calls to the `ChatClient`'s `CompleteChat` method.
 
 ```csharp
-List<ChatRequestMessage> messages =
-[
+List<ChatRequestMessage> messages = [
     new ChatRequestSystemMessage(
        "Don't make assumptions about what values to plug into functions."
        + " Ask for clarification if a user request is ambiguous."),
-    new ChatRequestUserMessage("What's the weather like in San Francisco?"),
+    new ChatRequestUserMessage("What's the weather like today?"),
 ];
 
 ChatCompletionOptions options = new()
 {
-    Tools = { getCurrentWeatherFunction },
+    Tools = { getCurrentLocationFunction, getCurrentWeatherFunction },
 };
-
-ChatCompletion chatCompletion = client.CompleteChat(messages, options);
 ```
 
-If the resulting `ChatCompletion` has a `FinishReason` property equal to `ChatFinishReason.ToolCalls`, it means that the model has determined that one or more tools must be called before the assistant can respond appropriately.
+When the resulting `ChatCompletion` has a `FinishReason` property equal to `ChatFinishReason.ToolCalls`, it means that the model has determined that one or more tools must be called before the assistant can respond appropriately. In those cases, you must first call the function specified in the `ChatCompletion`'s `ToolCalls` and then call the `ChatClient`'s `CompleteChat` method again while passing the function's result as an additional `ChatRequestToolMessage`. Repeat this process as needed.
 
 ```csharp
-if (chatCompletion.FinishReason == ChatFinishReason.ToolCalls)
+bool requiresAction;
+
+do
 {
-    // First, add the assistant message with tool calls to the conversation history.
-    messages.Add(new ChatRequestAssistantMessage(chatCompletion));
+    requiresAction = false;
+    ChatCompletion chatCompletion = client.CompleteChat(messages, options);
 
-    // Then, add a new tool message for each tool call that is resolved.
-    foreach (ChatToolCall toolCall in chatCompletion.ToolCalls)
+    switch (chatCompletion.FinishReason)
     {
-        ChatFunctionToolCall functionToolCall = toolCall as ChatFunctionToolCall;
-
-        switch (functionToolCall?.Name)
-        {
-            case GetCurrentWeatherFunctionName:
+        case ChatFinishReason.Stopped:
             {
-                // The arguments that the model wants to use to call the function are specified as a
-                // stringified JSON object based on the schema defined in the tool definition. Note that
-                // the model may hallucinate arguments too. Consequently, it is important to do the
-                // appropriate parsing and validation before calling the function.
-                using JsonDocument argumentsJson = JsonDocument.Parse(functionToolCall.Arguments);
-                bool hasLocation = argumentsJson.RootElement.TryGetProperty("location", out JsonElement location);
-                bool hasUnit = argumentsJson.RootElement.TryGetProperty("unit", out JsonElement unit);
-
-                if (!hasLocation)
-                {
-                    throw new ArgumentNullException(nameof(location), "The location argument is required.");
-                }
-
-                string toolResult = GetCurrentWeather(location.GetString(), hasUnit ? unit.GetString() : null);
-                messages.Add(new ChatRequestToolMessage(toolCall.Id, toolResult));
+                // Add the assistant message to the conversation history.
+                messages.Add(new ChatRequestAssistantMessage(chatCompletion));
                 break;
             }
 
-            default:
+        case ChatFinishReason.ToolCalls:
             {
-                // Handle other or unexpected calls.
-                throw new NotImplementedException();
-            }
-        }
-    }
+                // First, add the assistant message with tool calls to the conversation history.
+                messages.Add(new ChatRequestAssistantMessage(chatCompletion));
 
-    // Finally, make a new request to chat completions to let the assistant summarize the tool results
-    // and add the resulting message to the conversation history to keep it organized all in one place.
-    ChatCompletion chatCompletionAfterToolMessages = client.CompleteChat(messages, options);
-    messages.Add(new ChatRequestAssistantMessage(chatCompletionAfterToolMessages));
-}
+                // Then, add a new tool message for each tool call that is resolved.
+                foreach (ChatToolCall toolCall in chatCompletion.ToolCalls)
+                {
+                    ChatFunctionToolCall functionToolCall = toolCall as ChatFunctionToolCall;
+
+                    switch (functionToolCall?.Name)
+                    {
+                        case GetCurrentLocationFunctionName:
+                            {
+                                string toolResult = GetCurrentLocation();
+                                messages.Add(new ChatRequestToolMessage(toolCall.Id, toolResult));
+                                break;
+                            }
+
+                        case GetCurrentWeatherFunctionName:
+                            {
+                                // The arguments that the model wants to use to call the function are specified as a
+                                // stringified JSON object based on the schema defined in the tool definition. Note that
+                                // the model may hallucinate arguments too. Consequently, it is important to do the
+                                // appropriate parsing and validation before calling the function.
+                                using JsonDocument argumentsJson = JsonDocument.Parse(functionToolCall.Arguments);
+                                bool hasLocation = argumentsJson.RootElement.TryGetProperty("location", out JsonElement location);
+                                bool hasUnit = argumentsJson.RootElement.TryGetProperty("unit", out JsonElement unit);
+
+                                if (!hasLocation)
+                                {
+                                    throw new ArgumentNullException(nameof(location), "The location argument is required.");
+                                }
+
+                                string toolResult = hasUnit
+                                    ? GetCurrentWeather(location.GetString(), unit.GetString())
+                                    : GetCurrentWeather(location.GetString());
+                                messages.Add(new ChatRequestToolMessage(toolCall.Id, toolResult));
+                                break;
+                            }
+
+                        default:
+                            {
+                                // Handle other or unexpected calls.
+                                throw new NotImplementedException();
+                            }
+                    }
+                }
+
+                requiresAction = true;
+                break;
+            }
+
+        case ChatFinishReason.Length:
+            throw new NotImplementedException("Incomplete model output due to MaxTokens parameter or token limit exceeded.");
+
+        case ChatFinishReason.ContentFilter:
+            throw new NotImplementedException("Omitted content due to a content filter flag.");
+
+        case ChatFinishReason.FunctionCall:
+            throw new NotImplementedException("Deprecated in favor of tool calls.");
+
+        default:
+            throw new NotImplementedException(chatCompletion.FinishReason.ToString());
+    }
+} while (requiresAction);
 ```
 
 ## How to get text embeddings
@@ -239,7 +284,7 @@ To get a text embedding, start by adding the corresponding `using` statement:
 using OpenAI.Embeddings;
 ```
 
-Next, instantiate the `EmbeddingClient` and call its `GenerateEmbedding` method by passing the text input as a parameter:
+Next, instantiate the `EmbeddingClient` and call its `GenerateEmbedding` method by passing the text input as an argument:
 
 ```csharp
 EmbeddingClient client = new("text-embedding-3-small", "<insert your OpenAI API key here>");
@@ -253,7 +298,7 @@ Embedding embedding = client.GenerateEmbedding(description);
 ReadOnlyMemory<float> vector = embedding.Vector;
 ```
 
-Notice that the resulting embedding is a list (also called a vector) of floating point numbers represented as an instance of `ReadOnlyMemory<float>`. By default, the length of the embedding vector will be 1536 when using the `text-embedding-3-small` model or 3072 when using the `text-embedding-3-large` model. Generally, larger embeddings perform better, but using them also tends to cost more in terms of compute, memory, and storage. You can reduce the dimensions of the embedding by creating an instance of the `EmbeddingOptions` class, setting the `Dimensions` property, and passing it as a parameter in your call to the `GenerateEmbedding` method:
+Notice that the resulting embedding is a list (also called a vector) of floating point numbers represented as an instance of `ReadOnlyMemory<float>`. By default, the length of the embedding vector will be 1536 when using the `text-embedding-3-small` model or 3072 when using the `text-embedding-3-large` model. Generally, larger embeddings perform better, but using them also tends to cost more in terms of compute, memory, and storage. You can reduce the dimensions of the embedding by creating an instance of the `EmbeddingOptions` class, setting the `Dimensions` property, and passing it as an argument in your call to the `GenerateEmbedding` method:
 
 ```csharp
 EmbeddingOptions options = new() { Dimensions = 512 };
@@ -297,7 +342,7 @@ ImageGenerationOptions options = new()
 };
 ```
 
-Finally, call the `ImageClient`'s `GenerateImage` method by passing the prompt and the `ImageGenerationOptions` instance as parameters:
+Finally, call the `ImageClient`'s `GenerateImage` method by passing the prompt and the `ImageGenerationOptions` instance as arguments:
 
 ```csharp
 GeneratedImage image = client.GenerateImage(prompt, options);

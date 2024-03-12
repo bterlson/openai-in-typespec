@@ -41,8 +41,8 @@ namespace OpenAI.Samples
                 {
                     case ChatFinishReason.Stopped:
                         {
-                            ChatCompletion chatCompletionAfterToolMessages = await client.CompleteChatAsync(messages, options);
-                            messages.Add(new ChatRequestAssistantMessage(chatCompletionAfterToolMessages));
+                            // Add the assistant message to the conversation history.
+                            messages.Add(new ChatRequestAssistantMessage(chatCompletion));
                             break;
                         }
 

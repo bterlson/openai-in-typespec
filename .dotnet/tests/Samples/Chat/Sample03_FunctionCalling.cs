@@ -20,7 +20,9 @@ namespace OpenAI.Samples
             // Call the weather API here.
             return $"31 {unit}";
         }
+        #endregion
 
+        #region
         private const string GetCurrentLocationFunctionName = "get_current_location";
 
         private const string GetCurrentWeatherFunctionName = "get_current_weather";
@@ -87,8 +89,8 @@ namespace OpenAI.Samples
                 {
                     case ChatFinishReason.Stopped:
                         {
-                            ChatCompletion chatCompletionAfterToolMessages = client.CompleteChat(messages, options);
-                            messages.Add(new ChatRequestAssistantMessage(chatCompletionAfterToolMessages));
+                            // Add the assistant message to the conversation history.
+                            messages.Add(new ChatRequestAssistantMessage(chatCompletion));
                             break;
                         }
 

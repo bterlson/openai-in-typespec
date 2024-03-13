@@ -22,7 +22,7 @@ public class ChatLogProbabilityResult
     /// characters are represented by multiple tokens and their byte representations must be combined to generate
     /// the correct text representation. Can be null if there is no bytes representation for the token.
     /// </summary>
-    public IReadOnlyList<long> Utf8ByteValues { get; }
+    public IReadOnlyList<int> Utf8ByteValues { get; }
     /// <summary>
     /// List of the most likely tokens and their log probability at this token position. In rare cases,
     /// there may be fewer than the number of requested top_logprobs returned, as supplied via
@@ -32,7 +32,7 @@ public class ChatLogProbabilityResult
     internal ChatLogProbabilityResult(
         string token,
         double logProbability,
-        IEnumerable<long> byteValues,
+        IEnumerable<int> byteValues,
         IEnumerable<ChatLogProbabilityResultItem> alternateLogProbabilities)
         {
             Token = token;

@@ -8,7 +8,7 @@ namespace OpenAI.Samples
     public partial class ImageSamples
     {
         [Test]
-        // [Ignore("Compilation validation only")]
+        [Ignore("Compilation validation only")]
         public void Sample02_SimpleImageEdit()
         {
             ImageClient client = new("dall-e-2", Environment.GetEnvironmentVariable("OpenAIClient_KEY"));

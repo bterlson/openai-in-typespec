@@ -12,13 +12,13 @@ public partial class Embedding
     /// </summary>
     public ReadOnlyMemory<float> Vector { get; }
     /// <inheritdoc cref="Internal.Models.Embedding.Index"/>
-    public long Index { get; }
+    public int Index { get; }
     /// <inheritdoc cref="Internal.Models.CreateEmbeddingResponse.Model"/>
     public string Model { get; }
     /// <inheritdoc cref="Internal.Models.CreateEmbeddingResponse.Usage"/>
     public EmbeddingTokenUsage Usage { get; }
 
-    internal Embedding(ReadOnlyMemory<float> vector, long index, EmbeddingTokenUsage usage)
+    internal Embedding(ReadOnlyMemory<float> vector, int index, EmbeddingTokenUsage usage)
     {
         Vector = vector;
         Index = index;
@@ -27,7 +27,7 @@ public partial class Embedding
 
     internal Embedding(
         Internal.Models.CreateEmbeddingResponse internalResponse,
-        long internalDataIndex,
+        int internalDataIndex,
         EmbeddingTokenUsage usage = null)
     {
         Internal.Models.Embedding dataItem = internalResponse.Data[(int)internalDataIndex];
@@ -37,7 +37,7 @@ public partial class Embedding
         float[] vector = new float[bytes.Length / sizeof(float)];
         Buffer.BlockCopy(bytes, 0, vector, 0, bytes.Length);
         Vector = new ReadOnlyMemory<float>(vector);
-        Index = dataItem.Index;
+        Index = (int)dataItem.Index;
         Usage = usage ?? new(internalResponse.Usage);
         Model = internalResponse.Model;
     }

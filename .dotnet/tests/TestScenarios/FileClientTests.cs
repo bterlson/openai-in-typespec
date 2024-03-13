@@ -11,7 +11,7 @@ public partial class FileClientTests
     [Test]
     public void ListFilesWorks()
     {
-        FileClient client = new();
+        FileClient client = GetTestClient();
         ClientResult<OpenAIFileInfoCollection> result = client.GetFileInfoList();
         Assert.That(result.Value.Count, Is.GreaterThan(0));
         Console.WriteLine(result.Value.Count);

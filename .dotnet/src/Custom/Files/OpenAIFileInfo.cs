@@ -16,7 +16,7 @@ public partial class OpenAIFileInfo
         Purpose = internalFile.Purpose.ToString() switch
         {
             "fine-tune" => OpenAIFilePurpose.FineTuning,
-            "fine-tune-result" => OpenAIFilePurpose.FineTuningResults,
+            "fine-tune-results" => OpenAIFilePurpose.FineTuningResults,
             "assistants" => OpenAIFilePurpose.Assistants,
             "assistants_output" => OpenAIFilePurpose.AssistantOutputs,
             _ => throw new ArgumentException(nameof(internalFile)),

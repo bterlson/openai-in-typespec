@@ -165,7 +165,7 @@ public partial class ChatClient
         List<ChatCompletion> chatCompletions = [];
         for (int i = 0; i < response.Value.Choices.Count; i++)
         {
-            chatCompletions.Add(new(response.Value, response.Value.Choices[i].Index));
+            chatCompletions.Add(new(response.Value, (int)response.Value.Choices[i].Index));
         }
         return ClientResult.FromValue(new ChatCompletionCollection(chatCompletions), response.GetRawResponse());
     }
@@ -189,7 +189,7 @@ public partial class ChatClient
         List<ChatCompletion> chatCompletions = [];
         for (int i = 0; i < response.Value.Choices.Count; i++)
         {
-            chatCompletions.Add(new(response.Value, response.Value.Choices[i].Index));
+            chatCompletions.Add(new(response.Value, (int)response.Value.Choices[i].Index));
         }
         return ClientResult.FromValue(new ChatCompletionCollection(chatCompletions), response.GetRawResponse());
     }

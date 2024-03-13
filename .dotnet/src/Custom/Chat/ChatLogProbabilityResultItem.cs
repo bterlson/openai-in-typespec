@@ -22,7 +22,7 @@ public class ChatLogProbabilityResultItem
     /// characters are represented by multiple tokens and their byte representations must be combined to generate
     /// the correct text representation. Can be null if there is no bytes representation for the token.
     /// </summary>
-    public IReadOnlyList<long> Utf8ByteValues { get; }
+    public IReadOnlyList<int> Utf8ByteValues { get; }
     /// <summary>
     /// Creates a new instance of <see cref="ChatLogProbabilityResultItem"/>.
     /// </summary>
@@ -33,10 +33,10 @@ public class ChatLogProbabilityResultItem
     /// <param name="token"> The token represented by this item. </param>
     /// <param name="logProbability"> The <c>logprob</c> for the token. </param>
     /// <param name="byteValues"> The UTF8 byte value sequence representation for the token. </param>
-    internal ChatLogProbabilityResultItem(string token, double logProbability, IEnumerable<long> byteValues)
+    internal ChatLogProbabilityResultItem(string token, double logProbability, IEnumerable<int> byteValues)
     {
         Token = token;
         LogProbability = logProbability;
-        Utf8ByteValues = new List<long>(byteValues);
+        Utf8ByteValues = new List<int>(byteValues);
     }
 }

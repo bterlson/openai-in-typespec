@@ -15,19 +15,19 @@ public partial class ChatCompletionOptions
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.FrequencyPenalty" />
     public double? FrequencyPenalty { get; set; }
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.LogitBias" />
-    public IDictionary<long, long> TokenSelectionBiases { get; set; } = new OptionalDictionary<long, long>();
+    public IDictionary<int, int> TokenSelectionBiases { get; set; } = new OptionalDictionary<int, int>();
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.Logprobs" />
     public bool? IncludeLogProbabilities { get; set; }
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.TopLogprobs" />
-    public long? LogProbabilityCount { get; set; }
+    public int? LogProbabilityCount { get; set; }
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.MaxTokens" />
-    public long? MaxTokens { get; set; }
+    public int? MaxTokens { get; set; }
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.PresencePenalty" />
     public double? PresencePenalty { get; set; }
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.ResponseFormat" />
     public ChatResponseFormat? ResponseFormat { get; set; }
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.Seed" />
-    public long? Seed { get; set; }
+    public int? Seed { get; set; }
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.Stop" />
     public IList<string> StopSequences { get; } = new OptionalList<string>();
     /// <inheritdoc cref="Internal.Models.CreateChatCompletionRequest.Temperature" />
@@ -57,7 +57,7 @@ public partial class ChatCompletionOptions
     internal IDictionary<string, long> GetInternalLogitBias()
     {
         OptionalDictionary<string, long> packedLogitBias = [];
-        foreach (KeyValuePair<long, long> pair in TokenSelectionBiases)
+        foreach (KeyValuePair<int, int> pair in TokenSelectionBiases)
         {
             packedLogitBias[$"{pair.Key}"] = pair.Value;
         }
@@ -84,7 +84,7 @@ public partial class ChatCompletionOptions
 
     internal IList<Internal.Models.ChatCompletionFunctions> GetInternalFunctions()
     {
-        OptionalList<Internal.Models.ChatCompletionFunctions> internalFunctions = [];
+        OptionalList<Internal.Models.ChatCompletionFunctions> internalFunctions = new();
         foreach (ChatFunctionDefinition function in Functions)
         {
             Internal.Models.ChatCompletionFunctions internalFunction = new(

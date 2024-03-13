@@ -4,5 +4,5 @@ public class EmbeddingOptions
 {
     public string User { get; set; }
 
-    public long? Dimensions { get; set; }
+    public int? Dimensions { get; set; }
 }

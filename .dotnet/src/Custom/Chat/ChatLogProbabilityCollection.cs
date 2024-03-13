@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace OpenAI.Chat;
 
@@ -26,16 +27,18 @@ public class ChatLogProbabilityCollection : ReadOnlyCollection<ChatLogProbabilit
                 alternateLogProbabilities = [];
                 foreach (Internal.Models.ChatCompletionTokenLogprobTopLogprob internalTopLogprob in internalLogprob.TopLogprobs)
                 {
+                    List<int> convertedByteValues = internalLogprob.Bytes.Select(longByteValue => (int)longByteValue).ToList();
                     alternateLogProbabilities.Add(new(
                         internalLogprob.Token,
                         internalLogprob.Logprob,
-                        internalLogprob.Bytes));
+                        convertedByteValues));
                 }
             }
+            List<int> convertedResultByteValues = internalLogprob.Bytes.Select(longByteValue => (int)longByteValue).ToList();
             logProbabilities.Add(new(
                 internalLogprob.Token,
                 internalLogprob.Logprob,
-                internalLogprob.Bytes,
+                convertedResultByteValues,
                 alternateLogProbabilities));
         }
         return new ChatLogProbabilityCollection(logProbabilities);

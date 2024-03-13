@@ -2,11 +2,11 @@ namespace OpenAI.Assistants;
 
 public partial class RunTokenUsage
 {
-    public long InputTokens { get; }
-    public long OutputTokens { get; }
-    public long TotalTokens { get; }
+    public int InputTokens { get; }
+    public int OutputTokens { get; }
+    public int TotalTokens { get; }
 
-    internal RunTokenUsage(long inputTokens, long outputTokens, long totalTokens)
+    internal RunTokenUsage(int inputTokens, int outputTokens, int totalTokens)
     {
         InputTokens = inputTokens;
         OutputTokens = outputTokens;
@@ -14,7 +14,7 @@ public partial class RunTokenUsage
     }
 
     internal RunTokenUsage(Internal.Models.RunCompletionUsage internalUsage)
-        : this(internalUsage.PromptTokens, internalUsage.CompletionTokens, internalUsage.TotalTokens)
+        : this((int)internalUsage.PromptTokens, (int)internalUsage.CompletionTokens, (int)internalUsage.TotalTokens)
     {
     }
 }

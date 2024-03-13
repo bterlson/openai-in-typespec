@@ -1,5 +1,9 @@
 name: Validate OpenAPI definition
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
   pull_request:
     types: [opened, reopened, synchronize]
 
@@ -25,3 +29,27 @@ jobs:
         with:
           swagger-editor-url: http://localhost/
           definition-file: openapi.yaml
+
+  # Test, pack and publish the Open AI nuget package as a build artifact 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.x
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+
+      - name: Pack
+        run: dotnet pack -c Release -o out
+        working-directory: .dotnet
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: out/*.nupkg
+        if: ${{ github.event_name != 'pull_request' }}

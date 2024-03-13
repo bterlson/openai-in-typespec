@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>OpenAI.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+</Project>

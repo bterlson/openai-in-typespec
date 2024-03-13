@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ClientModel;
 
-namespace OpenAI.FineTuning;
+namespace OpenAI.FineTuningManagement;
 
 /// <summary>
 ///     The service client for OpenAI fine-tuning operations.
 /// </summary>
-public partial class FineTuningClient
+public partial class FineTuningManagementClient
 {
     private readonly OpenAIClientConnector _clientConnector;
     private Internal.FineTuning FineTuningShim => _clientConnector.InternalClient.GetFineTuningClient();
@@ -27,7 +27,7 @@ public partial class FineTuningClient
     /// <param name="endpoint">The connection endpoint to use.</param>
     /// <param name="credential">The API key used to authenticate with the service endpoint.</param>
     /// <param name="options">Additional options to customize the client.</param>
-    public FineTuningClient(Uri endpoint, ApiKeyCredential credential, OpenAIClientOptions options = null)
+    public FineTuningManagementClient(Uri endpoint, ApiKeyCredential credential, OpenAIClientOptions options = null)
     {
         _clientConnector = new("none", endpoint, credential, options);
     }
@@ -47,7 +47,7 @@ public partial class FineTuningClient
     /// </remarks>
     /// <param name="endpoint">The connection endpoint to use.</param>
     /// <param name="options">Additional options to customize the client.</param>
-    public FineTuningClient(Uri endpoint, OpenAIClientOptions options = null)
+    public FineTuningManagementClient(Uri endpoint, OpenAIClientOptions options = null)
         : this(endpoint, credential: null, options)
     { }
 
@@ -66,7 +66,7 @@ public partial class FineTuningClient
     /// </remarks>
     /// <param name="credential">The API key used to authenticate with the service endpoint.</param>
     /// <param name="options">Additional options to customize the client.</param>
-    public FineTuningClient(ApiKeyCredential credential, OpenAIClientOptions options = null)
+    public FineTuningManagementClient(ApiKeyCredential credential, OpenAIClientOptions options = null)
         : this(endpoint: null, credential, options)
     { }
 
@@ -84,7 +84,7 @@ public partial class FineTuningClient
     /// </para>
     /// </remarks>
     /// <param name="options">Additional options to customize the client.</param>
-    public FineTuningClient(OpenAIClientOptions options = null)
+    public FineTuningManagementClient(OpenAIClientOptions options = null)
         : this(endpoint: null, credential: null, options)
     { }
 }

@@ -2,9 +2,9 @@
 using System.ClientModel.Primitives;
 using System.Threading.Tasks;
 
-namespace OpenAI.FineTuning;
+namespace OpenAI.FineTuningManagement;
 
-public partial class FineTuningClient
+public partial class FineTuningManagementClient
 {
     /// <inheritdoc cref="Internal.FineTuning.CreateFineTuningJob(BinaryContent, RequestOptions)"/>
     public virtual ClientResult CreateFineTuningJob(

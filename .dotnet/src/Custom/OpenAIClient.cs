@@ -3,7 +3,7 @@ using OpenAI.Audio;
 using OpenAI.Chat;
 using OpenAI.Embeddings;
 using OpenAI.Files;
-using OpenAI.FineTuning;
+using OpenAI.FineTuningManagement;
 using OpenAI.Images;
 using OpenAI.LegacyCompletions;
 using OpenAI.ModelManagement;
@@ -143,15 +143,15 @@ public partial class OpenAIClient
         => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
 
     /// <summary>
-    /// Gets a new instance of <see cref="FineTuningClient"/> that reuses the client configuration details provided to
+    /// Gets a new instance of <see cref="FineTuningManagementClient"/> that reuses the client configuration details provided to
     /// the <see cref="OpenAIClient"/> instance.
     /// </summary>
     /// <remarks>
-    /// This method is functionally equivalent to using the <see cref="FineTuningClient"/> constructor directly with
+    /// This method is functionally equivalent to using the <see cref="FineTuningManagementClient"/> constructor directly with
     /// the same configuration details.
     /// </remarks>
-    /// <returns> A new <see cref="FineTuningClient"/>. </returns>
-    public FineTuningClient GetFineTuningClient()
+    /// <returns> A new <see cref="FineTuningManagementClient"/>. </returns>
+    public FineTuningManagementClient GetFineTuningManagementClient()
         => new(_cachedEndpoint, _cachedCredential, _cachedOptions);
 
     /// <summary>

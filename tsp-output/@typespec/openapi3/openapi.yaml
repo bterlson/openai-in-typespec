@@ -686,7 +686,7 @@ paths:
           description: Number of fine-tuning jobs to retrieve.
           schema:
             type: integer
-            format: int64
+            format: int32
             default: 20
       responses:
         '200':
@@ -781,6 +781,7 @@ paths:
           description: Number of events to retrieve.
           schema:
             type: integer
+            format: int32
             default: 20
       responses:
         '200':

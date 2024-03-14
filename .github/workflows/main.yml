@@ -1,4 +1,4 @@
-name: Validate OpenAPI definition
+name: Build and Test
 on:
   workflow_dispatch:
   push:
@@ -42,14 +42,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-
       - name: Pack
-        run: dotnet pack -c Release -o out
+        run: dotnet pack
+          -c Release
+          -o "${{github.workspace}}/packages"
+          ${{ github.ref == 'refs/heads/main' && '' || format('--version-suffix="alpha.{0}"', github.run_number) }}
         working-directory: .dotnet
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: package
-          path: out/*.nupkg
+          path: packages/*.nupkg
         if: ${{ github.event_name != 'pull_request' }}

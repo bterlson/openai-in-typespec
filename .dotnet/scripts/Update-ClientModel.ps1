@@ -34,7 +34,6 @@ function Update-OpenAIClient {
     $content = $content -creplace "\s+\/\/\/ <summary> The ClientDiagnostics is used to provide tracing support for the client library. </summary>", ""
     $content = $content -creplace "\s+internal TelemetrySource ClientDiagnostics { get; }", ""
     $content = $content -creplace "\(KeyCredential", "(ApiKeyCredential"
-    $content = $content -creplace "ClientUtilities.AssertNotNull\((?<var>\w+), nameof\((\w+)\)\);", "if (`${var} is null) throw new ArgumentNullException(nameof(`${var}));"
     $content = $content -creplace "\s+ClientDiagnostics = new TelemetrySource\(options, true\);", ""
     $content = $content -creplace "_pipeline = MessagePipeline\.Create\(options, new IPipelinePolicy<PipelineMessage>\[\] \{ new KeyCredentialPolicy\(_keyCredential, AuthorizationHeader, AuthorizationApiKeyPrefix\) \}, Array\.Empty<IPipelinePolicy<PipelineMessage>>\(\)\);", "var authenticationPolicy = ApiKeyAuthenticationPolicy.CreateBearerAuthorizationPolicy(_credential);`r`n            _pipeline = ClientPipeline.Create(options,`r`n                perCallPolicies: ReadOnlySpan<PipelinePolicy>.Empty,`r`n                perTryPolicies: new PipelinePolicy[] { authenticationPolicy },`r`n                beforeTransportPolicies: ReadOnlySpan<PipelinePolicy>.Empty);"
     $content = $content -creplace "\(ClientDiagnostics, ", "("
@@ -75,10 +74,6 @@ function Update-Subclients {
         $content = $content -creplace "\s+using System.ClientModel.Primitives.Pipeline;", ""
         $content = $content -creplace "using System.ClientModel.Primitives;", "using System.ClientModel.Primitives;`r`nusing System.Text;"
 
-        # Fix ClientUtilities
-        $content = $content -creplace "ClientUtilities.AssertNotNull\((?<var>\w+), nameof\((\w+)\)\);", "if (`${var} is null) throw new ArgumentNullException(nameof(`${var}));"
-        $content = $content -creplace "ClientUtilities.AssertNotNullOrEmpty\((?<var>\w+), nameof\((\w+)\)\);", "if (`${var} is null) throw new ArgumentNullException(nameof(`${var}));`r`n            if (string.IsNullOrEmpty(`${var})) throw new ArgumentException(nameof(`${var}));"
-
         # Delete TelemetrySource
         $content = $content -creplace "\s+\/\/\/ <summary> The ClientDiagnostics is used to provide tracing support for the client library. </summary>", ""
         $content = $content -creplace "\s+internal TelemetrySource ClientDiagnostics { get; }", ""
@@ -115,11 +110,10 @@ function Update-Subclients {
         $content = $content -creplace " RequestBody content", " BinaryContent content"
         $content = $content -creplace "\(RequestOptions context", "(RequestOptions options"
         $content = $content -creplace " RequestOptions context", " RequestOptions options"
-        $content = $content -creplace "\s+using var scope = ClientDiagnostics\.CreateSpan\(`"(\w+\.\w+)`"\);", ""
-        $content = $content -creplace "\s+scope\.Start\(\);", ""
-        $content = $content -creplace "(?s)\s+try\s+\{\s+using PipelineMessage message = (?<method>\w+)\((?<params>[(\w+)(,\s\w+)]*)context\);\s+return Result\.FromResponse\(await _pipeline\.ProcessMessageAsync\(message, context\)\.ConfigureAwait\(false\)\);\s+\}", "`r`n            options ??= new RequestOptions();`r`n            using PipelineMessage message = `${method}(`${params}options);`r`n            await _pipeline.SendAsync(message).ConfigureAwait(false);`r`n            PipelineResponse response = message.Response!;`r`n`r`n            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)`r`n            {`r`n                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);`r`n            }`r`n`r`n            return ClientResult.FromResponse(response);"
-        $content = $content -creplace "(?s)\s+try\s+\{\s+using PipelineMessage message = (?<method>\w+)\((?<params>[(\w+)(,\s\w+)]*)context\);\s+return Result\.FromResponse\(_pipeline.ProcessMessage\(message, context\)\);\s+\}", "`r`n            options ??= new RequestOptions();`r`n            using PipelineMessage message = `${method}(`${params}options);`r`n            _pipeline.Send(message);`r`n            PipelineResponse response = message.Response!;`r`n`r`n            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)`r`n            {`r`n                throw new ClientResultException(response);`r`n            }`r`n`r`n            return ClientResult.FromResponse(response);"
-        $content = $content -creplace "(?s)\s+catch \(Exception e\)\s+\{\s+scope\.Failed\(e\);\s+throw;\s+\}", ""
+        $content = $content -creplace "context\)", "options)"
+        $content = $content -creplace "using var scope = ClientDiagnostics\.CreateSpan\(`"(?<tag>\w+)\.(?<operationId>\w+)`"\);", "options ??= new RequestOptions();`r`n            // using var scope = ClientDiagnostics.CreateSpan(`"`${tag}.`${operationId}`"\);"
+        $content = $content -creplace "scope\.Start\(\);", "// scope.Start();"
+        $content = $content -creplace "scope\.Failed\(e\);", "// scope.Failed(e);"
 
         # Create request
         $content = $content -creplace "\(RequestBody content", "(BinaryContent content"
@@ -135,9 +129,6 @@ function Update-Subclients {
         $content = $content -creplace "request\.Uri = uri\.ToUri\(\);", "uriBuilder.Path += path.ToString();`r`n            request.Uri = uriBuilder.Uri;"
         $content = $content -creplace "request\.SetHeaderValue", "request.Headers.Set"
         $content = $content -creplace "request\.Content = content;", "request.Content = content;`r`n            message.Apply(options);"
-
-        # Delete DefaultRequestContext
-        # $content = $content -creplace "\s+private static RequestOptions DefaultRequestContext = new RequestOptions\(\);", ""
 
         # Clean up ApiKeyCredential
         $content = $content -creplace " KeyCredential", " ApiKeyCredential"
@@ -170,14 +161,65 @@ function Update-Models {
         Write-Output "Editing $($file.FullName)"
 
         $content = $content -creplace "\s+#nullable disable", ""
-        $content = $content -creplace "ClientUtilities.AssertNotNull\((?<var>@?\w+), nameof\((@?\w+)\)\);", "if (`${var} is null) throw new ArgumentNullException(nameof(`${var}));"
-        $content = $content -creplace "using System.ClientModel.Internal;", "using OpenAI.ClientShared.Internal;"
+        $content = $content -creplace "using System\.ClientModel\.Internal;", "using OpenAI.ClientShared.Internal;"
+        $content = $content -creplace "using System\.ClientModel\.Primitives;", "using System.ClientModel;`r`nusing System.ClientModel.Primitives;"
         $content = $content -creplace ": IUtf8JsonWriteable,", ":"
         $content = $content -creplace "\s+void IUtf8JsonWriteable\.Write\(Utf8JsonWriter writer\) => \(\(IJsonModel<(\w+)>\)this\)\.Write\(writer, new ModelReaderWriterOptions\(`"W`"\)\);`r`n", ""
-        $content = $content -creplace "(?s)\s+\/\/\/ <summary> Convert into a Utf8JsonRequestBody\. </summary>.*?return content;.*?\}", ""
+        $content = $content -creplace " RequestBody", " BinaryContent"
 
         $content | Set-Content -Path $file.FullName -NoNewline
     }
+}
+
+function Update-InternalClientPipelineExtensions {
+    $root = Split-Path $PSScriptRoot -Parent
+    $directory = Join-Path -Path $root -ChildPath "src\Generated\Internal"
+    $file = Get-ChildItem -Path $directory -Filter "ClientPipelineExtensions.cs"
+    $content = Get-Content -Path $file -Raw
+
+    Write-Output "Editing $($file.FullName)"
+
+    $content = $content -creplace "\s+using System\.ClientModel\.Primitives\.Pipeline;", ""
+    $content = $content -creplace " Pipeline<PipelineMessage>", " ClientPipeline"
+    $content = $content -creplace "\.ErrorBehavior", ".ErrorOptions"
+    $content = $content -creplace "ErrorBehavior\.", "ClientErrorBehaviors."
+    $content = $content -creplace " MessageFailedException", " ClientResultException"
+    $content = $content -creplace "(?s)\s+public static async ValueTask<NullableResult<bool>> ProcessHeadAsBoolMessageAsync.*?\}.*?\}", ""
+    $content = $content -creplace "(?s)\s+public static NullableResult<bool> ProcessHeadAsBoolMessage.*?\}.*?\}", ""
+
+    $content | Set-Content -Path $file.FullName -NoNewline
+}
+
+function Update-InternalErrorResult {
+    $root = Split-Path $PSScriptRoot -Parent
+    $directory = Join-Path -Path $root -ChildPath "src\Generated\Internal"
+    $file = Get-ChildItem -Path $directory -Filter "ErrorResult.cs"
+    $content = Get-Content -Path $file -Raw
+
+    Write-Output "Editing $($file.FullName)"
+
+    $content = $content -creplace " MessagePipeline", " ClientPipeline"
+    $content = $content -creplace " Result", " ClientResult"
+    $content = $content -creplace " MessageFailedException", " ClientResultException"
+    $content = $content -creplace "\s+public override bool HasValue => false;", ""
+    $content = $content -creplace "(?s)\s+public override PipelineResponse GetRawResponse\(\)\s+\{\s+return _response;\s+\}", ""
+
+    $content | Set-Content -Path $file.FullName -NoNewline
+}
+
+function Update-InternalUtf8JsonRequestBody {
+    $root = Split-Path $PSScriptRoot -Parent
+    $directory = Join-Path -Path $root -ChildPath "src\Generated\Internal"
+    $file = Get-ChildItem -Path $directory -Filter "Utf8JsonRequestBody.cs"
+    $content = Get-Content -Path $file -Raw
+
+    Write-Output "Editing $($file.FullName)"
+
+    $content = $content -creplace "using System\.ClientModel\.Primitives;", "using System;`r`nusing System.ClientModel;"
+    $content = $content -creplace " RequestBody", " BinaryContent"
+    $content = $content -creplace "_content = CreateFromStream\(_stream\);", "_content = BinaryContent.Create(BinaryData.FromStream(_stream));"
+
+    $content | Set-Content -Path $file.FullName -NoNewline
 }
 
 function Update-Tests {
@@ -201,4 +243,7 @@ Update-OpenAIClient
 Update-OpenAIClientOptions
 Update-Subclients
 Update-Models
+Update-InternalClientPipelineExtensions
+Update-InternalErrorResult
+Update-InternalUtf8JsonRequestBody
 Update-Tests

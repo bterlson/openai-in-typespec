@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace OpenAI.Internal.Models
 {
-    /// <summary> Enum for model in CreateChatCompletionRequest. </summary>
+    /// <summary> The CreateChatCompletionRequestModel. </summary>
     internal readonly partial struct CreateChatCompletionRequestModel : IEquatable<CreateChatCompletionRequestModel>
     {
         private readonly string _value;

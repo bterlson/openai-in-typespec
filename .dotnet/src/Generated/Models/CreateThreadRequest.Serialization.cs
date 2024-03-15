@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,7 +21,7 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsCollectionDefined(Messages))
+            if (Optional.IsCollectionDefined(Messages))
             {
                 writer.WritePropertyName("messages"u8);
                 writer.WriteStartArray();
@@ -29,7 +31,7 @@ namespace OpenAI.Internal.Models
                 }
                 writer.WriteEndArray();
             }
-            if (OptionalProperty.IsCollectionDefined(Metadata))
+            if (Optional.IsCollectionDefined(Metadata))
             {
                 if (Metadata != null)
                 {
@@ -85,8 +87,8 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<IList<CreateMessageRequest>> messages = default;
-            OptionalProperty<IDictionary<string, string>> metadata = default;
+            IList<CreateMessageRequest> messages = default;
+            IDictionary<string, string> metadata = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -100,7 +102,7 @@ namespace OpenAI.Internal.Models
                     List<CreateMessageRequest> array = new List<CreateMessageRequest>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(CreateMessageRequest.DeserializeCreateMessageRequest(item));
+                        array.Add(CreateMessageRequest.DeserializeCreateMessageRequest(item, options));
                     }
                     messages = array;
                     continue;
@@ -125,7 +127,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateThreadRequest(OptionalProperty.ToList(messages), OptionalProperty.ToDictionary(metadata), serializedAdditionalRawData);
+            return new CreateThreadRequest(messages ?? new ChangeTrackingList<CreateMessageRequest>(), metadata ?? new ChangeTrackingDictionary<string, string>(), serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateThreadRequest>.Write(ModelReaderWriterOptions options)
@@ -165,6 +167,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateThreadRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

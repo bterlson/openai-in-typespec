@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -77,12 +79,12 @@ namespace OpenAI.Internal.Models
                 }
                 if (property.NameEquals("categories"u8))
                 {
-                    categories = CreateModerationResponseResultCategories.DeserializeCreateModerationResponseResultCategories(property.Value);
+                    categories = CreateModerationResponseResultCategories.DeserializeCreateModerationResponseResultCategories(property.Value, options);
                     continue;
                 }
                 if (property.NameEquals("category_scores"u8))
                 {
-                    categoryScores = CreateModerationResponseResultCategoryScores.DeserializeCreateModerationResponseResultCategoryScores(property.Value);
+                    categoryScores = CreateModerationResponseResultCategoryScores.DeserializeCreateModerationResponseResultCategoryScores(property.Value, options);
                     continue;
                 }
                 if (options.Format != "W")
@@ -131,6 +133,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateModerationResponseResult(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

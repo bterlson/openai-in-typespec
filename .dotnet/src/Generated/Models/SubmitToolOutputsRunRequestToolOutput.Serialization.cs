@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,12 +21,12 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(ToolCallId))
+            if (Optional.IsDefined(ToolCallId))
             {
                 writer.WritePropertyName("tool_call_id"u8);
                 writer.WriteStringValue(ToolCallId);
             }
-            if (OptionalProperty.IsDefined(Output))
+            if (Optional.IsDefined(Output))
             {
                 writer.WritePropertyName("output"u8);
                 writer.WriteStringValue(Output);
@@ -67,8 +69,8 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<string> toolCallId = default;
-            OptionalProperty<string> output = default;
+            string toolCallId = default;
+            string output = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -89,7 +91,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new SubmitToolOutputsRunRequestToolOutput(toolCallId.Value, output.Value, serializedAdditionalRawData);
+            return new SubmitToolOutputsRunRequestToolOutput(toolCallId, output, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<SubmitToolOutputsRunRequestToolOutput>.Write(ModelReaderWriterOptions options)
@@ -129,6 +131,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeSubmitToolOutputsRunRequestToolOutput(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

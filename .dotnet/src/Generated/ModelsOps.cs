@@ -81,16 +81,18 @@ namespace OpenAI.Internal
         public virtual async Task<ClientResult> GetModelsAsync(RequestOptions options)
         {
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetModelsRequest(options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("ModelsOps.GetModels"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetModelsRequest(options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -115,16 +117,18 @@ namespace OpenAI.Internal
         public virtual ClientResult GetModels(RequestOptions options)
         {
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetModelsRequest(options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("ModelsOps.GetModels"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetModelsRequest(options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -136,8 +140,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="model"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<Model>> RetrieveAsync(string model)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
 
             ClientResult result = await RetrieveAsync(model, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(Model.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -152,8 +155,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="model"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<Model> Retrieve(string model)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
 
             ClientResult result = Retrieve(model, DefaultRequestContext);
             return ClientResult.FromValue(Model.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -183,19 +185,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> RetrieveAsync(string model, RequestOptions options)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateRetrieveRequest(model, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("ModelsOps.Retrieve"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateRetrieveRequest(model, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -222,19 +226,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult Retrieve(string model, RequestOptions options)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateRetrieveRequest(model, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("ModelsOps.Retrieve"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateRetrieveRequest(model, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Delete a fine-tuned model. You must have the Owner role in your organization to delete a model. </summary>
@@ -243,8 +249,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="model"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<DeleteModelResponse>> DeleteAsync(string model)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
 
             ClientResult result = await DeleteAsync(model, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteModelResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -256,8 +261,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="model"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<DeleteModelResponse> Delete(string model)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
 
             ClientResult result = Delete(model, DefaultRequestContext);
             return ClientResult.FromValue(DeleteModelResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -286,19 +290,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> DeleteAsync(string model, RequestOptions options)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteRequest(model, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("ModelsOps.Delete"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateDeleteRequest(model, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -324,19 +330,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult Delete(string model, RequestOptions options)
         {
-            if (model is null) throw new ArgumentNullException(nameof(model));
-            if (string.IsNullOrEmpty(model)) throw new ArgumentException(nameof(model));
+            Argument.AssertNotNullOrEmpty(model, nameof(model));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteRequest(model, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("ModelsOps.Delete"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateDeleteRequest(model, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         internal PipelineMessage CreateGetModelsRequest(RequestOptions options)

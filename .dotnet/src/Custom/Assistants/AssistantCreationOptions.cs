@@ -43,13 +43,13 @@ public partial class AssistantCreationOptions
     /// </list>
     /// </para>
     /// </summary>
-    public IList<ToolDefinition> Tools { get; } = new OptionalList<ToolDefinition>();
+    public IList<ToolDefinition> Tools { get; } = new ChangeTrackingList<ToolDefinition>();
 
     /// <summary>
     /// A collection of IDs for previously uploaded files that are made accessible to the assistant. These IDs are the
     /// basis for the functionality of file-based tools like <c>retrieval</c>.
     /// </summary>
-    public IList<string> FileIds { get; } = new OptionalList<string>();
+    public IList<string> FileIds { get; } = new ChangeTrackingList<string>();
 
     /// <summary>
     /// An optional key/value mapping of additional, supplemental data items to attach to the <see cref="Assistant"/>.
@@ -61,5 +61,5 @@ public partial class AssistantCreationOptions
     ///     <item><b>Values</b> can be a maximum of 512 characters in length.</item>
     /// </list>
     /// </remarks>
-    public IDictionary<string, string> Metadata { get; } = new OptionalDictionary<string, string>();
+    public IDictionary<string, string> Metadata { get; } = new ChangeTrackingDictionary<string, string>();
 }

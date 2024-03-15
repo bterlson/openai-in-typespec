@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -77,7 +79,7 @@ namespace OpenAI.Internal.Models
                     List<OpenAIFile> array = new List<OpenAIFile>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(OpenAIFile.DeserializeOpenAIFile(item));
+                        array.Add(OpenAIFile.DeserializeOpenAIFile(item, options));
                     }
                     data = array;
                     continue;
@@ -133,6 +135,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeListFilesResponse(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

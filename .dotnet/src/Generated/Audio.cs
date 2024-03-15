@@ -44,7 +44,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="speech"/> is null. </exception>
         public virtual async Task<ClientResult<BinaryData>> CreateSpeechAsync(CreateSpeechRequest speech)
         {
-            if (speech is null) throw new ArgumentNullException(nameof(speech));
+            Argument.AssertNotNull(speech, nameof(speech));
 
             using BinaryContent content = BinaryContent.Create(speech);
             ClientResult result = await CreateSpeechAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -56,7 +56,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="speech"/> is null. </exception>
         public virtual ClientResult<BinaryData> CreateSpeech(CreateSpeechRequest speech)
         {
-            if (speech is null) throw new ArgumentNullException(nameof(speech));
+            Argument.AssertNotNull(speech, nameof(speech));
 
             using BinaryContent content = BinaryContent.Create(speech);
             ClientResult result = CreateSpeech(content, DefaultRequestContext);
@@ -85,18 +85,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateSpeechAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateSpeechRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Audio.CreateSpeech"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateSpeechRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -121,18 +124,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateSpeech(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateSpeechRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Audio.CreateSpeech"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateSpeechRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Transcribes audio into the input language. </summary>
@@ -140,7 +146,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="audio"/> is null. </exception>
         public virtual async Task<ClientResult<CreateTranscriptionResponse>> CreateTranscriptionAsync(CreateTranscriptionRequest audio)
         {
-            if (audio is null) throw new ArgumentNullException(nameof(audio));
+            Argument.AssertNotNull(audio, nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
             ClientResult result = await CreateTranscriptionAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -152,7 +158,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="audio"/> is null. </exception>
         public virtual ClientResult<CreateTranscriptionResponse> CreateTranscription(CreateTranscriptionRequest audio)
         {
-            if (audio is null) throw new ArgumentNullException(nameof(audio));
+            Argument.AssertNotNull(audio, nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
             ClientResult result = CreateTranscription(content, DefaultRequestContext);
@@ -181,18 +187,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateTranscriptionAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateTranscriptionRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Audio.CreateTranscription"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateTranscriptionRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -217,18 +226,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateTranscription(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateTranscriptionRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Audio.CreateTranscription"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateTranscriptionRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Translates audio into English.. </summary>
@@ -236,7 +248,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="audio"/> is null. </exception>
         public virtual async Task<ClientResult<CreateTranslationResponse>> CreateTranslationAsync(CreateTranslationRequest audio)
         {
-            if (audio is null) throw new ArgumentNullException(nameof(audio));
+            Argument.AssertNotNull(audio, nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
             ClientResult result = await CreateTranslationAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -248,7 +260,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="audio"/> is null. </exception>
         public virtual ClientResult<CreateTranslationResponse> CreateTranslation(CreateTranslationRequest audio)
         {
-            if (audio is null) throw new ArgumentNullException(nameof(audio));
+            Argument.AssertNotNull(audio, nameof(audio));
 
             using BinaryContent content = BinaryContent.Create(audio);
             ClientResult result = CreateTranslation(content, DefaultRequestContext);
@@ -277,18 +289,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateTranslationAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateTranslationRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Audio.CreateTranslation"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateTranslationRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -313,18 +328,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateTranslation(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateTranslationRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Audio.CreateTranslation"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateTranslationRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         internal PipelineMessage CreateCreateSpeechRequest(BinaryContent content, RequestOptions options)

@@ -23,7 +23,7 @@ public abstract partial class ChatRequestMessage :  IJsonModel<ChatRequestMessag
             ChatRole.Function => "function",
             _ => throw new ArgumentException(nameof(Role))
         });
-        if (OptionalProperty.IsDefined(Content))
+        if (Optional.IsDefined(Content))
         {
             writer.WritePropertyName("content"u8);
             if (Content.Span.Length == 0)

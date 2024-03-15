@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -23,17 +25,17 @@ namespace OpenAI.Internal.Models
             writer.WriteBase64StringValue(Image.ToArray(), "D");
             writer.WritePropertyName("prompt"u8);
             writer.WriteStringValue(Prompt);
-            if (OptionalProperty.IsDefined(Mask))
+            if (Optional.IsDefined(Mask))
             {
                 writer.WritePropertyName("mask"u8);
                 writer.WriteBase64StringValue(Mask.ToArray(), "D");
             }
-            if (OptionalProperty.IsDefined(Model))
+            if (Optional.IsDefined(Model))
             {
                 writer.WritePropertyName("model"u8);
                 writer.WriteStringValue(Model.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(N))
+            if (Optional.IsDefined(N))
             {
                 if (N != null)
                 {
@@ -45,17 +47,17 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("n");
                 }
             }
-            if (OptionalProperty.IsDefined(Size))
+            if (Optional.IsDefined(Size))
             {
                 writer.WritePropertyName("size"u8);
                 writer.WriteStringValue(Size.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(ResponseFormat))
+            if (Optional.IsDefined(ResponseFormat))
             {
                 writer.WritePropertyName("response_format"u8);
                 writer.WriteStringValue(ResponseFormat.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(User))
+            if (Optional.IsDefined(User))
             {
                 writer.WritePropertyName("user"u8);
                 writer.WriteStringValue(User);
@@ -100,12 +102,12 @@ namespace OpenAI.Internal.Models
             }
             BinaryData image = default;
             string prompt = default;
-            OptionalProperty<BinaryData> mask = default;
-            OptionalProperty<CreateImageEditRequestModel> model = default;
-            OptionalProperty<long?> n = default;
-            OptionalProperty<CreateImageEditRequestSize> size = default;
-            OptionalProperty<CreateImageEditRequestResponseFormat> responseFormat = default;
-            OptionalProperty<string> user = default;
+            BinaryData mask = default;
+            CreateImageEditRequestModel? model = default;
+            long? n = default;
+            CreateImageEditRequestSize? size = default;
+            CreateImageEditRequestResponseFormat? responseFormat = default;
+            string user = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -177,7 +179,16 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateImageEditRequest(image, prompt, mask.Value, OptionalProperty.ToNullable(model), OptionalProperty.ToNullable(n), OptionalProperty.ToNullable(size), OptionalProperty.ToNullable(responseFormat), user.Value, serializedAdditionalRawData);
+            return new CreateImageEditRequest(
+                image,
+                prompt,
+                mask,
+                model,
+                n,
+                size,
+                responseFormat,
+                user,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateImageEditRequest>.Write(ModelReaderWriterOptions options)
@@ -217,6 +228,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateImageEditRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,7 +21,7 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(BatchSize))
+            if (Optional.IsDefined(BatchSize))
             {
                 writer.WritePropertyName("batch_size"u8);
 #if NET6_0_OR_GREATER
@@ -31,7 +33,7 @@ namespace OpenAI.Internal.Models
                 }
 #endif
             }
-            if (OptionalProperty.IsDefined(LearningRateMultiplier))
+            if (Optional.IsDefined(LearningRateMultiplier))
             {
                 writer.WritePropertyName("learning_rate_multiplier"u8);
 #if NET6_0_OR_GREATER
@@ -43,7 +45,7 @@ namespace OpenAI.Internal.Models
                 }
 #endif
             }
-            if (OptionalProperty.IsDefined(NEpochs))
+            if (Optional.IsDefined(NEpochs))
             {
                 writer.WritePropertyName("n_epochs"u8);
 #if NET6_0_OR_GREATER
@@ -93,9 +95,9 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<BinaryData> batchSize = default;
-            OptionalProperty<BinaryData> learningRateMultiplier = default;
-            OptionalProperty<BinaryData> nEpochs = default;
+            BinaryData batchSize = default;
+            BinaryData learningRateMultiplier = default;
+            BinaryData nEpochs = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -133,7 +135,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateFineTuningJobRequestHyperparameters(batchSize.Value, learningRateMultiplier.Value, nEpochs.Value, serializedAdditionalRawData);
+            return new CreateFineTuningJobRequestHyperparameters(batchSize, learningRateMultiplier, nEpochs, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateFineTuningJobRequestHyperparameters>.Write(ModelReaderWriterOptions options)
@@ -173,6 +175,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateFineTuningJobRequestHyperparameters(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

@@ -42,11 +42,11 @@ public partial class ToolOutput :  IJsonModel<ToolOutput>
     void IJsonModel<ToolOutput>.Write(Utf8JsonWriter writer, ModelReaderWriterOptions options)
     {
         writer.WriteStartObject();
-        if (OptionalProperty.IsDefined(Id))
+        if (Optional.IsDefined(Id))
         {
             writer.WriteString("tool_call_id"u8, Id);
         }
-        if (OptionalProperty.IsDefined(Output))
+        if (Optional.IsDefined(Output))
         {
             writer.WriteString("output"u8, Output);
         }

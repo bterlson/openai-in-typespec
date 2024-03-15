@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -30,17 +32,17 @@ namespace OpenAI.Internal.Models
 #endif
             writer.WritePropertyName("model"u8);
             writer.WriteStringValue(Model.ToString());
-            if (OptionalProperty.IsDefined(EncodingFormat))
+            if (Optional.IsDefined(EncodingFormat))
             {
                 writer.WritePropertyName("encoding_format"u8);
                 writer.WriteStringValue(EncodingFormat.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(Dimensions))
+            if (Optional.IsDefined(Dimensions))
             {
                 writer.WritePropertyName("dimensions"u8);
                 writer.WriteNumberValue(Dimensions.Value);
             }
-            if (OptionalProperty.IsDefined(User))
+            if (Optional.IsDefined(User))
             {
                 writer.WritePropertyName("user"u8);
                 writer.WriteStringValue(User);
@@ -85,9 +87,9 @@ namespace OpenAI.Internal.Models
             }
             BinaryData input = default;
             CreateEmbeddingRequestModel model = default;
-            OptionalProperty<CreateEmbeddingRequestEncodingFormat> encodingFormat = default;
-            OptionalProperty<long> dimensions = default;
-            OptionalProperty<string> user = default;
+            CreateEmbeddingRequestEncodingFormat? encodingFormat = default;
+            long? dimensions = default;
+            string user = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -131,7 +133,13 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateEmbeddingRequest(input, model, OptionalProperty.ToNullable(encodingFormat), OptionalProperty.ToNullable(dimensions), user.Value, serializedAdditionalRawData);
+            return new CreateEmbeddingRequest(
+                input,
+                model,
+                encodingFormat,
+                dimensions,
+                user,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateEmbeddingRequest>.Write(ModelReaderWriterOptions options)
@@ -171,6 +179,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateEmbeddingRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

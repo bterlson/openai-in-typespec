@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,7 +21,7 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (Content != null && OptionalProperty.IsCollectionDefined(Content))
+            if (Content != null && Optional.IsCollectionDefined(Content))
             {
                 writer.WritePropertyName("content"u8);
                 writer.WriteStartArray();
@@ -80,13 +82,13 @@ namespace OpenAI.Internal.Models
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        content = new OptionalList<ChatCompletionTokenLogprob>();
+                        content = new ChangeTrackingList<ChatCompletionTokenLogprob>();
                         continue;
                     }
                     List<ChatCompletionTokenLogprob> array = new List<ChatCompletionTokenLogprob>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(ChatCompletionTokenLogprob.DeserializeChatCompletionTokenLogprob(item));
+                        array.Add(ChatCompletionTokenLogprob.DeserializeChatCompletionTokenLogprob(item, options));
                     }
                     content = array;
                     continue;
@@ -137,6 +139,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateChatCompletionResponseChoiceLogprobs(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

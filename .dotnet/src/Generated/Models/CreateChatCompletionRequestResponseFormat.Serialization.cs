@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,7 +21,7 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(Type))
+            if (Optional.IsDefined(Type))
             {
                 writer.WritePropertyName("type"u8);
                 writer.WriteStringValue(Type.Value.ToString());
@@ -62,7 +64,7 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<CreateChatCompletionRequestResponseFormatType> type = default;
+            CreateChatCompletionRequestResponseFormatType? type = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -82,7 +84,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateChatCompletionRequestResponseFormat(OptionalProperty.ToNullable(type), serializedAdditionalRawData);
+            return new CreateChatCompletionRequestResponseFormat(type, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateChatCompletionRequestResponseFormat>.Write(ModelReaderWriterOptions options)
@@ -122,6 +124,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateChatCompletionRequestResponseFormat(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

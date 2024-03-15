@@ -60,7 +60,7 @@ public class ChatCompletion
         Content = internalChoice.Message.Content;
         if (internalChoice.Message.ToolCalls != null)
         {
-            OptionalList<ChatToolCall> toolCalls = [];
+            ChangeTrackingList<ChatToolCall> toolCalls = [];
             foreach (Internal.Models.ChatCompletionMessageToolCall internalToolCall in internalChoice.Message.ToolCalls)
             {
                 if (internalToolCall.Type == "function")

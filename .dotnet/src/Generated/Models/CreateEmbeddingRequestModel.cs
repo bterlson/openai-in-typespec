@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace OpenAI.Internal.Models
 {
-    /// <summary> Enum for model in CreateEmbeddingRequest. </summary>
+    /// <summary> The CreateEmbeddingRequestModel. </summary>
     internal readonly partial struct CreateEmbeddingRequestModel : IEquatable<CreateEmbeddingRequestModel>
     {
         private readonly string _value;

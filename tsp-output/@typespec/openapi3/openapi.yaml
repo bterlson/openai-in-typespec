@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   title: OpenAI API
-  version: 2.0.0
   description: The OpenAI REST API. Please see https://platform.openai.com/docs/api-reference for more details.
+  version: 0.0.0
 tags:
   - name: Audio
   - name: Assistants
@@ -1798,8 +1798,7 @@ components:
           maxLength: 32768
           description: The system instructions that the assistant uses. The maximum length is 32768 characters.
         tools:
-          allOf:
-            - $ref: '#/components/schemas/CreateAssistantRequestToolsItem'
+          $ref: '#/components/schemas/CreateAssistantRequestToolsItem'
           description: |-
             A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
             Tools can be of types `code_interpreter`, `retrieval`, or `function`.
@@ -1897,8 +1896,7 @@ components:
           type: string
           description: The text that was part of this audio segment.
         tokens:
-          allOf:
-            - $ref: '#/components/schemas/TokenArrayItem'
+          $ref: '#/components/schemas/TokenArrayItem'
           description: The token IDs matching the text in this audio segment.
         temperature:
           type: number
@@ -2376,8 +2374,7 @@ components:
           maxLength: 32768
           description: The system instructions that the assistant uses. The maximum length is 32768 characters.
         tools:
-          allOf:
-            - $ref: '#/components/schemas/CreateAssistantRequestToolsItem'
+          $ref: '#/components/schemas/CreateAssistantRequestToolsItem'
           description: |-
             A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
             Tools can be of types `code_interpreter`, `retrieval`, or `function`.
@@ -4823,8 +4820,7 @@ components:
           maxLength: 32768
           description: The system instructions that the assistant uses. The maximum length is 32768 characters.
         tools:
-          allOf:
-            - $ref: '#/components/schemas/CreateAssistantRequestToolsItem'
+          $ref: '#/components/schemas/CreateAssistantRequestToolsItem'
           description: |-
             A list of tool enabled on the assistant. There can be a maximum of 128 tools per assistant.
             Tools can be of types `code_interpreter`, `retrieval`, or `function`.
@@ -5112,8 +5108,7 @@ components:
           type: string
           description: The instructions that the [assistant](/docs/api-reference/assistants) used for this run.
         tools:
-          allOf:
-            - $ref: '#/components/schemas/CreateRunRequestToolsItem'
+          $ref: '#/components/schemas/CreateRunRequestToolsItem'
           description: The list of tools that the [assistant](/docs/api-reference/assistants) used for this run.
         file_ids:
           type: array
@@ -5210,8 +5205,7 @@ components:
               type: string
               description: The input to the Code Interpreter tool call.
             outputs:
-              allOf:
-                - $ref: '#/components/schemas/RunStepDetailsToolCallsCodeOutputs'
+              $ref: '#/components/schemas/RunStepDetailsToolCallsCodeOutputs'
               description: |-
                 The outputs from the Code Interpreter tool call. Code Interpreter can output one or more
                 items, including text (`logs`) or images (`image`). Each of these are represented by a
@@ -5311,8 +5305,7 @@ components:
             - tool_calls
           description: Always `tool_calls`.
         tool_calls:
-          allOf:
-            - $ref: '#/components/schemas/RunStepDetailsToolCallsObjectToolCallsItem'
+          $ref: '#/components/schemas/RunStepDetailsToolCallsObjectToolCallsItem'
           description: |-
             An array of tool calls the run step was involved in. These can be associated with one of three
             types of tools: `code_interpreter`, `retrieval`, or `function`.

@@ -10,7 +10,7 @@ namespace OpenAI.Assistants;
 /// </summary>
 public partial class ThreadCreationOptions
 {
-    public IList<ThreadInitializationMessage> Messages { get; } = new OptionalList<ThreadInitializationMessage>();
+    public IList<ThreadInitializationMessage> Messages { get; } = new ChangeTrackingList<ThreadInitializationMessage>();
 
     /// <summary>
     /// An optional key/value mapping of additional, supplemental data items to attach to the <see cref="Assistant"/>.
@@ -22,5 +22,5 @@ public partial class ThreadCreationOptions
     ///     <item><b>Values</b> can be a maximum of 512 characters in length.</item>
     /// </list>
     /// </remarks>
-    public IDictionary<string, string> Metadata { get; } = new OptionalDictionary<string, string>();
+    public IDictionary<string, string> Metadata { get; } = new ChangeTrackingDictionary<string, string>();
 }

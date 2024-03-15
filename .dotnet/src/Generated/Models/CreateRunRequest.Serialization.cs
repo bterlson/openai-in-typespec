@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -21,7 +23,7 @@ namespace OpenAI.Internal.Models
             writer.WriteStartObject();
             writer.WritePropertyName("assistant_id"u8);
             writer.WriteStringValue(AssistantId);
-            if (OptionalProperty.IsDefined(Model))
+            if (Optional.IsDefined(Model))
             {
                 if (Model != null)
                 {
@@ -33,7 +35,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("model");
                 }
             }
-            if (OptionalProperty.IsDefined(Instructions))
+            if (Optional.IsDefined(Instructions))
             {
                 if (Instructions != null)
                 {
@@ -45,7 +47,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("instructions");
                 }
             }
-            if (OptionalProperty.IsDefined(AdditionalInstructions))
+            if (Optional.IsDefined(AdditionalInstructions))
             {
                 if (AdditionalInstructions != null)
                 {
@@ -57,7 +59,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("additional_instructions");
                 }
             }
-            if (OptionalProperty.IsCollectionDefined(Tools))
+            if (Optional.IsCollectionDefined(Tools))
             {
                 if (Tools != null)
                 {
@@ -86,7 +88,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("tools");
                 }
             }
-            if (OptionalProperty.IsCollectionDefined(Metadata))
+            if (Optional.IsCollectionDefined(Metadata))
             {
                 if (Metadata != null)
                 {
@@ -143,11 +145,11 @@ namespace OpenAI.Internal.Models
                 return null;
             }
             string assistantId = default;
-            OptionalProperty<string> model = default;
-            OptionalProperty<string> instructions = default;
-            OptionalProperty<string> additionalInstructions = default;
-            OptionalProperty<IList<BinaryData>> tools = default;
-            OptionalProperty<IDictionary<string, string>> metadata = default;
+            string model = default;
+            string instructions = default;
+            string additionalInstructions = default;
+            IList<BinaryData> tools = default;
+            IDictionary<string, string> metadata = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -228,7 +230,14 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateRunRequest(assistantId, model.Value, instructions.Value, additionalInstructions.Value, OptionalProperty.ToList(tools), OptionalProperty.ToDictionary(metadata), serializedAdditionalRawData);
+            return new CreateRunRequest(
+                assistantId,
+                model,
+                instructions,
+                additionalInstructions,
+                tools ?? new ChangeTrackingList<BinaryData>(),
+                metadata ?? new ChangeTrackingDictionary<string, string>(),
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateRunRequest>.Write(ModelReaderWriterOptions options)
@@ -268,6 +277,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateRunRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

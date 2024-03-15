@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -83,7 +85,7 @@ namespace OpenAI.Internal.Models
                     List<Embedding> array = new List<Embedding>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(Embedding.DeserializeEmbedding(item));
+                        array.Add(Embedding.DeserializeEmbedding(item, options));
                     }
                     data = array;
                     continue;
@@ -100,7 +102,7 @@ namespace OpenAI.Internal.Models
                 }
                 if (property.NameEquals("usage"u8))
                 {
-                    usage = EmbeddingUsage.DeserializeEmbeddingUsage(property.Value);
+                    usage = EmbeddingUsage.DeserializeEmbeddingUsage(property.Value, options);
                     continue;
                 }
                 if (options.Format != "W")
@@ -149,6 +151,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateEmbeddingResponse(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

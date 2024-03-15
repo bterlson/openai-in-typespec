@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -124,7 +126,7 @@ namespace OpenAI.Internal.Models
                 writer.WriteStringValue(item);
             }
             writer.WriteEndArray();
-            if (Metadata != null && OptionalProperty.IsCollectionDefined(Metadata))
+            if (Metadata != null && Optional.IsCollectionDefined(Metadata))
             {
                 writer.WritePropertyName("metadata"u8);
                 writer.WriteStartObject();
@@ -246,7 +248,7 @@ namespace OpenAI.Internal.Models
                         requiredAction = null;
                         continue;
                     }
-                    requiredAction = RunObjectRequiredAction.DeserializeRunObjectRequiredAction(property.Value);
+                    requiredAction = RunObjectRequiredAction.DeserializeRunObjectRequiredAction(property.Value, options);
                     continue;
                 }
                 if (property.NameEquals("last_error"u8))
@@ -256,7 +258,7 @@ namespace OpenAI.Internal.Models
                         lastError = null;
                         continue;
                     }
-                    lastError = RunObjectLastError.DeserializeRunObjectLastError(property.Value);
+                    lastError = RunObjectLastError.DeserializeRunObjectLastError(property.Value, options);
                     continue;
                 }
                 if (property.NameEquals("expires_at"u8))
@@ -360,7 +362,7 @@ namespace OpenAI.Internal.Models
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        metadata = new OptionalDictionary<string, string>();
+                        metadata = new ChangeTrackingDictionary<string, string>();
                         continue;
                     }
                     Dictionary<string, string> dictionary = new Dictionary<string, string>();
@@ -378,7 +380,7 @@ namespace OpenAI.Internal.Models
                         usage = null;
                         continue;
                     }
-                    usage = RunCompletionUsage.DeserializeRunCompletionUsage(property.Value);
+                    usage = RunCompletionUsage.DeserializeRunCompletionUsage(property.Value, options);
                     continue;
                 }
                 if (options.Format != "W")
@@ -387,7 +389,27 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new RunObject(id, @object, createdAt, threadId, assistantId, status, requiredAction, lastError, expiresAt, startedAt, cancelledAt, failedAt, completedAt, model, instructions, tools, fileIds, metadata, usage, serializedAdditionalRawData);
+            return new RunObject(
+                id,
+                @object,
+                createdAt,
+                threadId,
+                assistantId,
+                status,
+                requiredAction,
+                lastError,
+                expiresAt,
+                startedAt,
+                cancelledAt,
+                failedAt,
+                completedAt,
+                model,
+                instructions,
+                tools,
+                fileIds,
+                metadata,
+                usage,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<RunObject>.Write(ModelReaderWriterOptions options)
@@ -427,6 +449,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeRunObject(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

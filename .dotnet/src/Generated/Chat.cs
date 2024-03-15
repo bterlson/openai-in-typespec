@@ -44,7 +44,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="createChatCompletionRequest"/> is null. </exception>
         public virtual async Task<ClientResult<CreateChatCompletionResponse>> CreateChatCompletionAsync(CreateChatCompletionRequest createChatCompletionRequest)
         {
-            if (createChatCompletionRequest is null) throw new ArgumentNullException(nameof(createChatCompletionRequest));
+            Argument.AssertNotNull(createChatCompletionRequest, nameof(createChatCompletionRequest));
 
             using BinaryContent content = BinaryContent.Create(createChatCompletionRequest);
             ClientResult result = await CreateChatCompletionAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -56,7 +56,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="createChatCompletionRequest"/> is null. </exception>
         public virtual ClientResult<CreateChatCompletionResponse> CreateChatCompletion(CreateChatCompletionRequest createChatCompletionRequest)
         {
-            if (createChatCompletionRequest is null) throw new ArgumentNullException(nameof(createChatCompletionRequest));
+            Argument.AssertNotNull(createChatCompletionRequest, nameof(createChatCompletionRequest));
 
             using BinaryContent content = BinaryContent.Create(createChatCompletionRequest);
             ClientResult result = CreateChatCompletion(content, DefaultRequestContext);
@@ -85,18 +85,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateChatCompletionAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateChatCompletionRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Chat.CreateChatCompletion"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateChatCompletionRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -121,18 +124,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateChatCompletion(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateChatCompletionRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Chat.CreateChatCompletion"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateChatCompletionRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         internal PipelineMessage CreateCreateChatCompletionRequest(BinaryContent content, RequestOptions options)

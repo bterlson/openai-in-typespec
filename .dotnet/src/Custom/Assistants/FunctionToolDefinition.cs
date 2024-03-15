@@ -75,11 +75,11 @@ public partial class FunctionToolDefinition : ToolDefinition
         writer.WritePropertyName("function"u8);
         writer.WriteStartObject();
         writer.WriteString("name"u8, Name);
-        if (OptionalProperty.IsDefined(Description))
+        if (Optional.IsDefined(Description))
         {
             writer.WriteString("description"u8, Description);
         }
-        if (OptionalProperty.IsDefined(Parameters))
+        if (Optional.IsDefined(Parameters))
         {
             writer.WritePropertyName("parameters"u8);
             writer.WriteRawValue(Parameters.ToString());

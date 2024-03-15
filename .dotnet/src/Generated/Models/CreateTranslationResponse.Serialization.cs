@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -21,22 +23,22 @@ namespace OpenAI.Internal.Models
             writer.WriteStartObject();
             writer.WritePropertyName("text"u8);
             writer.WriteStringValue(Text);
-            if (OptionalProperty.IsDefined(Task))
+            if (Optional.IsDefined(Task))
             {
                 writer.WritePropertyName("task"u8);
                 writer.WriteStringValue(Task.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(Language))
+            if (Optional.IsDefined(Language))
             {
                 writer.WritePropertyName("language"u8);
                 writer.WriteStringValue(Language);
             }
-            if (OptionalProperty.IsDefined(Duration))
+            if (Optional.IsDefined(Duration))
             {
                 writer.WritePropertyName("duration"u8);
                 writer.WriteNumberValue(Convert.ToInt32(Duration.Value.ToString("%s")));
             }
-            if (OptionalProperty.IsCollectionDefined(Segments))
+            if (Optional.IsCollectionDefined(Segments))
             {
                 writer.WritePropertyName("segments"u8);
                 writer.WriteStartArray();
@@ -85,10 +87,10 @@ namespace OpenAI.Internal.Models
                 return null;
             }
             string text = default;
-            OptionalProperty<CreateTranslationResponseTask> task = default;
-            OptionalProperty<string> language = default;
-            OptionalProperty<TimeSpan> duration = default;
-            OptionalProperty<IReadOnlyList<AudioSegment>> segments = default;
+            CreateTranslationResponseTask? task = default;
+            string language = default;
+            TimeSpan? duration = default;
+            IReadOnlyList<AudioSegment> segments = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -130,7 +132,7 @@ namespace OpenAI.Internal.Models
                     List<AudioSegment> array = new List<AudioSegment>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(AudioSegment.DeserializeAudioSegment(item));
+                        array.Add(AudioSegment.DeserializeAudioSegment(item, options));
                     }
                     segments = array;
                     continue;
@@ -141,7 +143,13 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateTranslationResponse(text, OptionalProperty.ToNullable(task), language.Value, OptionalProperty.ToNullable(duration), OptionalProperty.ToList(segments), serializedAdditionalRawData);
+            return new CreateTranslationResponse(
+                text,
+                task,
+                language,
+                duration,
+                segments ?? new ChangeTrackingList<AudioSegment>(),
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateTranslationResponse>.Write(ModelReaderWriterOptions options)
@@ -181,6 +189,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateTranslationResponse(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

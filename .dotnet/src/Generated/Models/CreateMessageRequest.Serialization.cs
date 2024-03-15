@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -23,7 +25,7 @@ namespace OpenAI.Internal.Models
             writer.WriteStringValue(Role.ToString());
             writer.WritePropertyName("content"u8);
             writer.WriteStringValue(Content);
-            if (OptionalProperty.IsCollectionDefined(FileIds))
+            if (Optional.IsCollectionDefined(FileIds))
             {
                 writer.WritePropertyName("file_ids"u8);
                 writer.WriteStartArray();
@@ -33,7 +35,7 @@ namespace OpenAI.Internal.Models
                 }
                 writer.WriteEndArray();
             }
-            if (OptionalProperty.IsCollectionDefined(Metadata))
+            if (Optional.IsCollectionDefined(Metadata))
             {
                 if (Metadata != null)
                 {
@@ -91,8 +93,8 @@ namespace OpenAI.Internal.Models
             }
             CreateMessageRequestRole role = default;
             string content = default;
-            OptionalProperty<IList<string>> fileIds = default;
-            OptionalProperty<IDictionary<string, string>> metadata = default;
+            IList<string> fileIds = default;
+            IDictionary<string, string> metadata = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -141,7 +143,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateMessageRequest(role, content, OptionalProperty.ToList(fileIds), OptionalProperty.ToDictionary(metadata), serializedAdditionalRawData);
+            return new CreateMessageRequest(role, content, fileIds ?? new ChangeTrackingList<string>(), metadata ?? new ChangeTrackingDictionary<string, string>(), serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateMessageRequest>.Write(ModelReaderWriterOptions options)
@@ -181,6 +183,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateMessageRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

@@ -23,7 +23,7 @@ public abstract partial class ListQueryPage
 
     internal static ListQueryPage<Assistant> Create(Internal.Models.ListAssistantsResponse internalResponse)
     {
-        OptionalList<Assistant> assistants = new();
+        ChangeTrackingList<Assistant> assistants = new();
         foreach (Internal.Models.AssistantObject internalAssistant in internalResponse.Data)
         {
             assistants.Add(new(internalAssistant));
@@ -33,7 +33,7 @@ public abstract partial class ListQueryPage
 
     internal static ListQueryPage<AssistantFileAssociation> Create(Internal.Models.ListAssistantFilesResponse internalResponse)
     {
-        OptionalList<AssistantFileAssociation> assistantFileAssociations = new();
+        ChangeTrackingList<AssistantFileAssociation> assistantFileAssociations = new();
         foreach (Internal.Models.AssistantFileObject internalFile in internalResponse.Data)
         {
             assistantFileAssociations.Add(new(internalFile));
@@ -43,7 +43,7 @@ public abstract partial class ListQueryPage
 
     internal static ListQueryPage<ThreadMessage> Create(Internal.Models.ListMessagesResponse internalResponse)
     {
-        OptionalList<ThreadMessage> messages = new();
+        ChangeTrackingList<ThreadMessage> messages = new();
         foreach (Internal.Models.MessageObject internalMessage in internalResponse.Data)
         {
             messages.Add(new(internalMessage));
@@ -53,7 +53,7 @@ public abstract partial class ListQueryPage
 
     internal static ListQueryPage<MessageFileAssociation> Create(Internal.Models.ListMessageFilesResponse internalResponse)
     {
-        OptionalList<MessageFileAssociation> messageFileAssociations = new();
+        ChangeTrackingList<MessageFileAssociation> messageFileAssociations = new();
         foreach (Internal.Models.MessageFileObject internalFile in internalResponse.Data)
         {
             messageFileAssociations.Add(new(internalFile));
@@ -63,7 +63,7 @@ public abstract partial class ListQueryPage
 
     internal static ListQueryPage<ThreadRun> Create(Internal.Models.ListRunsResponse internalResponse)
     {
-        OptionalList<ThreadRun> runs = new();
+        ChangeTrackingList<ThreadRun> runs = new();
         foreach (Internal.Models.RunObject internalRun in internalResponse.Data)
         {
             runs.Add(new(internalRun));

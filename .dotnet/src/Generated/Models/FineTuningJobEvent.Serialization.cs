@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -107,7 +109,13 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new FineTuningJobEvent(id, createdAt, level, message, @object, serializedAdditionalRawData);
+            return new FineTuningJobEvent(
+                id,
+                createdAt,
+                level,
+                message,
+                @object,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<FineTuningJobEvent>.Write(ModelReaderWriterOptions options)
@@ -147,6 +155,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeFineTuningJobEvent(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

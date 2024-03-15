@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace OpenAI.Internal.Models
 {
-    /// <summary> Enum for model in CreateFineTuningJobRequest. </summary>
+    /// <summary> The CreateFineTuningJobRequestModel. </summary>
     internal readonly partial struct CreateFineTuningJobRequestModel : IEquatable<CreateFineTuningJobRequestModel>
     {
         private readonly string _value;

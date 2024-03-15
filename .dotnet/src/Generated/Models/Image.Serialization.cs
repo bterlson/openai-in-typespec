@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,17 +21,17 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(B64Json))
+            if (Optional.IsDefined(B64Json))
             {
                 writer.WritePropertyName("b64_json"u8);
                 writer.WriteBase64StringValue(B64Json.ToArray(), "D");
             }
-            if (OptionalProperty.IsDefined(Url))
+            if (Optional.IsDefined(Url))
             {
                 writer.WritePropertyName("url"u8);
                 writer.WriteStringValue(Url.AbsoluteUri);
             }
-            if (OptionalProperty.IsDefined(RevisedPrompt))
+            if (Optional.IsDefined(RevisedPrompt))
             {
                 writer.WritePropertyName("revised_prompt"u8);
                 writer.WriteStringValue(RevisedPrompt);
@@ -72,9 +74,9 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<BinaryData> b64Json = default;
-            OptionalProperty<Uri> url = default;
-            OptionalProperty<string> revisedPrompt = default;
+            BinaryData b64Json = default;
+            Uri url = default;
+            string revisedPrompt = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -108,7 +110,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new Image(b64Json.Value, url.Value, revisedPrompt.Value, serializedAdditionalRawData);
+            return new Image(b64Json, url, revisedPrompt, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<Image>.Write(ModelReaderWriterOptions options)
@@ -148,6 +150,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeImage(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

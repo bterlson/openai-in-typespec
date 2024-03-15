@@ -31,7 +31,7 @@ public class ChatRequestSystemMessage : ChatRequestMessage
 
     internal override void WriteDerivedAdditions(Utf8JsonWriter writer, ModelReaderWriterOptions options)
     {
-        if (OptionalProperty.IsDefined(Name))
+        if (Optional.IsDefined(Name))
         {
             writer.WriteString("name"u8, Name);
         }

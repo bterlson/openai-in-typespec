@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -160,7 +162,7 @@ namespace OpenAI.Internal.Models
                         error = null;
                         continue;
                     }
-                    error = FineTuningJobError.DeserializeFineTuningJobError(property.Value);
+                    error = FineTuningJobError.DeserializeFineTuningJobError(property.Value, options);
                     continue;
                 }
                 if (property.NameEquals("fine_tuned_model"u8))
@@ -185,7 +187,7 @@ namespace OpenAI.Internal.Models
                 }
                 if (property.NameEquals("hyperparameters"u8))
                 {
-                    hyperparameters = FineTuningJobHyperparameters.DeserializeFineTuningJobHyperparameters(property.Value);
+                    hyperparameters = FineTuningJobHyperparameters.DeserializeFineTuningJobHyperparameters(property.Value, options);
                     continue;
                 }
                 if (property.NameEquals("model"u8))
@@ -249,7 +251,22 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new FineTuningJob(id, createdAt, error, fineTunedModel, finishedAt, hyperparameters, model, @object, organizationId, resultFiles, status, trainedTokens, trainingFile, validationFile, serializedAdditionalRawData);
+            return new FineTuningJob(
+                id,
+                createdAt,
+                error,
+                fineTunedModel,
+                finishedAt,
+                hyperparameters,
+                model,
+                @object,
+                organizationId,
+                resultFiles,
+                status,
+                trainedTokens,
+                trainingFile,
+                validationFile,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<FineTuningJob>.Write(ModelReaderWriterOptions options)
@@ -289,6 +306,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeFineTuningJob(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

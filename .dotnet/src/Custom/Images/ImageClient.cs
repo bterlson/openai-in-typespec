@@ -396,17 +396,17 @@ public partial class ImageClient
 
         content.Add(MultipartContent.Create(BinaryData.FromString(_clientConnector.Model)), name: "model", headers: []);
 
-        if (OptionalProperty.IsDefined(maskBytes))
+        if (Optional.IsDefined(maskBytes))
         {
             content.Add(MultipartContent.Create(maskBytes), name: "mask", fileName: "mask.png", headers: []);
         }
 
-        if (OptionalProperty.IsDefined(imageCount))
+        if (Optional.IsDefined(imageCount))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString(imageCount.ToString())), name: "n", headers: []);
         }
 
-        if (OptionalProperty.IsDefined(imageResponseFormat))
+        if (Optional.IsDefined(imageResponseFormat))
         {
             content.Add(MultipartContent.Create(
                 BinaryData.FromString(
@@ -421,7 +421,7 @@ public partial class ImageClient
                 headers: []);
         }
 
-        if (OptionalProperty.IsDefined(imageSize))
+        if (Optional.IsDefined(imageSize))
         {
             content.Add(MultipartContent.Create(
                 BinaryData.FromString(
@@ -440,7 +440,7 @@ public partial class ImageClient
                 headers: []);
         }
 
-        if (OptionalProperty.IsDefined(user))
+        if (Optional.IsDefined(user))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString(user)), "user", []);
         }
@@ -488,12 +488,12 @@ public partial class ImageClient
 
         content.Add(MultipartContent.Create(BinaryData.FromString(_clientConnector.Model)), name: "model", headers: []);
 
-        if (OptionalProperty.IsDefined(imageCount))
+        if (Optional.IsDefined(imageCount))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString(imageCount.ToString())), name: "n", headers: []);
         }
 
-        if (OptionalProperty.IsDefined(imageResponseFormat))
+        if (Optional.IsDefined(imageResponseFormat))
         {
             content.Add(MultipartContent.Create(
                 BinaryData.FromString(
@@ -508,7 +508,7 @@ public partial class ImageClient
                 headers: []);
         }
 
-        if (OptionalProperty.IsDefined(imageSize))
+        if (Optional.IsDefined(imageSize))
         {
             content.Add(MultipartContent.Create(
                 BinaryData.FromString(
@@ -527,7 +527,7 @@ public partial class ImageClient
                 headers: []);
         }
 
-        if (OptionalProperty.IsDefined(user))
+        if (Optional.IsDefined(user))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString(user)), "user", []);
         }

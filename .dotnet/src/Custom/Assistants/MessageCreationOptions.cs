@@ -14,7 +14,7 @@ public partial class MessageCreationOptions
     /// A collection of IDs for previously uploaded files that are made accessible to the message. These IDs are the
     /// basis for the functionality of file-based tools like <c>retrieval</c>.
     /// </summary>
-    public IList<string> FileIds { get; } = new OptionalList<string>();
+    public IList<string> FileIds { get; } = new ChangeTrackingList<string>();
 
     /// <summary>
     /// An optional key/value mapping of additional, supplemental data items to attach to the <see cref="ThreadMessage"/>.
@@ -26,5 +26,5 @@ public partial class MessageCreationOptions
     ///     <item><b>Values</b> can be a maximum of 512 characters in length.</item>
     /// </list>
     /// </remarks>
-    public IDictionary<string, string> Metadata { get; } = new OptionalDictionary<string, string>();
+    public IDictionary<string, string> Metadata { get; } = new ChangeTrackingDictionary<string, string>();
 }

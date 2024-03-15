@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -25,12 +27,12 @@ namespace OpenAI.Internal.Models
             writer.WriteStringValue(Input);
             writer.WritePropertyName("voice"u8);
             writer.WriteStringValue(Voice.ToString());
-            if (OptionalProperty.IsDefined(ResponseFormat))
+            if (Optional.IsDefined(ResponseFormat))
             {
                 writer.WritePropertyName("response_format"u8);
                 writer.WriteStringValue(ResponseFormat.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(Speed))
+            if (Optional.IsDefined(Speed))
             {
                 writer.WritePropertyName("speed"u8);
                 writer.WriteNumberValue(Speed.Value);
@@ -76,8 +78,8 @@ namespace OpenAI.Internal.Models
             CreateSpeechRequestModel model = default;
             string input = default;
             CreateSpeechRequestVoice voice = default;
-            OptionalProperty<CreateSpeechRequestResponseFormat> responseFormat = default;
-            OptionalProperty<double> speed = default;
+            CreateSpeechRequestResponseFormat? responseFormat = default;
+            double? speed = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -121,7 +123,13 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateSpeechRequest(model, input, voice, OptionalProperty.ToNullable(responseFormat), OptionalProperty.ToNullable(speed), serializedAdditionalRawData);
+            return new CreateSpeechRequest(
+                model,
+                input,
+                voice,
+                responseFormat,
+                speed,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateSpeechRequest>.Write(ModelReaderWriterOptions options)
@@ -161,6 +169,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateSpeechRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace OpenAI.Internal.Models
 {
-    /// <summary> Enum for model in CreateImageEditRequest. </summary>
+    /// <summary> The CreateImageEditRequestModel. </summary>
     internal readonly partial struct CreateImageEditRequestModel : IEquatable<CreateImageEditRequestModel>
     {
         private readonly string _value;

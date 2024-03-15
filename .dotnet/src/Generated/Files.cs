@@ -53,7 +53,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="file"/> is null. </exception>
         public virtual async Task<ClientResult<OpenAIFile>> CreateFileAsync(CreateFileRequest file)
         {
-            if (file is null) throw new ArgumentNullException(nameof(file));
+            Argument.AssertNotNull(file, nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
             ClientResult result = await CreateFileAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -74,7 +74,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="file"/> is null. </exception>
         public virtual ClientResult<OpenAIFile> CreateFile(CreateFileRequest file)
         {
-            if (file is null) throw new ArgumentNullException(nameof(file));
+            Argument.AssertNotNull(file, nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
             ClientResult result = CreateFile(content, DefaultRequestContext);
@@ -110,18 +110,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateFileAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateFileRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.CreateFile"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateFileRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -153,18 +156,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateFile(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateFileRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.CreateFile"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateFileRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Returns a list of files that belong to the user's organization. </summary>
@@ -205,16 +211,18 @@ namespace OpenAI.Internal
         public virtual async Task<ClientResult> GetFilesAsync(string purpose, RequestOptions options)
         {
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetFilesRequest(purpose, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.GetFiles"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetFilesRequest(purpose, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -239,16 +247,18 @@ namespace OpenAI.Internal
         public virtual ClientResult GetFiles(string purpose, RequestOptions options)
         {
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetFilesRequest(purpose, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.GetFiles"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetFilesRequest(purpose, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Returns information about a specific file. </summary>
@@ -257,8 +267,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<OpenAIFile>> RetrieveFileAsync(string fileId)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = await RetrieveFileAsync(fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(OpenAIFile.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -270,8 +279,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<OpenAIFile> RetrieveFile(string fileId)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = RetrieveFile(fileId, DefaultRequestContext);
             return ClientResult.FromValue(OpenAIFile.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -300,19 +308,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> RetrieveFileAsync(string fileId, RequestOptions options)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateRetrieveFileRequest(fileId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.RetrieveFile"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateRetrieveFileRequest(fileId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -338,19 +348,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult RetrieveFile(string fileId, RequestOptions options)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateRetrieveFileRequest(fileId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.RetrieveFile"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateRetrieveFileRequest(fileId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Delete a file. </summary>
@@ -359,8 +371,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<DeleteFileResponse>> DeleteFileAsync(string fileId)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = await DeleteFileAsync(fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -372,8 +383,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<DeleteFileResponse> DeleteFile(string fileId)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = DeleteFile(fileId, DefaultRequestContext);
             return ClientResult.FromValue(DeleteFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -402,19 +412,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> DeleteFileAsync(string fileId, RequestOptions options)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteFileRequest(fileId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.DeleteFile"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateDeleteFileRequest(fileId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -440,19 +452,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult DeleteFile(string fileId, RequestOptions options)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteFileRequest(fileId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.DeleteFile"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateDeleteFileRequest(fileId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Returns the contents of the specified file. </summary>
@@ -461,8 +475,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<string>> DownloadFileAsync(string fileId)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = await DownloadFileAsync(fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(result.GetRawResponse().Content.ToObjectFromJson<string>(), result.GetRawResponse());
@@ -474,8 +487,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<string> DownloadFile(string fileId)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = DownloadFile(fileId, DefaultRequestContext);
             return ClientResult.FromValue(result.GetRawResponse().Content.ToObjectFromJson<string>(), result.GetRawResponse());
@@ -504,19 +516,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> DownloadFileAsync(string fileId, RequestOptions options)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDownloadFileRequest(fileId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.DownloadFile"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateDownloadFileRequest(fileId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -542,19 +556,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult DownloadFile(string fileId, RequestOptions options)
         {
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDownloadFileRequest(fileId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Files.DownloadFile"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateDownloadFileRequest(fileId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         internal PipelineMessage CreateCreateFileRequest(BinaryContent content, RequestOptions options)

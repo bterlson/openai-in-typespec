@@ -44,7 +44,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="assistant"/> is null. </exception>
         public virtual async Task<ClientResult<AssistantObject>> CreateAssistantAsync(CreateAssistantRequest assistant)
         {
-            if (assistant is null) throw new ArgumentNullException(nameof(assistant));
+            Argument.AssertNotNull(assistant, nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
             ClientResult result = await CreateAssistantAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -56,7 +56,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="assistant"/> is null. </exception>
         public virtual ClientResult<AssistantObject> CreateAssistant(CreateAssistantRequest assistant)
         {
-            if (assistant is null) throw new ArgumentNullException(nameof(assistant));
+            Argument.AssertNotNull(assistant, nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
             ClientResult result = CreateAssistant(content, DefaultRequestContext);
@@ -85,18 +85,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateAssistantAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateAssistantRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.CreateAssistant"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateAssistantRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -121,18 +124,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateAssistant(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateAssistantRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.CreateAssistant"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateAssistantRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Returns a list of assistants. </summary>
@@ -224,16 +230,18 @@ namespace OpenAI.Internal
         public virtual async Task<ClientResult> GetAssistantsAsync(int? limit, string order, string after, string before, RequestOptions options)
         {
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantsRequest(limit, order, after, before, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistants"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetAssistantsRequest(limit, order, after, before, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -275,16 +283,18 @@ namespace OpenAI.Internal
         public virtual ClientResult GetAssistants(int? limit, string order, string after, string before, RequestOptions options)
         {
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantsRequest(limit, order, after, before, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistants"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetAssistantsRequest(limit, order, after, before, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Retrieves an assistant. </summary>
@@ -293,8 +303,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<AssistantObject>> GetAssistantAsync(string assistantId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
 
             ClientResult result = await GetAssistantAsync(assistantId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -306,8 +315,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<AssistantObject> GetAssistant(string assistantId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
 
             ClientResult result = GetAssistant(assistantId, DefaultRequestContext);
             return ClientResult.FromValue(AssistantObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -336,19 +344,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> GetAssistantAsync(string assistantId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantRequest(assistantId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistant"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetAssistantRequest(assistantId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -374,19 +384,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult GetAssistant(string assistantId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantRequest(assistantId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistant"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetAssistantRequest(assistantId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Modifies an assistant. </summary>
@@ -396,9 +408,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<AssistantObject>> ModifyAssistantAsync(string assistantId, ModifyAssistantRequest assistant)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (assistant is null) throw new ArgumentNullException(nameof(assistant));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(assistant, nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
             ClientResult result = await ModifyAssistantAsync(assistantId, content, DefaultRequestContext).ConfigureAwait(false);
@@ -412,9 +423,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<AssistantObject> ModifyAssistant(string assistantId, ModifyAssistantRequest assistant)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (assistant is null) throw new ArgumentNullException(nameof(assistant));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(assistant, nameof(assistant));
 
             using BinaryContent content = BinaryContent.Create(assistant);
             ClientResult result = ModifyAssistant(assistantId, content, DefaultRequestContext);
@@ -445,20 +455,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> ModifyAssistantAsync(string assistantId, BinaryContent content, RequestOptions options = null)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateModifyAssistantRequest(assistantId, content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.ModifyAssistant"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateModifyAssistantRequest(assistantId, content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -485,20 +497,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult ModifyAssistant(string assistantId, BinaryContent content, RequestOptions options = null)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateModifyAssistantRequest(assistantId, content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.ModifyAssistant"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateModifyAssistantRequest(assistantId, content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Delete an assistant. </summary>
@@ -507,8 +521,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<DeleteAssistantResponse>> DeleteAssistantAsync(string assistantId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
 
             ClientResult result = await DeleteAssistantAsync(assistantId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteAssistantResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -520,8 +533,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<DeleteAssistantResponse> DeleteAssistant(string assistantId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
 
             ClientResult result = DeleteAssistant(assistantId, DefaultRequestContext);
             return ClientResult.FromValue(DeleteAssistantResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -550,19 +562,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> DeleteAssistantAsync(string assistantId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteAssistantRequest(assistantId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.DeleteAssistant"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateDeleteAssistantRequest(assistantId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -588,19 +602,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult DeleteAssistant(string assistantId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteAssistantRequest(assistantId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.DeleteAssistant"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateDeleteAssistantRequest(assistantId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -613,9 +629,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<AssistantFileObject>> CreateAssistantFileAsync(string assistantId, CreateAssistantFileRequest file)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (file is null) throw new ArgumentNullException(nameof(file));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(file, nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
             ClientResult result = await CreateAssistantFileAsync(assistantId, content, DefaultRequestContext).ConfigureAwait(false);
@@ -632,9 +647,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<AssistantFileObject> CreateAssistantFile(string assistantId, CreateAssistantFileRequest file)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (file is null) throw new ArgumentNullException(nameof(file));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(file, nameof(file));
 
             using BinaryContent content = BinaryContent.Create(file);
             ClientResult result = CreateAssistantFile(assistantId, content, DefaultRequestContext);
@@ -666,20 +680,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateAssistantFileAsync(string assistantId, BinaryContent content, RequestOptions options = null)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateAssistantFileRequest(assistantId, content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.CreateAssistantFile"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateAssistantFileRequest(assistantId, content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -707,20 +723,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateAssistantFile(string assistantId, BinaryContent content, RequestOptions options = null)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateAssistantFileRequest(assistantId, content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.CreateAssistantFile"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateAssistantFileRequest(assistantId, content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Returns a list of assistant files. </summary>
@@ -747,8 +765,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<ListAssistantFilesResponse>> GetAssistantFilesAsync(string assistantId, int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
 
             ClientResult result = await GetAssistantFilesAsync(assistantId, limit, order?.ToString(), after, before, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListAssistantFilesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -778,8 +795,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<ListAssistantFilesResponse> GetAssistantFiles(string assistantId, int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
 
             ClientResult result = GetAssistantFiles(assistantId, limit, order?.ToString(), after, before, DefaultRequestContext);
             return ClientResult.FromValue(ListAssistantFilesResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -826,19 +842,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> GetAssistantFilesAsync(string assistantId, int? limit, string order, string after, string before, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantFilesRequest(assistantId, limit, order, after, before, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistantFiles"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetAssistantFilesRequest(assistantId, limit, order, after, before, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -882,19 +900,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult GetAssistantFiles(string assistantId, int? limit, string order, string after, string before, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantFilesRequest(assistantId, limit, order, after, before, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistantFiles"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetAssistantFilesRequest(assistantId, limit, order, after, before, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Retrieves an assistant file. </summary>
@@ -904,10 +924,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> or <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<AssistantFileObject>> GetAssistantFileAsync(string assistantId, string fileId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = await GetAssistantFileAsync(assistantId, fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(AssistantFileObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -920,10 +938,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> or <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<AssistantFileObject> GetAssistantFile(string assistantId, string fileId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = GetAssistantFile(assistantId, fileId, DefaultRequestContext);
             return ClientResult.FromValue(AssistantFileObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -953,21 +969,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> GetAssistantFileAsync(string assistantId, string fileId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantFileRequest(assistantId, fileId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistantFile"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetAssistantFileRequest(assistantId, fileId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -994,21 +1011,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult GetAssistantFile(string assistantId, string fileId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetAssistantFileRequest(assistantId, fileId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.GetAssistantFile"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetAssistantFileRequest(assistantId, fileId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Delete an assistant file. </summary>
@@ -1018,10 +1036,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> or <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<DeleteAssistantFileResponse>> DeleteAssistantFileAsync(string assistantId, string fileId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = await DeleteAssistantFileAsync(assistantId, fileId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(DeleteAssistantFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -1034,10 +1050,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="assistantId"/> or <paramref name="fileId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<DeleteAssistantFileResponse> DeleteAssistantFile(string assistantId, string fileId)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
 
             ClientResult result = DeleteAssistantFile(assistantId, fileId, DefaultRequestContext);
             return ClientResult.FromValue(DeleteAssistantFileResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -1067,21 +1081,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> DeleteAssistantFileAsync(string assistantId, string fileId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteAssistantFileRequest(assistantId, fileId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.DeleteAssistantFile"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateDeleteAssistantFileRequest(assistantId, fileId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -1108,21 +1123,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult DeleteAssistantFile(string assistantId, string fileId, RequestOptions options)
         {
-            if (assistantId is null) throw new ArgumentNullException(nameof(assistantId));
-            if (string.IsNullOrEmpty(assistantId)) throw new ArgumentException(nameof(assistantId));
-            if (fileId is null) throw new ArgumentNullException(nameof(fileId));
-            if (string.IsNullOrEmpty(fileId)) throw new ArgumentException(nameof(fileId));
+            Argument.AssertNotNullOrEmpty(assistantId, nameof(assistantId));
+            Argument.AssertNotNullOrEmpty(fileId, nameof(fileId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateDeleteAssistantFileRequest(assistantId, fileId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Assistants.DeleteAssistantFile"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateDeleteAssistantFileRequest(assistantId, fileId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         internal PipelineMessage CreateCreateAssistantRequest(BinaryContent content, RequestOptions options)

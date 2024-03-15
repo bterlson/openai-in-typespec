@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -23,12 +25,12 @@ namespace OpenAI.Internal.Models
             writer.WriteStringValue(Model.ToString());
             writer.WritePropertyName("training_file"u8);
             writer.WriteStringValue(TrainingFile);
-            if (OptionalProperty.IsDefined(Hyperparameters))
+            if (Optional.IsDefined(Hyperparameters))
             {
                 writer.WritePropertyName("hyperparameters"u8);
                 writer.WriteObjectValue(Hyperparameters);
             }
-            if (OptionalProperty.IsDefined(Suffix))
+            if (Optional.IsDefined(Suffix))
             {
                 if (Suffix != null)
                 {
@@ -40,7 +42,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("suffix");
                 }
             }
-            if (OptionalProperty.IsDefined(ValidationFile))
+            if (Optional.IsDefined(ValidationFile))
             {
                 if (ValidationFile != null)
                 {
@@ -92,9 +94,9 @@ namespace OpenAI.Internal.Models
             }
             CreateFineTuningJobRequestModel model = default;
             string trainingFile = default;
-            OptionalProperty<CreateFineTuningJobRequestHyperparameters> hyperparameters = default;
-            OptionalProperty<string> suffix = default;
-            OptionalProperty<string> validationFile = default;
+            CreateFineTuningJobRequestHyperparameters hyperparameters = default;
+            string suffix = default;
+            string validationFile = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -115,7 +117,7 @@ namespace OpenAI.Internal.Models
                     {
                         continue;
                     }
-                    hyperparameters = CreateFineTuningJobRequestHyperparameters.DeserializeCreateFineTuningJobRequestHyperparameters(property.Value);
+                    hyperparameters = CreateFineTuningJobRequestHyperparameters.DeserializeCreateFineTuningJobRequestHyperparameters(property.Value, options);
                     continue;
                 }
                 if (property.NameEquals("suffix"u8))
@@ -144,7 +146,13 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateFineTuningJobRequest(model, trainingFile, hyperparameters.Value, suffix.Value, validationFile.Value, serializedAdditionalRawData);
+            return new CreateFineTuningJobRequest(
+                model,
+                trainingFile,
+                hyperparameters,
+                suffix,
+                validationFile,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateFineTuningJobRequest>.Write(ModelReaderWriterOptions options)
@@ -184,6 +192,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateFineTuningJobRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

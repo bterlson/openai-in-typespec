@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,14 +21,14 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(Description))
+            if (Optional.IsDefined(Description))
             {
                 writer.WritePropertyName("description"u8);
                 writer.WriteStringValue(Description);
             }
             writer.WritePropertyName("name"u8);
             writer.WriteStringValue(Name);
-            if (OptionalProperty.IsDefined(Parameters))
+            if (Optional.IsDefined(Parameters))
             {
                 writer.WritePropertyName("parameters"u8);
                 writer.WriteObjectValue(Parameters);
@@ -69,9 +71,9 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<string> description = default;
+            string description = default;
             string name = default;
-            OptionalProperty<FunctionParameters> parameters = default;
+            FunctionParameters parameters = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -92,7 +94,7 @@ namespace OpenAI.Internal.Models
                     {
                         continue;
                     }
-                    parameters = FunctionParameters.DeserializeFunctionParameters(property.Value);
+                    parameters = FunctionParameters.DeserializeFunctionParameters(property.Value, options);
                     continue;
                 }
                 if (options.Format != "W")
@@ -101,7 +103,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new FunctionObject(description.Value, name, parameters.Value, serializedAdditionalRawData);
+            return new FunctionObject(description, name, parameters, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<FunctionObject>.Write(ModelReaderWriterOptions options)
@@ -141,6 +143,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeFunctionObject(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

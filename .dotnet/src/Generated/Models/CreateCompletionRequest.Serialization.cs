@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -37,7 +39,7 @@ namespace OpenAI.Internal.Models
             {
                 writer.WriteNull("prompt");
             }
-            if (OptionalProperty.IsDefined(BestOf))
+            if (Optional.IsDefined(BestOf))
             {
                 if (BestOf != null)
                 {
@@ -49,7 +51,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("best_of");
                 }
             }
-            if (OptionalProperty.IsDefined(Echo))
+            if (Optional.IsDefined(Echo))
             {
                 if (Echo != null)
                 {
@@ -61,7 +63,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("echo");
                 }
             }
-            if (OptionalProperty.IsDefined(FrequencyPenalty))
+            if (Optional.IsDefined(FrequencyPenalty))
             {
                 if (FrequencyPenalty != null)
                 {
@@ -73,7 +75,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("frequency_penalty");
                 }
             }
-            if (OptionalProperty.IsCollectionDefined(LogitBias))
+            if (Optional.IsCollectionDefined(LogitBias))
             {
                 if (LogitBias != null)
                 {
@@ -91,7 +93,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("logit_bias");
                 }
             }
-            if (OptionalProperty.IsDefined(Logprobs))
+            if (Optional.IsDefined(Logprobs))
             {
                 if (Logprobs != null)
                 {
@@ -103,7 +105,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("logprobs");
                 }
             }
-            if (OptionalProperty.IsDefined(MaxTokens))
+            if (Optional.IsDefined(MaxTokens))
             {
                 if (MaxTokens != null)
                 {
@@ -115,7 +117,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("max_tokens");
                 }
             }
-            if (OptionalProperty.IsDefined(N))
+            if (Optional.IsDefined(N))
             {
                 if (N != null)
                 {
@@ -127,7 +129,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("n");
                 }
             }
-            if (OptionalProperty.IsDefined(PresencePenalty))
+            if (Optional.IsDefined(PresencePenalty))
             {
                 if (PresencePenalty != null)
                 {
@@ -139,7 +141,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("presence_penalty");
                 }
             }
-            if (OptionalProperty.IsDefined(Seed))
+            if (Optional.IsDefined(Seed))
             {
                 if (Seed != null)
                 {
@@ -151,7 +153,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("seed");
                 }
             }
-            if (OptionalProperty.IsDefined(Stop))
+            if (Optional.IsDefined(Stop))
             {
                 if (Stop != null)
                 {
@@ -170,7 +172,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("stop");
                 }
             }
-            if (OptionalProperty.IsDefined(Stream))
+            if (Optional.IsDefined(Stream))
             {
                 if (Stream != null)
                 {
@@ -182,7 +184,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("stream");
                 }
             }
-            if (OptionalProperty.IsDefined(Suffix))
+            if (Optional.IsDefined(Suffix))
             {
                 if (Suffix != null)
                 {
@@ -194,7 +196,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("suffix");
                 }
             }
-            if (OptionalProperty.IsDefined(Temperature))
+            if (Optional.IsDefined(Temperature))
             {
                 if (Temperature != null)
                 {
@@ -206,7 +208,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("temperature");
                 }
             }
-            if (OptionalProperty.IsDefined(TopP))
+            if (Optional.IsDefined(TopP))
             {
                 if (TopP != null)
                 {
@@ -218,7 +220,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("top_p");
                 }
             }
-            if (OptionalProperty.IsDefined(User))
+            if (Optional.IsDefined(User))
             {
                 writer.WritePropertyName("user"u8);
                 writer.WriteStringValue(User);
@@ -263,21 +265,21 @@ namespace OpenAI.Internal.Models
             }
             CreateCompletionRequestModel model = default;
             BinaryData prompt = default;
-            OptionalProperty<long?> bestOf = default;
-            OptionalProperty<bool?> echo = default;
-            OptionalProperty<double?> frequencyPenalty = default;
-            OptionalProperty<IDictionary<string, long>> logitBias = default;
-            OptionalProperty<long?> logprobs = default;
-            OptionalProperty<long?> maxTokens = default;
-            OptionalProperty<long?> n = default;
-            OptionalProperty<double?> presencePenalty = default;
-            OptionalProperty<long?> seed = default;
-            OptionalProperty<BinaryData> stop = default;
-            OptionalProperty<bool?> stream = default;
-            OptionalProperty<string> suffix = default;
-            OptionalProperty<double?> temperature = default;
-            OptionalProperty<double?> topP = default;
-            OptionalProperty<string> user = default;
+            long? bestOf = default;
+            bool? echo = default;
+            double? frequencyPenalty = default;
+            IDictionary<string, long> logitBias = default;
+            long? logprobs = default;
+            long? maxTokens = default;
+            long? n = default;
+            double? presencePenalty = default;
+            long? seed = default;
+            BinaryData stop = default;
+            bool? stream = default;
+            string suffix = default;
+            double? temperature = default;
+            double? topP = default;
+            string user = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -452,7 +454,25 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateCompletionRequest(model, prompt, OptionalProperty.ToNullable(bestOf), OptionalProperty.ToNullable(echo), OptionalProperty.ToNullable(frequencyPenalty), OptionalProperty.ToDictionary(logitBias), OptionalProperty.ToNullable(logprobs), OptionalProperty.ToNullable(maxTokens), OptionalProperty.ToNullable(n), OptionalProperty.ToNullable(presencePenalty), OptionalProperty.ToNullable(seed), stop.Value, OptionalProperty.ToNullable(stream), suffix.Value, OptionalProperty.ToNullable(temperature), OptionalProperty.ToNullable(topP), user.Value, serializedAdditionalRawData);
+            return new CreateCompletionRequest(
+                model,
+                prompt,
+                bestOf,
+                echo,
+                frequencyPenalty,
+                logitBias ?? new ChangeTrackingDictionary<string, long>(),
+                logprobs,
+                maxTokens,
+                n,
+                presencePenalty,
+                seed,
+                stop,
+                stream,
+                suffix,
+                temperature,
+                topP,
+                user,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateCompletionRequest>.Write(ModelReaderWriterOptions options)
@@ -492,6 +512,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateCompletionRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

@@ -248,15 +248,15 @@ public partial class AudioClient
     {
         MultipartFormDataContent content = new();
         content.Add(MultipartContent.Create(BinaryData.FromString(_clientConnector.Model)), name: "model", []);
-        if (OptionalProperty.IsDefined(language))
+        if (Optional.IsDefined(language))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString(language)), name: "language", []);
         }
-        if (OptionalProperty.IsDefined(prompt))
+        if (Optional.IsDefined(prompt))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString(prompt)), name: "prompt", []);
         }
-        if (OptionalProperty.IsDefined(transcriptionFormat))
+        if (Optional.IsDefined(transcriptionFormat))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString(transcriptionFormat switch
             {
@@ -269,11 +269,11 @@ public partial class AudioClient
             name: "response_format",
             []);
         }
-        if (OptionalProperty.IsDefined(temperature))
+        if (Optional.IsDefined(temperature))
         {
             content.Add(MultipartContent.Create(BinaryData.FromString($"{temperature}")), name: "temperature", []);
         }
-        if (OptionalProperty.IsDefined(enableWordTimestamps) || OptionalProperty.IsDefined(enableSegmentTimestamps))
+        if (Optional.IsDefined(enableWordTimestamps) || Optional.IsDefined(enableSegmentTimestamps))
         {
             List<string> granularities = [];
             if (enableWordTimestamps == true)

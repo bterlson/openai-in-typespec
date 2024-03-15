@@ -44,7 +44,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="image"/> is null. </exception>
         public virtual async Task<ClientResult<ImagesResponse>> CreateImageAsync(CreateImageRequest image)
         {
-            if (image is null) throw new ArgumentNullException(nameof(image));
+            Argument.AssertNotNull(image, nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
             ClientResult result = await CreateImageAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -56,7 +56,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="image"/> is null. </exception>
         public virtual ClientResult<ImagesResponse> CreateImage(CreateImageRequest image)
         {
-            if (image is null) throw new ArgumentNullException(nameof(image));
+            Argument.AssertNotNull(image, nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
             ClientResult result = CreateImage(content, DefaultRequestContext);
@@ -85,18 +85,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateImageAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateImageRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Images.CreateImage"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateImageRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -121,18 +124,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateImage(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateImageRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Images.CreateImage"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateImageRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Creates an edited or extended image given an original image and a prompt. </summary>
@@ -140,7 +146,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="image"/> is null. </exception>
         public virtual async Task<ClientResult<ImagesResponse>> CreateImageEditAsync(CreateImageEditRequest image)
         {
-            if (image is null) throw new ArgumentNullException(nameof(image));
+            Argument.AssertNotNull(image, nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
             ClientResult result = await CreateImageEditAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -152,7 +158,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="image"/> is null. </exception>
         public virtual ClientResult<ImagesResponse> CreateImageEdit(CreateImageEditRequest image)
         {
-            if (image is null) throw new ArgumentNullException(nameof(image));
+            Argument.AssertNotNull(image, nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
             ClientResult result = CreateImageEdit(content, DefaultRequestContext);
@@ -181,18 +187,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateImageEditAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateImageEditRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Images.CreateImageEdit"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateImageEditRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -217,18 +226,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateImageEdit(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateImageEditRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Images.CreateImageEdit"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateImageEditRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Creates an edited or extended image given an original image and a prompt. </summary>
@@ -236,7 +248,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="image"/> is null. </exception>
         public virtual async Task<ClientResult<ImagesResponse>> CreateImageVariationAsync(CreateImageVariationRequest image)
         {
-            if (image is null) throw new ArgumentNullException(nameof(image));
+            Argument.AssertNotNull(image, nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
             ClientResult result = await CreateImageVariationAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -248,7 +260,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="image"/> is null. </exception>
         public virtual ClientResult<ImagesResponse> CreateImageVariation(CreateImageVariationRequest image)
         {
-            if (image is null) throw new ArgumentNullException(nameof(image));
+            Argument.AssertNotNull(image, nameof(image));
 
             using BinaryContent content = BinaryContent.Create(image);
             ClientResult result = CreateImageVariation(content, DefaultRequestContext);
@@ -277,18 +289,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateImageVariationAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateImageVariationRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Images.CreateImageVariation"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateImageVariationRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -313,18 +328,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateImageVariation(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateImageVariationRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Images.CreateImageVariation"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateImageVariationRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         internal PipelineMessage CreateCreateImageRequest(BinaryContent content, RequestOptions options)

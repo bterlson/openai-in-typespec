@@ -701,10 +701,10 @@ public partial class AssistantClient
             serializedAdditionalRawData: null);
     }
 
-    internal static OptionalList<BinaryData> ToInternalBinaryDataList<T>(IEnumerable<T> values)
+    internal static ChangeTrackingList<BinaryData> ToInternalBinaryDataList<T>(IEnumerable<T> values)
         where T : IPersistableModel<T>
     {
-        OptionalList<BinaryData> internalList = [];
+        ChangeTrackingList<BinaryData> internalList = [];
         foreach (T value in values)
         {
             internalList.Add(ModelReaderWriter.Write(value));
@@ -733,10 +733,10 @@ public partial class AssistantClient
         _ => throw new ArgumentException(nameof(role)),
     };
 
-    internal static OptionalList<Internal.Models.CreateMessageRequest> ToInternalCreateMessageRequestList(
+    internal static ChangeTrackingList<Internal.Models.CreateMessageRequest> ToInternalCreateMessageRequestList(
         IEnumerable<ThreadInitializationMessage> messages)
     {
-        OptionalList<Internal.Models.CreateMessageRequest> internalList = [];
+        ChangeTrackingList<Internal.Models.CreateMessageRequest> internalList = [];
         foreach (ThreadInitializationMessage message in messages)
         {
             internalList.Add(new Internal.Models.CreateMessageRequest(

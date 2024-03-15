@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -19,12 +21,12 @@ namespace OpenAI.Internal.Models
             }
 
             writer.WriteStartObject();
-            if (OptionalProperty.IsDefined(Model))
+            if (Optional.IsDefined(Model))
             {
                 writer.WritePropertyName("model"u8);
                 writer.WriteStringValue(Model);
             }
-            if (OptionalProperty.IsDefined(Name))
+            if (Optional.IsDefined(Name))
             {
                 if (Name != null)
                 {
@@ -36,7 +38,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("name");
                 }
             }
-            if (OptionalProperty.IsDefined(Description))
+            if (Optional.IsDefined(Description))
             {
                 if (Description != null)
                 {
@@ -48,7 +50,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("description");
                 }
             }
-            if (OptionalProperty.IsDefined(Instructions))
+            if (Optional.IsDefined(Instructions))
             {
                 if (Instructions != null)
                 {
@@ -60,7 +62,7 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("instructions");
                 }
             }
-            if (OptionalProperty.IsCollectionDefined(Tools))
+            if (Optional.IsCollectionDefined(Tools))
             {
                 writer.WritePropertyName("tools"u8);
                 writer.WriteStartArray();
@@ -82,7 +84,7 @@ namespace OpenAI.Internal.Models
                 }
                 writer.WriteEndArray();
             }
-            if (OptionalProperty.IsCollectionDefined(FileIds))
+            if (Optional.IsCollectionDefined(FileIds))
             {
                 writer.WritePropertyName("file_ids"u8);
                 writer.WriteStartArray();
@@ -92,7 +94,7 @@ namespace OpenAI.Internal.Models
                 }
                 writer.WriteEndArray();
             }
-            if (OptionalProperty.IsCollectionDefined(Metadata))
+            if (Optional.IsCollectionDefined(Metadata))
             {
                 if (Metadata != null)
                 {
@@ -148,13 +150,13 @@ namespace OpenAI.Internal.Models
             {
                 return null;
             }
-            OptionalProperty<string> model = default;
-            OptionalProperty<string> name = default;
-            OptionalProperty<string> description = default;
-            OptionalProperty<string> instructions = default;
-            OptionalProperty<IList<BinaryData>> tools = default;
-            OptionalProperty<IList<string>> fileIds = default;
-            OptionalProperty<IDictionary<string, string>> metadata = default;
+            string model = default;
+            string name = default;
+            string description = default;
+            string instructions = default;
+            IList<BinaryData> tools = default;
+            IList<string> fileIds = default;
+            IDictionary<string, string> metadata = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -249,7 +251,15 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new ModifyAssistantRequest(model.Value, name.Value, description.Value, instructions.Value, OptionalProperty.ToList(tools), OptionalProperty.ToList(fileIds), OptionalProperty.ToDictionary(metadata), serializedAdditionalRawData);
+            return new ModifyAssistantRequest(
+                model,
+                name,
+                description,
+                instructions,
+                tools ?? new ChangeTrackingList<BinaryData>(),
+                fileIds ?? new ChangeTrackingList<string>(),
+                metadata ?? new ChangeTrackingDictionary<string, string>(),
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<ModifyAssistantRequest>.Write(ModelReaderWriterOptions options)
@@ -289,6 +299,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeModifyAssistantRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -21,12 +23,12 @@ namespace OpenAI.Internal.Models
             writer.WriteStartObject();
             writer.WritePropertyName("prompt"u8);
             writer.WriteStringValue(Prompt);
-            if (OptionalProperty.IsDefined(Model))
+            if (Optional.IsDefined(Model))
             {
                 writer.WritePropertyName("model"u8);
                 writer.WriteStringValue(Model.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(N))
+            if (Optional.IsDefined(N))
             {
                 if (N != null)
                 {
@@ -38,27 +40,27 @@ namespace OpenAI.Internal.Models
                     writer.WriteNull("n");
                 }
             }
-            if (OptionalProperty.IsDefined(Quality))
+            if (Optional.IsDefined(Quality))
             {
                 writer.WritePropertyName("quality"u8);
                 writer.WriteStringValue(Quality.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(ResponseFormat))
+            if (Optional.IsDefined(ResponseFormat))
             {
                 writer.WritePropertyName("response_format"u8);
                 writer.WriteStringValue(ResponseFormat.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(Size))
+            if (Optional.IsDefined(Size))
             {
                 writer.WritePropertyName("size"u8);
                 writer.WriteStringValue(Size.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(Style))
+            if (Optional.IsDefined(Style))
             {
                 writer.WritePropertyName("style"u8);
                 writer.WriteStringValue(Style.Value.ToString());
             }
-            if (OptionalProperty.IsDefined(User))
+            if (Optional.IsDefined(User))
             {
                 writer.WritePropertyName("user"u8);
                 writer.WriteStringValue(User);
@@ -102,13 +104,13 @@ namespace OpenAI.Internal.Models
                 return null;
             }
             string prompt = default;
-            OptionalProperty<CreateImageRequestModel> model = default;
-            OptionalProperty<long?> n = default;
-            OptionalProperty<CreateImageRequestQuality> quality = default;
-            OptionalProperty<CreateImageRequestResponseFormat> responseFormat = default;
-            OptionalProperty<CreateImageRequestSize> size = default;
-            OptionalProperty<CreateImageRequestStyle> style = default;
-            OptionalProperty<string> user = default;
+            CreateImageRequestModel? model = default;
+            long? n = default;
+            CreateImageRequestQuality? quality = default;
+            CreateImageRequestResponseFormat? responseFormat = default;
+            CreateImageRequestSize? size = default;
+            CreateImageRequestStyle? style = default;
+            string user = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -184,7 +186,16 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateImageRequest(prompt, OptionalProperty.ToNullable(model), OptionalProperty.ToNullable(n), OptionalProperty.ToNullable(quality), OptionalProperty.ToNullable(responseFormat), OptionalProperty.ToNullable(size), OptionalProperty.ToNullable(style), user.Value, serializedAdditionalRawData);
+            return new CreateImageRequest(
+                prompt,
+                model,
+                n,
+                quality,
+                responseFormat,
+                size,
+                style,
+                user,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateImageRequest>.Write(ModelReaderWriterOptions options)
@@ -224,6 +235,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateImageRequest(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

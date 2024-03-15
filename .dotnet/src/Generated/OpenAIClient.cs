@@ -39,8 +39,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="endpoint"/> or <paramref name="credential"/> is null. </exception>
         public OpenAIClient(Uri endpoint, ApiKeyCredential credential, OpenAIClientOptions options)
         {
-            if (endpoint is null) throw new ArgumentNullException(nameof(endpoint));
-            if (credential is null) throw new ArgumentNullException(nameof(credential));
+            Argument.AssertNotNull(endpoint, nameof(endpoint));
+            Argument.AssertNotNull(credential, nameof(credential));
             options ??= new OpenAIClientOptions();
             _credential = credential;
             var authenticationPolicy = ApiKeyAuthenticationPolicy.CreateBearerAuthorizationPolicy(_credential);

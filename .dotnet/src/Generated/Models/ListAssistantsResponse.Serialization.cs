@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -91,7 +93,7 @@ namespace OpenAI.Internal.Models
                     List<AssistantObject> array = new List<AssistantObject>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(AssistantObject.DeserializeAssistantObject(item));
+                        array.Add(AssistantObject.DeserializeAssistantObject(item, options));
                     }
                     data = array;
                     continue;
@@ -117,7 +119,13 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new ListAssistantsResponse(@object, data, firstId, lastId, hasMore, serializedAdditionalRawData);
+            return new ListAssistantsResponse(
+                @object,
+                data,
+                firstId,
+                lastId,
+                hasMore,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<ListAssistantsResponse>.Write(ModelReaderWriterOptions options)
@@ -157,6 +165,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeListAssistantsResponse(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

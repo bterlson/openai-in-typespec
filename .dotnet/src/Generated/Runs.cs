@@ -44,7 +44,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="threadAndRun"/> is null. </exception>
         public virtual async Task<ClientResult<RunObject>> CreateThreadAndRunAsync(CreateThreadAndRunRequest threadAndRun)
         {
-            if (threadAndRun is null) throw new ArgumentNullException(nameof(threadAndRun));
+            Argument.AssertNotNull(threadAndRun, nameof(threadAndRun));
 
             using BinaryContent content = BinaryContent.Create(threadAndRun);
             ClientResult result = await CreateThreadAndRunAsync(content, DefaultRequestContext).ConfigureAwait(false);
@@ -56,7 +56,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentNullException"> <paramref name="threadAndRun"/> is null. </exception>
         public virtual ClientResult<RunObject> CreateThreadAndRun(CreateThreadAndRunRequest threadAndRun)
         {
-            if (threadAndRun is null) throw new ArgumentNullException(nameof(threadAndRun));
+            Argument.AssertNotNull(threadAndRun, nameof(threadAndRun));
 
             using BinaryContent content = BinaryContent.Create(threadAndRun);
             ClientResult result = CreateThreadAndRun(content, DefaultRequestContext);
@@ -85,18 +85,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateThreadAndRunAsync(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateThreadAndRunRequest(content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.CreateThreadAndRun"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateThreadAndRunRequest(content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -121,18 +124,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateThreadAndRun(BinaryContent content, RequestOptions options = null)
         {
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateThreadAndRunRequest(content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.CreateThreadAndRun"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateThreadAndRunRequest(content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Create a run. </summary>
@@ -142,9 +148,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<RunObject>> CreateRunAsync(string threadId, CreateRunRequest run)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (run is null) throw new ArgumentNullException(nameof(run));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNull(run, nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
             ClientResult result = await CreateRunAsync(threadId, content, DefaultRequestContext).ConfigureAwait(false);
@@ -158,9 +163,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<RunObject> CreateRun(string threadId, CreateRunRequest run)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (run is null) throw new ArgumentNullException(nameof(run));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNull(run, nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
             ClientResult result = CreateRun(threadId, content, DefaultRequestContext);
@@ -191,20 +195,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CreateRunAsync(string threadId, BinaryContent content, RequestOptions options = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateRunRequest(threadId, content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.CreateRun"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCreateRunRequest(threadId, content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -231,20 +237,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CreateRun(string threadId, BinaryContent content, RequestOptions options = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCreateRunRequest(threadId, content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.CreateRun"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCreateRunRequest(threadId, content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Returns a list of runs belonging to a thread. </summary>
@@ -271,8 +279,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<ListRunsResponse>> GetRunsAsync(string threadId, int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
 
             ClientResult result = await GetRunsAsync(threadId, limit, order?.ToString(), after, before, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListRunsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -302,8 +309,7 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<ListRunsResponse> GetRuns(string threadId, int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
 
             ClientResult result = GetRuns(threadId, limit, order?.ToString(), after, before, DefaultRequestContext);
             return ClientResult.FromValue(ListRunsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -350,19 +356,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> GetRunsAsync(string threadId, int? limit, string order, string after, string before, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunsRequest(threadId, limit, order, after, before, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRuns"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetRunsRequest(threadId, limit, order, after, before, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -406,19 +414,21 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult GetRuns(string threadId, int? limit, string order, string after, string before, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunsRequest(threadId, limit, order, after, before, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRuns"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetRunsRequest(threadId, limit, order, after, before, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Retrieves a run. </summary>
@@ -428,10 +438,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<RunObject>> GetRunAsync(string threadId, string runId)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
 
             ClientResult result = await GetRunAsync(threadId, runId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -444,10 +452,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<RunObject> GetRun(string threadId, string runId)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
 
             ClientResult result = GetRun(threadId, runId, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -477,21 +483,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> GetRunAsync(string threadId, string runId, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunRequest(threadId, runId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRun"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetRunRequest(threadId, runId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -518,21 +525,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult GetRun(string threadId, string runId, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunRequest(threadId, runId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRun"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetRunRequest(threadId, runId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Modifies a run. </summary>
@@ -543,11 +551,9 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<RunObject>> ModifyRunAsync(string threadId, string runId, ModifyRunRequest run)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (run is null) throw new ArgumentNullException(nameof(run));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(run, nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
             ClientResult result = await ModifyRunAsync(threadId, runId, content, DefaultRequestContext).ConfigureAwait(false);
@@ -562,11 +568,9 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<RunObject> ModifyRun(string threadId, string runId, ModifyRunRequest run)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (run is null) throw new ArgumentNullException(nameof(run));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(run, nameof(run));
 
             using BinaryContent content = BinaryContent.Create(run);
             ClientResult result = ModifyRun(threadId, runId, content, DefaultRequestContext);
@@ -598,22 +602,23 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> ModifyRunAsync(string threadId, string runId, BinaryContent content, RequestOptions options = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateModifyRunRequest(threadId, runId, content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.ModifyRun"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateModifyRunRequest(threadId, runId, content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -641,22 +646,23 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult ModifyRun(string threadId, string runId, BinaryContent content, RequestOptions options = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateModifyRunRequest(threadId, runId, content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.ModifyRun"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateModifyRunRequest(threadId, runId, content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Cancels a run that is `in_progress`. </summary>
@@ -666,10 +672,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<RunObject>> CancelRunAsync(string threadId, string runId)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
 
             ClientResult result = await CancelRunAsync(threadId, runId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -682,10 +686,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<RunObject> CancelRun(string threadId, string runId)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
 
             ClientResult result = CancelRun(threadId, runId, DefaultRequestContext);
             return ClientResult.FromValue(RunObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -715,21 +717,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> CancelRunAsync(string threadId, string runId, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCancelRunRequest(threadId, runId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.CancelRun"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateCancelRunRequest(threadId, runId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -756,21 +759,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult CancelRun(string threadId, string runId, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateCancelRunRequest(threadId, runId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.CancelRun"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateCancelRunRequest(threadId, runId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -785,11 +789,9 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<RunObject>> SubmitToolOuputsToRunAsync(string threadId, string runId, SubmitToolOutputsRunRequest submitToolOutputsRun)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (submitToolOutputsRun is null) throw new ArgumentNullException(nameof(submitToolOutputsRun));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(submitToolOutputsRun, nameof(submitToolOutputsRun));
 
             using BinaryContent content = BinaryContent.Create(submitToolOutputsRun);
             ClientResult result = await SubmitToolOuputsToRunAsync(threadId, runId, content, DefaultRequestContext).ConfigureAwait(false);
@@ -808,11 +810,9 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<RunObject> SubmitToolOuputsToRun(string threadId, string runId, SubmitToolOutputsRunRequest submitToolOutputsRun)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (submitToolOutputsRun is null) throw new ArgumentNullException(nameof(submitToolOutputsRun));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(submitToolOutputsRun, nameof(submitToolOutputsRun));
 
             using BinaryContent content = BinaryContent.Create(submitToolOutputsRun);
             ClientResult result = SubmitToolOuputsToRun(threadId, runId, content, DefaultRequestContext);
@@ -846,22 +846,23 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> SubmitToolOuputsToRunAsync(string threadId, string runId, BinaryContent content, RequestOptions options = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateSubmitToolOuputsToRunRequest(threadId, runId, content, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.SubmitToolOuputsToRun"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateSubmitToolOuputsToRunRequest(threadId, runId, content, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -891,22 +892,23 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult SubmitToolOuputsToRun(string threadId, string runId, BinaryContent content, RequestOptions options = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (content is null) throw new ArgumentNullException(nameof(content));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNull(content, nameof(content));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateSubmitToolOuputsToRunRequest(threadId, runId, content, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.SubmitToolOuputsToRun"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateSubmitToolOuputsToRunRequest(threadId, runId, content, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Returns a list of run steps belonging to a run. </summary>
@@ -934,10 +936,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<ListRunStepsResponse>> GetRunStepsAsync(string threadId, string runId, int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
 
             ClientResult result = await GetRunStepsAsync(threadId, runId, limit, order?.ToString(), after, before, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(ListRunStepsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -968,10 +968,8 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/> or <paramref name="runId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<ListRunStepsResponse> GetRunSteps(string threadId, string runId, int? limit = null, ListOrder? order = null, string after = null, string before = null)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
 
             ClientResult result = GetRunSteps(threadId, runId, limit, order?.ToString(), after, before, DefaultRequestContext);
             return ClientResult.FromValue(ListRunStepsResponse.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -1019,21 +1017,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> GetRunStepsAsync(string threadId, string runId, int? limit, string order, string after, string before, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunStepsRequest(threadId, runId, limit, order, after, before, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRunSteps"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetRunStepsRequest(threadId, runId, limit, order, after, before, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -1078,21 +1077,22 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult GetRunSteps(string threadId, string runId, int? limit, string order, string after, string before, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunStepsRequest(threadId, runId, limit, order, after, before, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRunSteps"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetRunStepsRequest(threadId, runId, limit, order, after, before, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary> Retrieves a run step. </summary>
@@ -1103,12 +1103,9 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/>, <paramref name="runId"/> or <paramref name="stepId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual async Task<ClientResult<RunStepObject>> GetRunStepAsync(string threadId, string runId, string stepId)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (stepId is null) throw new ArgumentNullException(nameof(stepId));
-            if (string.IsNullOrEmpty(stepId)) throw new ArgumentException(nameof(stepId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNullOrEmpty(stepId, nameof(stepId));
 
             ClientResult result = await GetRunStepAsync(threadId, runId, stepId, DefaultRequestContext).ConfigureAwait(false);
             return ClientResult.FromValue(RunStepObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -1122,12 +1119,9 @@ namespace OpenAI.Internal
         /// <exception cref="ArgumentException"> <paramref name="threadId"/>, <paramref name="runId"/> or <paramref name="stepId"/> is an empty string, and was expected to be non-empty. </exception>
         public virtual ClientResult<RunStepObject> GetRunStep(string threadId, string runId, string stepId)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (stepId is null) throw new ArgumentNullException(nameof(stepId));
-            if (string.IsNullOrEmpty(stepId)) throw new ArgumentException(nameof(stepId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNullOrEmpty(stepId, nameof(stepId));
 
             ClientResult result = GetRunStep(threadId, runId, stepId, DefaultRequestContext);
             return ClientResult.FromValue(RunStepObject.FromResponse(result.GetRawResponse()), result.GetRawResponse());
@@ -1158,23 +1152,23 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual async Task<ClientResult> GetRunStepAsync(string threadId, string runId, string stepId, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (stepId is null) throw new ArgumentNullException(nameof(stepId));
-            if (string.IsNullOrEmpty(stepId)) throw new ArgumentException(nameof(stepId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNullOrEmpty(stepId, nameof(stepId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunStepRequest(threadId, runId, stepId, options);
-            await _pipeline.SendAsync(message).ConfigureAwait(false);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRunStep"\);
+            // scope.Start();
+            try
             {
-                throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
+                using PipelineMessage message = CreateGetRunStepRequest(threadId, runId, stepId, options);
+                return ClientResult.FromResponse(await _pipeline.ProcessMessageAsync(message, options).ConfigureAwait(false));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -1202,23 +1196,23 @@ namespace OpenAI.Internal
         /// <returns> The response returned from the service. </returns>
         public virtual ClientResult GetRunStep(string threadId, string runId, string stepId, RequestOptions options)
         {
-            if (threadId is null) throw new ArgumentNullException(nameof(threadId));
-            if (string.IsNullOrEmpty(threadId)) throw new ArgumentException(nameof(threadId));
-            if (runId is null) throw new ArgumentNullException(nameof(runId));
-            if (string.IsNullOrEmpty(runId)) throw new ArgumentException(nameof(runId));
-            if (stepId is null) throw new ArgumentNullException(nameof(stepId));
-            if (string.IsNullOrEmpty(stepId)) throw new ArgumentException(nameof(stepId));
+            Argument.AssertNotNullOrEmpty(threadId, nameof(threadId));
+            Argument.AssertNotNullOrEmpty(runId, nameof(runId));
+            Argument.AssertNotNullOrEmpty(stepId, nameof(stepId));
+
             options ??= new RequestOptions();
-            using PipelineMessage message = CreateGetRunStepRequest(threadId, runId, stepId, options);
-            _pipeline.Send(message);
-            PipelineResponse response = message.Response!;
-
-            if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
+            // using var scope = ClientDiagnostics.CreateSpan("Runs.GetRunStep"\);
+            // scope.Start();
+            try
             {
-                throw new ClientResultException(response);
+                using PipelineMessage message = CreateGetRunStepRequest(threadId, runId, stepId, options);
+                return ClientResult.FromResponse(_pipeline.ProcessMessage(message, options));
             }
-
-            return ClientResult.FromResponse(response);
+            catch (Exception e)
+            {
+                // scope.Failed(e);
+                throw;
+            }
         }
 
         internal PipelineMessage CreateCreateThreadAndRunRequest(BinaryContent content, RequestOptions options)

@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -28,7 +30,7 @@ namespace OpenAI.Internal.Models
             {
                 writer.WriteNull("content");
             }
-            if (OptionalProperty.IsCollectionDefined(ToolCalls))
+            if (Optional.IsCollectionDefined(ToolCalls))
             {
                 writer.WritePropertyName("tool_calls"u8);
                 writer.WriteStartArray();
@@ -40,7 +42,7 @@ namespace OpenAI.Internal.Models
             }
             writer.WritePropertyName("role"u8);
             writer.WriteStringValue(Role.ToString());
-            if (OptionalProperty.IsDefined(FunctionCall))
+            if (Optional.IsDefined(FunctionCall))
             {
                 writer.WritePropertyName("function_call"u8);
                 writer.WriteObjectValue(FunctionCall);
@@ -84,9 +86,9 @@ namespace OpenAI.Internal.Models
                 return null;
             }
             string content = default;
-            OptionalProperty<IReadOnlyList<ChatCompletionMessageToolCall>> toolCalls = default;
+            IReadOnlyList<ChatCompletionMessageToolCall> toolCalls = default;
             ChatCompletionResponseMessageRole role = default;
-            OptionalProperty<ChatCompletionResponseMessageFunctionCall> functionCall = default;
+            ChatCompletionResponseMessageFunctionCall functionCall = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -110,7 +112,7 @@ namespace OpenAI.Internal.Models
                     List<ChatCompletionMessageToolCall> array = new List<ChatCompletionMessageToolCall>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(ChatCompletionMessageToolCall.DeserializeChatCompletionMessageToolCall(item));
+                        array.Add(ChatCompletionMessageToolCall.DeserializeChatCompletionMessageToolCall(item, options));
                     }
                     toolCalls = array;
                     continue;
@@ -126,7 +128,7 @@ namespace OpenAI.Internal.Models
                     {
                         continue;
                     }
-                    functionCall = ChatCompletionResponseMessageFunctionCall.DeserializeChatCompletionResponseMessageFunctionCall(property.Value);
+                    functionCall = ChatCompletionResponseMessageFunctionCall.DeserializeChatCompletionResponseMessageFunctionCall(property.Value, options);
                     continue;
                 }
                 if (options.Format != "W")
@@ -135,7 +137,7 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new ChatCompletionResponseMessage(content, OptionalProperty.ToList(toolCalls), role, functionCall.Value, serializedAdditionalRawData);
+            return new ChatCompletionResponseMessage(content, toolCalls ?? new ChangeTrackingList<ChatCompletionMessageToolCall>(), role, functionCall, serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<ChatCompletionResponseMessage>.Write(ModelReaderWriterOptions options)
@@ -175,6 +177,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeChatCompletionResponseMessage(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

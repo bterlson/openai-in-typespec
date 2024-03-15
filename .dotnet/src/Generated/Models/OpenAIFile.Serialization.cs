@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -40,7 +42,7 @@ namespace OpenAI.Internal.Models
             writer.WriteStringValue(Purpose.ToString());
             writer.WritePropertyName("status"u8);
             writer.WriteStringValue(Status.ToString());
-            if (OptionalProperty.IsDefined(StatusDetails))
+            if (Optional.IsDefined(StatusDetails))
             {
                 writer.WritePropertyName("status_details"u8);
                 writer.WriteStringValue(StatusDetails);
@@ -90,7 +92,7 @@ namespace OpenAI.Internal.Models
             OpenAIFileObject @object = default;
             OpenAIFilePurpose purpose = default;
             OpenAIFileStatus status = default;
-            OptionalProperty<string> statusDetails = default;
+            string statusDetails = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -146,7 +148,16 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new OpenAIFile(id, bytes, createdAt, filename, @object, purpose, status, statusDetails.Value, serializedAdditionalRawData);
+            return new OpenAIFile(
+                id,
+                bytes,
+                createdAt,
+                filename,
+                @object,
+                purpose,
+                status,
+                statusDetails,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<OpenAIFile>.Write(ModelReaderWriterOptions options)
@@ -186,6 +197,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeOpenAIFile(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -89,7 +91,7 @@ namespace OpenAI.Internal.Models
             {
                 writer.WriteNull("completed_at");
             }
-            if (Metadata != null && OptionalProperty.IsCollectionDefined(Metadata))
+            if (Metadata != null && Optional.IsCollectionDefined(Metadata))
             {
                 writer.WritePropertyName("metadata"u8);
                 writer.WriteStartObject();
@@ -223,7 +225,7 @@ namespace OpenAI.Internal.Models
                         lastError = null;
                         continue;
                     }
-                    lastError = RunStepObjectLastError.DeserializeRunStepObjectLastError(property.Value);
+                    lastError = RunStepObjectLastError.DeserializeRunStepObjectLastError(property.Value, options);
                     continue;
                 }
                 if (property.NameEquals("expires_at"u8))
@@ -270,7 +272,7 @@ namespace OpenAI.Internal.Models
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        metadata = new OptionalDictionary<string, string>();
+                        metadata = new ChangeTrackingDictionary<string, string>();
                         continue;
                     }
                     Dictionary<string, string> dictionary = new Dictionary<string, string>();
@@ -288,7 +290,7 @@ namespace OpenAI.Internal.Models
                         usage = null;
                         continue;
                     }
-                    usage = RunCompletionUsage.DeserializeRunCompletionUsage(property.Value);
+                    usage = RunCompletionUsage.DeserializeRunCompletionUsage(property.Value, options);
                     continue;
                 }
                 if (options.Format != "W")
@@ -297,7 +299,24 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new RunStepObject(id, @object, createdAt, assistantId, threadId, runId, type, status, stepDetails, lastError, expiresAt, cancelledAt, failedAt, completedAt, metadata, usage, serializedAdditionalRawData);
+            return new RunStepObject(
+                id,
+                @object,
+                createdAt,
+                assistantId,
+                threadId,
+                runId,
+                type,
+                status,
+                stepDetails,
+                lastError,
+                expiresAt,
+                cancelledAt,
+                failedAt,
+                completedAt,
+                metadata,
+                usage,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<RunStepObject>.Write(ModelReaderWriterOptions options)
@@ -337,6 +356,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeRunStepObject(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

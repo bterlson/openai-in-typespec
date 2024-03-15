@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -23,7 +25,7 @@ namespace OpenAI.Internal.Models
             writer.WriteStringValue(Token);
             writer.WritePropertyName("logprob"u8);
             writer.WriteNumberValue(Logprob);
-            if (Bytes != null && OptionalProperty.IsCollectionDefined(Bytes))
+            if (Bytes != null && Optional.IsCollectionDefined(Bytes))
             {
                 writer.WritePropertyName("bytes"u8);
                 writer.WriteStartArray();
@@ -96,7 +98,7 @@ namespace OpenAI.Internal.Models
                 {
                     if (property.Value.ValueKind == JsonValueKind.Null)
                     {
-                        bytes = new OptionalList<long>();
+                        bytes = new ChangeTrackingList<long>();
                         continue;
                     }
                     List<long> array = new List<long>();
@@ -153,6 +155,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeChatCompletionTokenLogprobTopLogprob(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

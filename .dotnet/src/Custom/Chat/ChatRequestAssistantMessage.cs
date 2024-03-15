@@ -25,7 +25,7 @@ public class ChatRequestAssistantMessage : ChatRequestMessage
     /// <see cref="ChatToolDefinition"/> instance and is resolved by providing a <see cref="ChatRequestToolMessage"/>
     /// that correlates via <c>id</c> to the item in <c>tool_calls</c>.
     /// </summary>
-    public IReadOnlyList<ChatToolCall> ToolCalls { get; } = new OptionalList<ChatToolCall>();
+    public IReadOnlyList<ChatToolCall> ToolCalls { get; } = new ChangeTrackingList<ChatToolCall>();
 
     /// <summary>
     /// <c>Deprecated in favor of tool_calls.</c>
@@ -105,11 +105,11 @@ public class ChatRequestAssistantMessage : ChatRequestMessage
 
     internal override void WriteDerivedAdditions(Utf8JsonWriter writer, ModelReaderWriterOptions options)
     {
-        if (OptionalProperty.IsDefined(Name))
+        if (Optional.IsDefined(Name))
         {
             writer.WriteString("name"u8, Name);
         }
-        if (OptionalProperty.IsCollectionDefined(ToolCalls))
+        if (Optional.IsCollectionDefined(ToolCalls))
         {
             writer.WritePropertyName("tool_calls"u8);
             writer.WriteStartArray();
@@ -119,7 +119,7 @@ public class ChatRequestAssistantMessage : ChatRequestMessage
             }
             writer.WriteEndArray();
         }
-        if (OptionalProperty.IsDefined(FunctionCall))
+        if (Optional.IsDefined(FunctionCall))
         {
             writer.WritePropertyName("function_call"u8);
             (FunctionCall as IJsonModel<ChatFunctionCall>).Write(writer, options);

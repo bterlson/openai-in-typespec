@@ -105,7 +105,7 @@ public partial class ModelManagementClient
     public virtual ClientResult<ModelDetailCollection> GetModels()
     {
         ClientResult<Internal.Models.ListModelsResponse> internalResult = Shim.GetModels();
-        OptionalList<ModelDetails> modelEntries = [];
+        ChangeTrackingList<ModelDetails> modelEntries = [];
         foreach (Internal.Models.Model internalModel in internalResult.Value.Data)
         {
             modelEntries.Add(new(internalModel));
@@ -117,7 +117,7 @@ public partial class ModelManagementClient
     {
         ClientResult<Internal.Models.ListModelsResponse> internalResult
             = await Shim.GetModelsAsync().ConfigureAwait(false);
-        OptionalList<ModelDetails> modelEntries = [];
+        ChangeTrackingList<ModelDetails> modelEntries = [];
         foreach (Internal.Models.Model internalModel in internalResult.Value.Data)
         {
             modelEntries.Add(new(internalModel));

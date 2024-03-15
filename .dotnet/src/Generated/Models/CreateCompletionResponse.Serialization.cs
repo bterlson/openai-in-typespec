@@ -2,9 +2,11 @@
 
 using System;
 using OpenAI.ClientShared.Internal;
+using System.ClientModel;
 using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Text.Json;
+using OpenAI;
 
 namespace OpenAI.Internal.Models
 {
@@ -32,14 +34,14 @@ namespace OpenAI.Internal.Models
             writer.WriteNumberValue(Created, "U");
             writer.WritePropertyName("model"u8);
             writer.WriteStringValue(Model);
-            if (OptionalProperty.IsDefined(SystemFingerprint))
+            if (Optional.IsDefined(SystemFingerprint))
             {
                 writer.WritePropertyName("system_fingerprint"u8);
                 writer.WriteStringValue(SystemFingerprint);
             }
             writer.WritePropertyName("object"u8);
             writer.WriteStringValue(Object.ToString());
-            if (OptionalProperty.IsDefined(Usage))
+            if (Optional.IsDefined(Usage))
             {
                 writer.WritePropertyName("usage"u8);
                 writer.WriteObjectValue(Usage);
@@ -86,9 +88,9 @@ namespace OpenAI.Internal.Models
             IReadOnlyList<CreateCompletionResponseChoice> choices = default;
             DateTimeOffset created = default;
             string model = default;
-            OptionalProperty<string> systemFingerprint = default;
+            string systemFingerprint = default;
             CreateCompletionResponseObject @object = default;
-            OptionalProperty<CompletionUsage> usage = default;
+            CompletionUsage usage = default;
             IDictionary<string, BinaryData> serializedAdditionalRawData = default;
             Dictionary<string, BinaryData> additionalPropertiesDictionary = new Dictionary<string, BinaryData>();
             foreach (var property in element.EnumerateObject())
@@ -103,7 +105,7 @@ namespace OpenAI.Internal.Models
                     List<CreateCompletionResponseChoice> array = new List<CreateCompletionResponseChoice>();
                     foreach (var item in property.Value.EnumerateArray())
                     {
-                        array.Add(CreateCompletionResponseChoice.DeserializeCreateCompletionResponseChoice(item));
+                        array.Add(CreateCompletionResponseChoice.DeserializeCreateCompletionResponseChoice(item, options));
                     }
                     choices = array;
                     continue;
@@ -134,7 +136,7 @@ namespace OpenAI.Internal.Models
                     {
                         continue;
                     }
-                    usage = CompletionUsage.DeserializeCompletionUsage(property.Value);
+                    usage = CompletionUsage.DeserializeCompletionUsage(property.Value, options);
                     continue;
                 }
                 if (options.Format != "W")
@@ -143,7 +145,15 @@ namespace OpenAI.Internal.Models
                 }
             }
             serializedAdditionalRawData = additionalPropertiesDictionary;
-            return new CreateCompletionResponse(id, choices, created, model, systemFingerprint.Value, @object, usage.Value, serializedAdditionalRawData);
+            return new CreateCompletionResponse(
+                id,
+                choices,
+                created,
+                model,
+                systemFingerprint,
+                @object,
+                usage,
+                serializedAdditionalRawData);
         }
 
         BinaryData IPersistableModel<CreateCompletionResponse>.Write(ModelReaderWriterOptions options)
@@ -183,6 +193,14 @@ namespace OpenAI.Internal.Models
         {
             using var document = JsonDocument.Parse(response.Content);
             return DeserializeCreateCompletionResponse(document.RootElement);
+        }
+
+        /// <summary> Convert into a Utf8JsonRequestBody. </summary>
+        internal virtual BinaryContent ToRequestBody()
+        {
+            var content = new Utf8JsonRequestBody();
+            content.JsonWriter.WriteObjectValue(this);
+            return content;
         }
     }
 }

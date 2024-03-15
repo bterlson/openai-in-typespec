@@ -1,38 +1,32 @@
-name: Build and Test
+name: Release package
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, reopened, synchronize]
+  release:
+    types: [created]
 
 jobs:
-  build: # Test, pack and publish the Open AI nuget package as a build artifact 
+  deploy:
     runs-on: ubuntu-latest
-    env:
-      version_suffix_args: ${{ format('--version-suffix="alpha.{0}"', github.run_number) }}
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 8.x
-
-      - name: Checkout code
-        uses: actions/checkout@v2
+          dotnet-version: '8.x' # SDK Version to use.
 
       - name: Build
         run: dotnet build
           -c Release
-          ${{ env.version_suffix_args }}
         working-directory: .dotnet
 
       - name: Test
         run: dotnet test
           --no-build
           --configuration Release
-          --filter="TestCategory~${{ github.event_name == 'pull_request' && 'Offline' || 'Online' }}"
+          --filter="TestCategory~Online"
           --logger "trx;LogFileName=${{github.workspace}}/artifacts/test-results/full.trx"
         env:
           SECRET_VALUE: ${{ secrets.OPENAI_TOKEN }}
@@ -43,7 +37,6 @@ jobs:
           --no-build
           --configuration Release
           --output "${{github.workspace}}/artifacts/packages"
-          ${{ env.version_suffix_args }}
         working-directory: .dotnet
 
       - name: Upload artifact
@@ -53,7 +46,6 @@ jobs:
           path: ${{github.workspace}}/artifacts
 
       - name: NuGet Autenticate
-        if: github.event_name != 'pull_request'
         run: dotnet nuget add source
           "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
           --name "github"
@@ -63,10 +55,10 @@ jobs:
         working-directory: .dotnet
 
       - name: Publish
-        if: github.event_name != 'pull_request'
         run: dotnet nuget push
           ${{github.workspace}}/artifacts/packages/*.nupkg
           --source "github"
           --api-key ${{ secrets.GITHUB_TOKEN }}
           --skip-duplicate
         working-directory: .dotnet
+  

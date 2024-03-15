@@ -15,6 +15,7 @@ launchSettings.json
 .assets
 
 # Build results
+/artifacts
 binaries/
 [Dd]ebug*/
 [Rr]elease/

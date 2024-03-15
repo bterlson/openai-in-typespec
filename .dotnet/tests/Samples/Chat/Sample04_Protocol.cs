@@ -26,7 +26,8 @@ namespace OpenAI.Samples
                 }
                 """);
 
-            ClientResult result = client.CompleteChat(BinaryContent.Create(input));
+            using BinaryContent content = BinaryContent.Create(input);
+            ClientResult result = client.CompleteChat(content);
             BinaryData output = result.GetRawResponse().Content;
 
             using JsonDocument outputAsJson = JsonDocument.Parse(output.ToString());

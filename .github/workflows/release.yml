@@ -32,11 +32,14 @@ jobs:
           SECRET_VALUE: ${{ secrets.OPENAI_TOKEN }}
         working-directory: .dotnet
 
+      # Pack the client nuget package and include urls back to the repository and release tag
       - name: Pack
         run: dotnet pack
           --no-build
           --configuration Release
           --output "${{github.workspace}}/artifacts/packages"
+          /p:RepositoryUrl="${{ github.repository }}"
+          /p:PackageProjectUrl="${{ github.repository }}/tree/${{ github.event.release.tag_name }}"
         working-directory: .dotnet
 
       # Append the nuget package to the github release that triggered this workflow

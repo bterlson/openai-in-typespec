@@ -120,7 +120,7 @@ public partial class AssistantClient
 
     /// <inheritdoc cref="Internal.Assistants.GetAssistantFiles(string, int?, string, string, string, RequestOptions)"/>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual ClientResult GetAssistantFileAssociation(
+    public virtual ClientResult GetAssistantFileAssociations(
         string assistantId,
         int? maxResults,
         string createdSortOrder,
@@ -131,7 +131,7 @@ public partial class AssistantClient
 
     /// <inheritdoc cref="Internal.Assistants.GetAssistantFilesAsync(string, int?, string, string, string, RequestOptions)"/>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual async Task<ClientResult> GetAssistantFileAssociationAsync(
+    public virtual async Task<ClientResult> GetAssistantFileAssociationsAsync(
         string assistantId,
         int? maxResults,
         string createdSortOrder,
@@ -245,6 +245,24 @@ public partial class AssistantClient
         string messageId,
         RequestOptions options)
         => await MessageShim.GetMessageAsync(threadId, messageId, options).ConfigureAwait(false);
+
+    /// <inheritdoc cref="Internal.Messages.ModifyMessage(string, string, BinaryContent, RequestOptions)"/>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public virtual ClientResult ModifyMessage(
+        string threadId,
+        string messageId,
+        BinaryContent content,
+        RequestOptions options)
+        => MessageShim.ModifyMessage(threadId, messageId, content, options);
+
+    /// <inheritdoc cref="Internal.Messages.ModifyMessageAsync(string, string, BinaryContent, RequestOptions)"/>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public virtual async Task<ClientResult> ModifyMessageAsync(
+        string threadId,
+        string messageId,
+        BinaryContent content,
+        RequestOptions options)
+        => await MessageShim.ModifyMessageAsync(threadId, messageId, content, options).ConfigureAwait(false);
 
     /// <inheritdoc cref="Internal.Messages.GetMessages(string, int?, string, string, string, RequestOptions)"/>
     [EditorBrowsable(EditorBrowsableState.Never)]

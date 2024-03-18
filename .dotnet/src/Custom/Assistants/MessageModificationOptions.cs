@@ -3,13 +3,13 @@ using System.Collections.Generic;
 namespace OpenAI.Assistants;
 
 /// <summary>
-/// Represents additional options available when modifying an existing <see cref="AssistantThread"/>.
+/// Represents additional options available when modifying an existing <see cref="ThreadMessage"/>.
 /// </summary>
-public partial class ThreadModificationOptions
+public partial class MessageModificationOptions
 {
     /// <summary>
     /// A replacement for the optional key/value mapping of additional, supplemental data items to attach to the
-    /// <see cref="AssistantThread"/>. This information may be useful for storing custom details in a structured format.
+    /// <see cref="ThreadMessage"/>. This information may be useful for storing custom details in a structured format.
     /// </summary>
     /// <remarks>
     /// <list type="bullet">

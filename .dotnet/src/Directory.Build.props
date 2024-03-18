@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix>beta.1</VersionSuffix>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>beta.0</VersionSuffix>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>OpenAI.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>

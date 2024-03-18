@@ -38,8 +38,8 @@ jobs:
           --no-build
           --configuration Release
           --output "${{github.workspace}}/artifacts/packages"
-          /p:RepositoryUrl="${{ github.repository }}"
-          /p:PackageProjectUrl="${{ github.repository }}/tree/${{ github.event.release.tag_name }}"
+          /p:RepositoryUrl="https://github.com/${{ github.repository }}"
+          /p:PackageProjectUrl="https://github.com/${{ github.repository }}/tree/${{ github.event.release.tag_name }}"
         working-directory: .dotnet
 
       # Append the nuget package to the github release that triggered this workflow

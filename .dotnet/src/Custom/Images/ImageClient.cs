@@ -181,7 +181,6 @@ public partial class ImageClient
         return ClientResult.FromValue(new GeneratedImageCollection(images), response.GetRawResponse());
     }
 
-
     // convenience method - sync; Stream overload
     // TODO: add refdoc comment
     public virtual ClientResult<GeneratedImageCollection> GenerateImageEdits(
@@ -306,52 +305,6 @@ public partial class ImageClient
         return ClientResult.FromValue(value, response);
     }
 
-    // protocol method - sync
-    // TODO: add refdoc comment
-    public virtual ClientResult GenerateImageEdits(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateCreateImageEditsRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw new ClientResultException(response);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
-    // protocol method - async
-    // TODO: add refdoc comment
-    public virtual async Task<ClientResult> GenerateImageEditsAsync(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateCreateImageEditsRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
     // convenience method - sync
     // TODO: add refdoc comment
     public virtual ClientResult<GeneratedImageCollection> GenerateImageVariations(
@@ -446,52 +399,6 @@ public partial class ImageClient
         GeneratedImageCollection value = GeneratedImageCollection.Deserialize(response.Content!);
 
         return ClientResult.FromValue(value, response);
-    }
-
-    // protocol method - sync
-    // TODO: add refdoc comment
-    public virtual ClientResult GenerateImageVariations(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateImageVariationsRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw new ClientResultException(response);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
-    // protocol method - async
-    // TODO: add refdoc comment
-    public virtual async Task<ClientResult> GenerateImageVariationsAsync(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateImageVariationsRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
-        }
-
-        return ClientResult.FromResponse(response);
     }
 
     private Internal.Models.CreateImageRequest CreateInternalImageRequest(

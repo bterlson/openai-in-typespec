@@ -170,52 +170,6 @@ public partial class FileClient
         return ClientResult.FromValue(fileInfo, response);
     }
 
-    // protocol method - sync
-    // TODO: add refdoc comment
-    public virtual ClientResult UploadFile(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateUploadFileRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw new ClientResultException(response);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
-    // protocol method - async
-    // TODO: add refdoc comment
-    public virtual async Task<ClientResult> UploadFileAsync(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateUploadFileRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
     public virtual ClientResult<OpenAIFileInfo> GetFileInfo(string fileId)
     {
         ClientResult<Internal.Models.OpenAIFile> internalResult = Shim.RetrieveFile(fileId);

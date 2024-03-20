@@ -224,52 +224,6 @@ public partial class AudioClient
         return ClientResult.FromValue(value, response);
     }
 
-    // protocol method - sync
-    // TODO: add refdoc comment
-    public virtual ClientResult TranscribeAudio(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateCreateTranscriptionRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw new ClientResultException(response);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
-    // protocol method - async
-    // TODO: add refdoc comment
-    public virtual async Task<ClientResult> TranscribeAudioAsync(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateCreateTranscriptionRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
     private PipelineMessage CreateCreateTranscriptionRequest(BinaryContent content, string contentType, RequestOptions options)
     {
         PipelineMessage message = Shim.Pipeline.CreateMessage();
@@ -373,52 +327,6 @@ public partial class AudioClient
         AudioTranslation value = AudioTranslation.Deserialize(response.Content!);
 
         return ClientResult.FromValue(value, response);
-    }
-
-    // protocol method - sync
-    // TODO: add refdoc comment
-    public virtual ClientResult TranslateAudio(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateCreateTranslationRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw new ClientResultException(response);
-        }
-
-        return ClientResult.FromResponse(response);
-    }
-
-    // protocol method - async
-    // TODO: add refdoc comment
-    public virtual async Task<ClientResult> TranslateAudioAsync(BinaryContent content, string contentType, RequestOptions options = null)
-    {
-        Argument.AssertNotNull(content, nameof(content));
-        Argument.AssertNotNull(contentType, nameof(contentType));
-
-        options ??= new RequestOptions();
-
-        using PipelineMessage message = CreateCreateTranslationRequest(content, contentType, options);
-
-        Shim.Pipeline.Send(message);
-
-        PipelineResponse response = message.Response!;
-
-        if (response.IsError && options.ErrorOptions == ClientErrorBehaviors.Default)
-        {
-            throw await ClientResultException.CreateAsync(response).ConfigureAwait(false);
-        }
-
-        return ClientResult.FromResponse(response);
     }
 
     private PipelineMessage CreateCreateTranslationRequest(BinaryContent content, string contentType, RequestOptions options)

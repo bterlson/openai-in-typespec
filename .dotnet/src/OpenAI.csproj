@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>This is the OpenAI client library for developing .NET applications with rich experience.</Description>
     <AssemblyTitle>SDK Code Generation OpenAI</AssemblyTitle>
@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.ClientModel" Version="1.1.0-alpha.20240305.1" />
+    <PackageReference Include="System.ClientModel" Version="1.1.0-beta.2" />
     <PackageReference Include="System.Text.Json" Version="8.0.2" />
   </ItemGroup>
 </Project>

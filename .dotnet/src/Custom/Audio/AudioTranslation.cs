@@ -1,6 +1,5 @@
 using System;
 using System.ClientModel.Primitives;
-using System.Collections.Generic;
 using System.Text.Json;
 
 namespace OpenAI.Audio;
@@ -14,7 +13,13 @@ public partial class AudioTranslation
         Text = text;
     }
 
-    internal static AudioTranslation DeserializeAudioTranscription(JsonElement element, ModelReaderWriterOptions options = default)
+    internal static AudioTranslation Deserialize(BinaryData content)
+    {
+        using JsonDocument responseDocument = JsonDocument.Parse(content);
+        return DeserializeAudioTranslation(responseDocument.RootElement);
+    }
+
+    internal static AudioTranslation DeserializeAudioTranslation(JsonElement element, ModelReaderWriterOptions options = default)
     {
         string text = null;
 

@@ -22,6 +22,12 @@ public partial class AudioTranscription
         Segments = segments;
     }
 
+    internal static AudioTranscription Deserialize(BinaryData content)
+    {
+        using JsonDocument responseDocument = JsonDocument.Parse(content);
+        return DeserializeAudioTranscription(responseDocument.RootElement);
+    }
+
     internal static AudioTranscription DeserializeAudioTranscription(JsonElement element, ModelReaderWriterOptions options = default)
     {
         string language = null;

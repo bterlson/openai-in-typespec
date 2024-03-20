@@ -13,6 +13,8 @@ namespace OpenAI.Samples
         [Ignore("Compilation validation only")]
         public void Sample01_RetrievalAugmentedGeneration()
         {
+            // Assistants is a beta API and subject to change; acknowledge its experimental status by suppressing the matching warning.
+#pragma warning disable OPENAI001
             OpenAIClient openAIClient = new(Environment.GetEnvironmentVariable("OpenAIClient_KEY"));
             FileClient fileClient = openAIClient.GetFileClient();
             AssistantClient assistantClient = openAIClient.GetAssistantClient();

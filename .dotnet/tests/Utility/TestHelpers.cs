@@ -38,7 +38,9 @@ internal static class TestHelpers
         {
             TestScenario.Chat => new ChatClient(overrideModel ?? "gpt-3.5-turbo", credential: null, options),
             TestScenario.VisionChat => new ChatClient(overrideModel ?? "gpt-4-vision-preview", credential: null, options),
+#pragma warning disable OPENAI001
             TestScenario.Assistants => new AssistantClient(credential: null, options),
+#pragma warning restore OPENAI001
             TestScenario.Images => new ImageClient(overrideModel ?? "dall-e-3", credential: null, options),
             TestScenario.Files => new FileClient(credential: null, options),
             TestScenario.Transcription => new AudioClient(overrideModel ?? "whisper-1", credential: null, options),

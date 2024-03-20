@@ -7,6 +7,7 @@ using static OpenAI.Tests.TestHelpers;
 
 namespace OpenAI.Tests.Assistants;
 
+#pragma warning disable OPENAI001
 public partial class AssistantTests
 {
     [Test]
@@ -143,7 +144,7 @@ public partial class AssistantTests
 
     private async Task DeleteRecentTestThings()
     {
-        AssistantClient client = new();
+        AssistantClient client = GetTestClient();
         foreach(Assistant assistant in client.GetAssistants().Value)
         {
             if (assistant.Name == s_testAssistantName
@@ -159,3 +160,5 @@ public partial class AssistantTests
     private static readonly string s_testAssistantName = $".NET SDK Test Assistant - Please Delete Me";
     private static readonly string s_cleanupMetadataKey = $"test_metadata_cleanup_eligible";
 }
+
+#pragma warning restore OPENAI001

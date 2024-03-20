@@ -16,24 +16,4 @@
     <PackageReference Include="Moq" Version="[4.18.2]" />
     <PackageReference Include="System.ClientModel" Version="1.1.0-alpha.20240319.1" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="Assets\edit_sample_image.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\edit_sample_mask.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\hello_world.m4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\hola_mundo.m4a">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\stop_sign.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\variation_sample_image.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>

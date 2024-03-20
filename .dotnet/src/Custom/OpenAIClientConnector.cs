@@ -19,13 +19,12 @@ internal partial class OpenAIClientConnector
 
     internal OpenAIClientConnector(
         string model,
-        Uri endpoint = null,
         ApiKeyCredential credential = null,
         OpenAIClientOptions options = null)
     {
         if (model is null) throw new ArgumentNullException(nameof(model));
         Model = model;
-        Endpoint ??= new(Environment.GetEnvironmentVariable(s_OpenAIEndpointEnvironmentVariable) ?? s_defaultOpenAIV1Endpoint);
+        Endpoint ??= options?.Endpoint ?? new(Environment.GetEnvironmentVariable(s_OpenAIEndpointEnvironmentVariable) ?? s_defaultOpenAIV1Endpoint);
         credential ??= new(Environment.GetEnvironmentVariable(s_OpenAIApiKeyEnvironmentVariable) ?? string.Empty);
         options ??= new();
         InternalClient = new(Endpoint, credential, options.InternalOptions);

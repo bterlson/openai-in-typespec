@@ -1,3 +1,4 @@
+using System;
 using System.ClientModel;
 using System.ClientModel;
 using System.ClientModel.Primitives;
@@ -10,6 +11,11 @@ namespace OpenAI;
 /// </summary>
 public partial class OpenAIClientOptions : RequestOptions
 {
+    /// <summary>
+    /// Gets or sets a non-default base endpoint that clients should use when connecting.
+    /// </summary>
+    public Uri Endpoint { get; set; }
+
     // Note: this type currently proxies RequestOptions properties manually via the matching internal type. This is a
     //       temporary extra step pending richer integration with code generation.
 

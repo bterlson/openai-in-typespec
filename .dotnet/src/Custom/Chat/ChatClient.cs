@@ -26,73 +26,13 @@ public partial class ChatClient
     ///    if it is defined.
     /// </para>
     /// </remarks>
-    /// <param name="endpoint">The connection endpoint to use.</param>
     /// <param name="model">The model name for chat completions that the client should use.</param>
     /// <param name="credential">The API key used to authenticate with the service endpoint.</param>
     /// <param name="options">Additional options to customize the client.</param>
-    public ChatClient(Uri endpoint, string model, ApiKeyCredential credential, OpenAIClientOptions options = null)
+    public ChatClient(string model, ApiKeyCredential credential = default, OpenAIClientOptions options = null)
     {
-        _clientConnector = new(model, endpoint, credential, options);
+        _clientConnector = new(model, credential, options);
     }
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="ChatClient"/>, used for Chat Completion requests. 
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    ///     If an endpoint is not provided, the client will use the <c>OPENAI_ENDPOINT</c> environment variable if it
-    ///     defined and otherwise use the default OpenAI v1 endpoint.
-    /// </para>
-    /// <para>
-    ///    If an authentication credential is not defined, the client use the <c>OPENAI_API_KEY</c> environment variable
-    ///    if it is defined.
-    /// </para>
-    /// </remarks>
-    /// <param name="endpoint">The connection endpoint to use.</param>
-    /// <param name="model">The model name for chat completions that the client should use.</param>
-    /// <param name="options">Additional options to customize the client.</param>
-    public ChatClient(Uri endpoint, string model, OpenAIClientOptions options = null)
-        : this(endpoint, model, credential: null, options)
-    { }
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="ChatClient"/>, used for Chat Completion requests. 
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    ///     If an endpoint is not provided, the client will use the <c>OPENAI_ENDPOINT</c> environment variable if it
-    ///     defined and otherwise use the default OpenAI v1 endpoint.
-    /// </para>
-    /// <para>
-    ///    If an authentication credential is not defined, the client use the <c>OPENAI_API_KEY</c> environment variable
-    ///    if it is defined.
-    /// </para>
-    /// </remarks>
-    /// <param name="model">The model name for chat completions that the client should use.</param>
-    /// <param name="credential">The API key used to authenticate with the service endpoint.</param>
-    /// <param name="options">Additional options to customize the client.</param>
-    public ChatClient(string model, ApiKeyCredential credential, OpenAIClientOptions options = null)
-        : this(endpoint: null, model, credential, options)
-    { }
-
-    /// <summary>
-    /// Initializes a new instance of <see cref="ChatClient"/>, used for Chat Completion requests. 
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    ///     If an endpoint is not provided, the client will use the <c>OPENAI_ENDPOINT</c> environment variable if it
-    ///     defined and otherwise use the default OpenAI v1 endpoint.
-    /// </para>
-    /// <para>
-    ///    If an authentication credential is not defined, the client use the <c>OPENAI_API_KEY</c> environment variable
-    ///    if it is defined.
-    /// </para>
-    /// </remarks>
-    /// <param name="model">The model name for chat completions that the client should use.</param>
-    /// <param name="options">Additional options to customize the client.</param>
-    public ChatClient(string model, OpenAIClientOptions options = null)
-        : this(endpoint: null, model, credential: null, options)
-    { }
 
     /// <summary>
     /// Generates a single chat completion result for a single, simple user message.

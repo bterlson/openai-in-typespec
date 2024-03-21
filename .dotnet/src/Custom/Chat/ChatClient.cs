@@ -208,11 +208,10 @@ public partial class ChatClient
             throw new ClientResultException(response);
         }
 
-        ClientResult genericResult = ClientResult.FromResponse(response);
-        return StreamingClientResult<StreamingChatUpdate>.CreateFromResponse(
-            genericResult,
+        return StreamingEventResult<StreamingChatUpdate>.CreateFromResponse(
+            response,
             (responseForEnumeration) => SseAsyncEnumerator<StreamingChatUpdate>.EnumerateFromSseStream(
-                responseForEnumeration.GetRawResponse().ContentStream,
+                responseForEnumeration.ContentStream,
                 e => StreamingChatUpdate.DeserializeStreamingChatUpdates(e)));
     }
 
@@ -229,7 +228,6 @@ public partial class ChatClient
     ///     The number of independent, alternative choices that the chat completion request should generate.
     /// </param>
     /// <param name="options"> Additional options for the chat completion request. </param>
-    /// <param name="cancellationToken"> The cancellation token for the operation. </param>
     /// <returns> A streaming result with incremental chat completion updates. </returns>
     public virtual async Task<StreamingClientResult<StreamingChatUpdate>> CompleteChatStreamingAsync(
         IEnumerable<ChatRequestMessage> messages,
@@ -246,11 +244,10 @@ public partial class ChatClient
             throw new ClientResultException(response);
         }
 
-        ClientResult genericResult = ClientResult.FromResponse(response);
-        return StreamingClientResult<StreamingChatUpdate>.CreateFromResponse(
-            genericResult,
+        return StreamingEventResult<StreamingChatUpdate>.CreateFromResponse(
+            response,
             (responseForEnumeration) => SseAsyncEnumerator<StreamingChatUpdate>.EnumerateFromSseStream(
-                responseForEnumeration.GetRawResponse().ContentStream,
+                responseForEnumeration.ContentStream,
                 e => StreamingChatUpdate.DeserializeStreamingChatUpdates(e)));   
     }
 

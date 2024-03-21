@@ -6,6 +6,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\azure-sdk-for-net\sdk\core\System.ClientModel\src\System.ClientModel.csproj" />
     <ProjectReference Include="..\src\OpenAI.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -14,6 +15,5 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="Moq" Version="[4.18.2]" />
-    <PackageReference Include="System.ClientModel" Version="1.1.0-alpha.20240319.1" />
   </ItemGroup>
 </Project>

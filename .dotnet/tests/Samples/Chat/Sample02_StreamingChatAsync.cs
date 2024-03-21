@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenAI.Chat;
 using System;
+using System.ClientModel;
 using System.Threading.Tasks;
 
 namespace OpenAI.Samples

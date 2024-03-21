@@ -9,7 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.ClientModel" Version="1.1.0-alpha.20240319.1" />
     <PackageReference Include="System.Text.Json" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\azure-sdk-for-net\sdk\core\System.ClientModel\src\System.ClientModel.csproj" />
   </ItemGroup>
 </Project>
